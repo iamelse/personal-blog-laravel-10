@@ -1,0 +1,17 @@
+.nav.nav-underline .nav-item .nav-link {
+    transition: none !important;
+    font-weight: 500 !important;
+}
+
+.nav.nav-underline .nav-item .nav-link.active {
+    color: var(--l-text-dark) !important;
+    border-bottom-color: var(--navbar-link-active-color) !important;
+    font-weight: 500 !important;
+}
+
+.nav.nav-underline .nav-item .nav-link:not(.active):hover {
+    color: var(--navbar-link-text-color-hover) !important;
+    border-bottom: none !important;
+    font-weight: 500 !important;
+    transition: none !important;
+}

@@ -1,0 +1,64 @@
+:root {
+    --l-text-primary: #0ea5e9;
+    --l-text-dark: #1E293B;
+    --l-text-p: #64748B;
+    --l-btn-primary: #0ea5e9;
+    --l-btn-primary-hover: #0881b9;
+    --navbar-link-active-color: #0ea5e9;
+    --navbar-link-text-color: #94A3B8;
+    --navbar-link-text-color-hover: #64748B;
+    --search-form-color: #F1F5F9;
+    --search-icon-form-color: #64748B;
+}
+
+.btn.l-btn-primary {
+    background-color: var(--l-btn-primary);
+    color: white;
+    font-weight: 500;
+    border-radius: 5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.btn.l-btn-primary:hover {
+    background-color: var(--l-btn-primary-hover);
+    color: white;
+    font-weight: 500;
+    border-radius: 5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.text.l-text-primary {
+    color: var(--l-text-primary);
+}
+
+.l-text-dark {
+    color: var(--l-text-dark);
+}
+
+.text.l-text-dark {
+    color: var(--l-text-dark);
+}
+
+.text.l-text-p {
+    color: var(--l-text-p);
+}
+
+.l-text-p {
+    color: var(--l-text-p);
+}
+
+a, a:hover, a:focus, a:active {
+    text-decoration: none !important;
+}
+
+.l-form .form-control {
+    border-radius: 5rem;
+    border: none;
+    background-color: var(--search-form-color);
+}
+
+input::placeholder {
+    font-size: 0.9rem;
+}
