@@ -26,27 +26,27 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     
-                    <li class="nav-item">
+                    <li class="nav-item me-1">
                         <a class="nav-link active" aria-current="page" href="#">Home</a>
                     </li>
 
-                    <li class="nav-item">
+                    <li class="nav-item me-1">
                         <a class="nav-link" href="#">About</a>
                     </li>
 
-                    <li class="nav-item">
+                    <li class="nav-item me-1">
                         <a class="nav-link" href="#">Projects</a>
                     </li>
 
-                    <li class="nav-item">
+                    <li class="nav-item me-1">
                         <a class="nav-link" href="#">Resume</a>
                     </li>
 
-                    <li class="nav-item">
+                    <li class="nav-item me-1">
                         <a class="nav-link" href="#">Subscribe</a>
                     </li>
 
-                    <li class="nav-item">
+                    <li class="nav-item me-1">
                         <a class="nav-link" href="#">Article</a>
                     </li>
 
@@ -559,142 +559,36 @@
 
                 </section>
             </div>
-
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                Nunc eu placerat tortor, in rutrum leo. Vestibulum id interdum quam. 
-                Sed id congue urna. Donec vestibulum commodo condimentum. 
-                Etiam in eros a arcu pharetra pellentesque. 
-                Aliquam mollis lectus magna, non fringilla justo finibus ac. 
-                Pellentesque vel suscipit sapien. 
-                Sed vestibulum consequat augue eleifend sodales. 
-                Sed consequat sollicitudin enim vel convallis. 
-                Aenean volutpat in mi at porttitor. 
-                Curabitur mattis luctus massa sed malesuada. 
-            </p>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                Nunc eu placerat tortor, in rutrum leo. Vestibulum id interdum quam. 
-                Sed id congue urna. Donec vestibulum commodo condimentum. 
-                Etiam in eros a arcu pharetra pellentesque. 
-                Aliquam mollis lectus magna, non fringilla justo finibus ac. 
-                Pellentesque vel suscipit sapien. 
-                Sed vestibulum consequat augue eleifend sodales. 
-                Sed consequat sollicitudin enim vel convallis. 
-                Aenean volutpat in mi at porttitor. 
-                Curabitur mattis luctus massa sed malesuada. 
-            </p>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                Nunc eu placerat tortor, in rutrum leo. Vestibulum id interdum quam. 
-                Sed id congue urna. Donec vestibulum commodo condimentum. 
-                Etiam in eros a arcu pharetra pellentesque. 
-                Aliquam mollis lectus magna, non fringilla justo finibus ac. 
-                Pellentesque vel suscipit sapien. 
-                Sed vestibulum consequat augue eleifend sodales. 
-                Sed consequat sollicitudin enim vel convallis. 
-                Aenean volutpat in mi at porttitor. 
-                Curabitur mattis luctus massa sed malesuada. 
-            </p>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                Nunc eu placerat tortor, in rutrum leo. Vestibulum id interdum quam. 
-                Sed id congue urna. Donec vestibulum commodo condimentum. 
-                Etiam in eros a arcu pharetra pellentesque. 
-                Aliquam mollis lectus magna, non fringilla justo finibus ac. 
-                Pellentesque vel suscipit sapien. 
-                Sed vestibulum consequat augue eleifend sodales. 
-                Sed consequat sollicitudin enim vel convallis. 
-                Aenean volutpat in mi at porttitor. 
-                Curabitur mattis luctus massa sed malesuada. 
-            </p>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                Nunc eu placerat tortor, in rutrum leo. Vestibulum id interdum quam. 
-                Sed id congue urna. Donec vestibulum commodo condimentum. 
-                Etiam in eros a arcu pharetra pellentesque. 
-                Aliquam mollis lectus magna, non fringilla justo finibus ac. 
-                Pellentesque vel suscipit sapien. 
-                Sed vestibulum consequat augue eleifend sodales. 
-                Sed consequat sollicitudin enim vel convallis. 
-                Aenean volutpat in mi at porttitor. 
-                Curabitur mattis luctus massa sed malesuada. 
-            </p>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                Nunc eu placerat tortor, in rutrum leo. Vestibulum id interdum quam. 
-                Sed id congue urna. Donec vestibulum commodo condimentum. 
-                Etiam in eros a arcu pharetra pellentesque. 
-                Aliquam mollis lectus magna, non fringilla justo finibus ac. 
-                Pellentesque vel suscipit sapien. 
-                Sed vestibulum consequat augue eleifend sodales. 
-                Sed consequat sollicitudin enim vel convallis. 
-                Aenean volutpat in mi at porttitor. 
-                Curabitur mattis luctus massa sed malesuada. 
-            </p>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                Nunc eu placerat tortor, in rutrum leo. Vestibulum id interdum quam. 
-                Sed id congue urna. Donec vestibulum commodo condimentum. 
-                Etiam in eros a arcu pharetra pellentesque. 
-                Aliquam mollis lectus magna, non fringilla justo finibus ac. 
-                Pellentesque vel suscipit sapien. 
-                Sed vestibulum consequat augue eleifend sodales. 
-                Sed consequat sollicitudin enim vel convallis. 
-                Aenean volutpat in mi at porttitor. 
-                Curabitur mattis luctus massa sed malesuada. 
-            </p>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                Nunc eu placerat tortor, in rutrum leo. Vestibulum id interdum quam. 
-                Sed id congue urna. Donec vestibulum commodo condimentum. 
-                Etiam in eros a arcu pharetra pellentesque. 
-                Aliquam mollis lectus magna, non fringilla justo finibus ac. 
-                Pellentesque vel suscipit sapien. 
-                Sed vestibulum consequat augue eleifend sodales. 
-                Sed consequat sollicitudin enim vel convallis. 
-                Aenean volutpat in mi at porttitor. 
-                Curabitur mattis luctus massa sed malesuada. 
-            </p>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                Nunc eu placerat tortor, in rutrum leo. Vestibulum id interdum quam. 
-                Sed id congue urna. Donec vestibulum commodo condimentum. 
-                Etiam in eros a arcu pharetra pellentesque. 
-                Aliquam mollis lectus magna, non fringilla justo finibus ac. 
-                Pellentesque vel suscipit sapien. 
-                Sed vestibulum consequat augue eleifend sodales. 
-                Sed consequat sollicitudin enim vel convallis. 
-                Aenean volutpat in mi at porttitor. 
-                Curabitur mattis luctus massa sed malesuada. 
-            </p>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                Nunc eu placerat tortor, in rutrum leo. Vestibulum id interdum quam. 
-                Sed id congue urna. Donec vestibulum commodo condimentum. 
-                Etiam in eros a arcu pharetra pellentesque. 
-                Aliquam mollis lectus magna, non fringilla justo finibus ac. 
-                Pellentesque vel suscipit sapien. 
-                Sed vestibulum consequat augue eleifend sodales. 
-                Sed consequat sollicitudin enim vel convallis. 
-                Aenean volutpat in mi at porttitor. 
-                Curabitur mattis luctus massa sed malesuada. 
-            </p>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                Nunc eu placerat tortor, in rutrum leo. Vestibulum id interdum quam. 
-                Sed id congue urna. Donec vestibulum commodo condimentum. 
-                Etiam in eros a arcu pharetra pellentesque. 
-                Aliquam mollis lectus magna, non fringilla justo finibus ac. 
-                Pellentesque vel suscipit sapien. 
-                Sed vestibulum consequat augue eleifend sodales. 
-                Sed consequat sollicitudin enim vel convallis. 
-                Aenean volutpat in mi at porttitor. 
-                Curabitur mattis luctus massa sed malesuada. 
-            </p>
         </div>
     </main>
     <!-- End main content -->
+
+    <footer>
+        <div class="container mt-4">
+          <hr class="card-hr">
+          <div class="row py-4">
+            <div class="col-md-6">
+              <p class="text l-text-p l-card-text">Copyright © Iamelse. All rights reserved.</p>
+            </div>
+            <div class="col-md-6 text-md-end">
+              <!-- Social Media Icons with Boxicons -->
+              <ul class="list-inline">
+                <li class="list-inline-item">
+                  <a href="#" target="_blank" title="Facebook">
+                    <i class='bx bxl-facebook l-text-p bx-sm text l-text-primary'></i>
+                  </a>
+                </li>
+                <li class="list-inline-item">
+                  <a href="#" target="_blank" title="Instagram">
+                    <i class='bx bxl-instagram l-text-p bx-sm text l-text-primary'></i>
+                  </a>
+                </li>
+                <!-- Add more social media icons as needed -->
+              </ul>
+            </div>
+          </div>
+        </div>
+    </footer>
 
 </body>
 
