@@ -2,3 +2,15 @@
     border-color: rgba(131, 131, 131, 0.1) !important;
     box-shadow: 0 0 4px rgba(131, 131, 131, 0.1) !important;
 }
+
+.circle-container {
+    display: inline-block;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.circle-content i {
+    margin: 0.7rem;
+    font-size: 1.5rem;
+    color: #007bff;
+}
