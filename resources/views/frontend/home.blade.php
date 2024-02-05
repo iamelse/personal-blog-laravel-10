@@ -35,7 +35,7 @@
                     </li>
 
                     <li class="nav-item me-1">
-                        <a class="nav-link" href="#">Projects</a>
+                        <a class="nav-link" href="/project">Projects</a>
                     </li>
 
                     <li class="nav-item me-1">
