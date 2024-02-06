@@ -28,3 +28,7 @@ Route::get('/project', function () {
 Route::get('/resume', function () {
     return view('frontend.resume');
 });
+
+Route::get('/subscribe', function () {
+    return view('frontend.subscribe');
+});

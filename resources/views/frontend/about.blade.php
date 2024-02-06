@@ -43,7 +43,7 @@
                     </li>
 
                     <li class="nav-item me-1">
-                        <a class="nav-link" href="#">Subscribe</a>
+                        <a class="nav-link" href="/subscribe">Subscribe</a>
                     </li>
 
                     <li class="nav-item me-1">
