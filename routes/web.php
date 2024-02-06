@@ -32,3 +32,7 @@ Route::get('/resume', function () {
 Route::get('/subscribe', function () {
     return view('frontend.subscribe');
 });
+
+Route::get('/article', function () {
+    return view('frontend.article');
+});
