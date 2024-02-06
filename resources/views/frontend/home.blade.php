@@ -39,7 +39,7 @@
                     </li>
 
                     <li class="nav-item me-1">
-                        <a class="nav-link" href="#">Resume</a>
+                        <a class="nav-link" href="/resume">Resume</a>
                     </li>
 
                     <li class="nav-item me-1">

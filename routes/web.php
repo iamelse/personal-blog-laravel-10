@@ -24,3 +24,7 @@ Route::get('/about', function () {
 Route::get('/project', function () {
     return view('frontend.project');
 });
+
+Route::get('/resume', function () {
+    return view('frontend.resume');
+});
