@@ -244,128 +244,126 @@
                                 </div>        
                             </div>
                             <div class="tab-pane fade" id="contentStartups">
-                                <div class="table-responsive text-nowrap">
-                                    <div class="card-list">
-                                        <div class="card flex-row border-0">
-                                            <img class="card-img-left l-card-img align-self-center" src="https://preview.cruip.com/devspace/images/post-thumb-01.jpg"/>
-                                            <div class="card-body">
-                                                <div class="d-flex justify-content-between align-items-start">
-                                                    <div>
-                                                        <span class="dash-date-list-card">—</span>
-                                                        <span class="date-list-card">DEC 24, 2023</span>
-                                                        <a href="">
-                                                            <h5 class="l-card-title h5 h4-sm mt-1 l-text-dark">Fuzzy Logic in a Hurry</h5>
-                                                        </a>
-                                                        <p class="l-card-text">Flexbox is a remarkably flexible layout mode. When we understand how it works, we can build responsive designs that rearrange themselves as needed.</p>
-                                                    </div>
-                                                    <a class="arrow-card-link mt-5 ms-4" href="">
-                                                        <i class='bx bx-right-arrow-alt bx-sm align-self-center mt-2'></i>
+                                <div class="card-list">
+                                    <div class="card flex-row border-0">
+                                        <img class="card-img-left l-card-img align-self-center" src="https://preview.cruip.com/devspace/images/post-thumb-01.jpg"/>
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <div>
+                                                    <span class="dash-date-list-card">—</span>
+                                                    <span class="date-list-card">DEC 24, 2023</span>
+                                                    <a href="">
+                                                        <h5 class="l-card-title h5 h4-sm mt-1 l-text-dark">Machine Learning for Humans</h5>
                                                     </a>
+                                                    <p class="l-card-text">Flexbox is a remarkably flexible layout mode. When we understand how it works, we can build responsive designs that rearrange themselves as needed.</p>
                                                 </div>
+                                                <a class="arrow-card-link mt-5 ms-4" href="">
+                                                    <i class='bx bx-right-arrow-alt bx-sm align-self-center mt-2'></i>
+                                                </a>
                                             </div>
                                         </div>
-                                        <hr class="card-hr">
-        
-                                        <div class="card flex-row border-0">
-                                            <img class="card-img-left l-card-img align-self-center" src="https://preview.cruip.com/devspace/images/post-thumb-01.jpg"/>
-                                            <div class="card-body">
-                                                <div class="d-flex justify-content-between align-items-start">
-                                                    <div>
-                                                        <span class="dash-date-list-card">—</span>
-                                                        <span class="date-list-card">DEC 24, 2023</span>
-                                                        <a href="">
-                                                            <h5 class="l-card-title h5 h4-sm mt-1 l-text-dark">An Interactive Guide to Flexbox</h5>
-                                                        </a>
-                                                        <p class="l-card-text">Flexbox is a remarkably flexible layout mode. When we understand how it works, we can build responsive designs that rearrange themselves as needed.</p>
-                                                    </div>
-                                                    <a class="arrow-card-link mt-5 ms-4" href="">
-                                                        <i class='bx bx-right-arrow-alt bx-sm align-self-center mt-2'></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <hr class="card-hr">
-        
-                                        <div class="card flex-row border-0">
-                                            <img class="card-img-left l-card-img align-self-center" src="https://preview.cruip.com/devspace/images/post-thumb-01.jpg"/>
-                                            <div class="card-body">
-                                                <div class="d-flex justify-content-between align-items-start">
-                                                    <div>
-                                                        <span class="dash-date-list-card">—</span>
-                                                        <span class="date-list-card">DEC 24, 2023</span>
-                                                        <a href="">
-                                                            <h5 class="l-card-title h5 h4-sm mt-1 l-text-dark">An Interactive Guide to Flexbox</h5>
-                                                        </a>
-                                                        <p class="l-card-text">Flexbox is a remarkably flexible layout mode. When we understand how it works, we can build responsive designs that rearrange themselves as needed.</p>
-                                                    </div>
-                                                    <a class="arrow-card-link mt-5 ms-4" href="">
-                                                        <i class='bx bx-right-arrow-alt bx-sm align-self-center mt-2'></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <hr class="card-hr">
-        
-                                        <div class="card flex-row border-0">
-                                            <img class="card-img-left l-card-img align-self-center" src="https://preview.cruip.com/devspace/images/post-thumb-01.jpg"/>
-                                            <div class="card-body">
-                                                <div class="d-flex justify-content-between align-items-start">
-                                                    <div>
-                                                        <span class="dash-date-list-card">—</span>
-                                                        <span class="date-list-card">DEC 24, 2023</span>
-                                                        <a href="">
-                                                            <h5 class="l-card-title h5 h4-sm mt-1 l-text-dark">An Interactive Guide to Flexbox</h5>
-                                                        </a>
-                                                        <p class="l-card-text">Flexbox is a remarkably flexible layout mode. When we understand how it works, we can build responsive designs that rearrange themselves as needed.</p>
-                                                    </div>
-                                                    <a class="arrow-card-link mt-5 ms-4" href="">
-                                                        <i class='bx bx-right-arrow-alt bx-sm align-self-center mt-2'></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <hr class="card-hr">
-        
-                                        <div class="card flex-row border-0">
-                                            <img class="card-img-left l-card-img align-self-center" src="https://preview.cruip.com/devspace/images/post-thumb-01.jpg"/>
-                                            <div class="card-body">
-                                                <div class="d-flex justify-content-between align-items-start">
-                                                    <div>
-                                                        <span class="dash-date-list-card">—</span>
-                                                        <span class="date-list-card">DEC 24, 2023</span>
-                                                        <a href="">
-                                                            <h5 class="l-card-title h5 h4-sm mt-1 l-text-dark">An Interactive Guide to Flexbox</h5>
-                                                        </a>
-                                                        <p class="l-card-text">Flexbox is a remarkably flexible layout mode. When we understand how it works, we can build responsive designs that rearrange themselves as needed.</p>
-                                                    </div>
-                                                    <a class="arrow-card-link mt-5 ms-4" href="">
-                                                        <i class='bx bx-right-arrow-alt bx-sm align-self-center mt-2'></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <hr class="card-hr">
-        
-                                        <div class="card flex-row border-0">
-                                            <img class="card-img-left l-card-img align-self-center" src="https://preview.cruip.com/devspace/images/post-thumb-01.jpg"/>
-                                            <div class="card-body">
-                                                <div class="d-flex justify-content-between align-items-start">
-                                                    <div>
-                                                        <span class="dash-date-list-card">—</span>
-                                                        <span class="date-list-card">DEC 24, 2023</span>
-                                                        <a href="">
-                                                            <h5 class="l-card-title h5 h4-sm mt-1 l-text-dark">An Interactive Guide to Flexbox</h5>
-                                                        </a>
-                                                        <p class="l-card-text">Flexbox is a remarkably flexible layout mode. When we understand how it works, we can build responsive designs that rearrange themselves as needed.</p>
-                                                    </div>
-                                                    <a class="arrow-card-link mt-5 ms-4" href="">
-                                                        <i class='bx bx-right-arrow-alt bx-sm align-self-center mt-2'></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <hr class="card-hr">
                                     </div>
+                                    <hr class="card-hr">
+    
+                                    <div class="card flex-row border-0">
+                                        <img class="card-img-left l-card-img align-self-center" src="https://preview.cruip.com/devspace/images/post-thumb-01.jpg"/>
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <div>
+                                                    <span class="dash-date-list-card">—</span>
+                                                    <span class="date-list-card">DEC 24, 2023</span>
+                                                    <a href="">
+                                                        <h5 class="l-card-title h5 h4-sm mt-1 l-text-dark">An Interactive Guide to Flexbox</h5>
+                                                    </a>
+                                                    <p class="l-card-text">Flexbox is a remarkably flexible layout mode. When we understand how it works, we can build responsive designs that rearrange themselves as needed.</p>
+                                                </div>
+                                                <a class="arrow-card-link mt-5 ms-4" href="">
+                                                    <i class='bx bx-right-arrow-alt bx-sm align-self-center mt-2'></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr class="card-hr">
+    
+                                    <div class="card flex-row border-0">
+                                        <img class="card-img-left l-card-img align-self-center" src="https://preview.cruip.com/devspace/images/post-thumb-01.jpg"/>
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <div>
+                                                    <span class="dash-date-list-card">—</span>
+                                                    <span class="date-list-card">DEC 24, 2023</span>
+                                                    <a href="">
+                                                        <h5 class="l-card-title h5 h4-sm mt-1 l-text-dark">An Interactive Guide to Flexbox</h5>
+                                                    </a>
+                                                    <p class="l-card-text">Flexbox is a remarkably flexible layout mode. When we understand how it works, we can build responsive designs that rearrange themselves as needed.</p>
+                                                </div>
+                                                <a class="arrow-card-link mt-5 ms-4" href="">
+                                                    <i class='bx bx-right-arrow-alt bx-sm align-self-center mt-2'></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr class="card-hr">
+    
+                                    <div class="card flex-row border-0">
+                                        <img class="card-img-left l-card-img align-self-center" src="https://preview.cruip.com/devspace/images/post-thumb-01.jpg"/>
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <div>
+                                                    <span class="dash-date-list-card">—</span>
+                                                    <span class="date-list-card">DEC 24, 2023</span>
+                                                    <a href="">
+                                                        <h5 class="l-card-title h5 h4-sm mt-1 l-text-dark">An Interactive Guide to Flexbox</h5>
+                                                    </a>
+                                                    <p class="l-card-text">Flexbox is a remarkably flexible layout mode. When we understand how it works, we can build responsive designs that rearrange themselves as needed.</p>
+                                                </div>
+                                                <a class="arrow-card-link mt-5 ms-4" href="">
+                                                    <i class='bx bx-right-arrow-alt bx-sm align-self-center mt-2'></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr class="card-hr">
+    
+                                    <div class="card flex-row border-0">
+                                        <img class="card-img-left l-card-img align-self-center" src="https://preview.cruip.com/devspace/images/post-thumb-01.jpg"/>
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <div>
+                                                    <span class="dash-date-list-card">—</span>
+                                                    <span class="date-list-card">DEC 24, 2023</span>
+                                                    <a href="">
+                                                        <h5 class="l-card-title h5 h4-sm mt-1 l-text-dark">An Interactive Guide to Flexbox</h5>
+                                                    </a>
+                                                    <p class="l-card-text">Flexbox is a remarkably flexible layout mode. When we understand how it works, we can build responsive designs that rearrange themselves as needed.</p>
+                                                </div>
+                                                <a class="arrow-card-link mt-5 ms-4" href="">
+                                                    <i class='bx bx-right-arrow-alt bx-sm align-self-center mt-2'></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr class="card-hr">
+    
+                                    <div class="card flex-row border-0">
+                                        <img class="card-img-left l-card-img align-self-center" src="https://preview.cruip.com/devspace/images/post-thumb-01.jpg"/>
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <div>
+                                                    <span class="dash-date-list-card">—</span>
+                                                    <span class="date-list-card">DEC 24, 2023</span>
+                                                    <a href="">
+                                                        <h5 class="l-card-title h5 h4-sm mt-1 l-text-dark">An Interactive Guide to Flexbox</h5>
+                                                    </a>
+                                                    <p class="l-card-text">Flexbox is a remarkably flexible layout mode. When we understand how it works, we can build responsive designs that rearrange themselves as needed.</p>
+                                                </div>
+                                                <a class="arrow-card-link mt-5 ms-4" href="">
+                                                    <i class='bx bx-right-arrow-alt bx-sm align-self-center mt-2'></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr class="card-hr">
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="contentTutorials">
