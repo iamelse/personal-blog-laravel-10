@@ -36,3 +36,7 @@ Route::get('/subscribe', function () {
 Route::get('/article', function () {
     return view('frontend.article');
 });
+
+Route::get('/a-post', function () {
+    return view('frontend.a-post');
+});
