@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Home\DashboardController;
+use App\Http\Controllers\Home\PermissionController;
+use App\Http\Controllers\Home\RoleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -47,6 +49,12 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login')->
 Route::post('/authenticate', [LoginController::class, 'authenticate'])->name('authenticate')->middleware('guest');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::group(['middleware' => 'auth'], function () {
-    Route::get('/dashboard', [DashboardController::class, 'showPage'])->name('dashboard');
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/role', [RoleController::class, 'index'])->name('role.index');
+
+    Route::get('/permission', [PermissionController::class, 'index'])->name('permission.index');
+    Route::get('/permission/create', [PermissionController::class, 'create'])->name('permission.create');
+    Route::post('/permission/store', [PermissionController::class, 'store'])->name('permission.store');
 });
