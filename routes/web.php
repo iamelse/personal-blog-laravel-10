@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Home\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,3 +42,9 @@ Route::get('/article', function () {
 Route::get('/a-post', function () {
     return view('frontend.a-post');
 });
+
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/authenticate', [LoginController::class, 'authenticate'])->name('authenticate');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+Route::get('/dashboard', [DashboardController::class, 'showPage'])->name('dashboard');
