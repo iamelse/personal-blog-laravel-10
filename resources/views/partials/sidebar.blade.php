@@ -39,6 +39,22 @@
                    </a>
                </li>
 
+               <li class="sidebar-title">Article</li>
+
+               <li class="sidebar-item">
+                    <a href="{{ route('post.category.index') }}" class='sidebar-link'>
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Category</span>
+                    </a>
+                </li>
+            
+               <li class="sidebar-item">
+                   <a href="{{ route('permission.index') }}" class='sidebar-link'>
+                       <i class="bi bi-grid-fill"></i>
+                       <span>Post</span>
+                   </a>
+               </li>
+
                <li class="sidebar-title">Setting</li>
 
                <li class="sidebar-item">

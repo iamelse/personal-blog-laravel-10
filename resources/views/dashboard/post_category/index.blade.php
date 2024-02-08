@@ -1,3 +1,4 @@
+
 @extends('template.main')
 
 @section('content')
@@ -31,7 +32,7 @@
                                 <div class="row">
                                     <div class="col-10 text-start">
                                         <div class="col-1">
-                                            <form method="GET" action="{{ route('role.index') }}">
+                                            <form method="GET" action="{{ route('post.category.index') }}">
                                                 <select name="limit" class="form-select col-2" onchange="this.form.submit()">
                                                     <option value="10" {{ request('limit') == 10 ? 'selected' : '' }}>10</option>
                                                     <option value="25" {{ request('limit') == 25 ? 'selected' : '' }}>25</option>
@@ -42,7 +43,7 @@
                                         </div>
                                     </div>
                                     <div class="col-2 text-end">
-                                        <form method="GET" action="{{ route('role.search') }}">
+                                        <form method="GET" action="{{ route('post.category.search') }}">
                                             <div class="form-group mandatory">
                                                 <input
                                                     type="text"
@@ -68,19 +69,19 @@
                                         <thead>
                                             <tr>
                                                 <th>No.</th>
-                                                <th>Role Name</th>
-                                                <th>Total Permission</th>
+                                                <th>Post Category Name</th>
+                                                <th>Slug</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @forelse ($roles as $role)
+                                            @forelse ($postCategories as $postCategory)
                                             <tr>
                                                 <td class="text-bold-500">{{ $loop->iteration }}</td>
-                                                <td class="text-bold-500">{{ $role->name }}</td>
-                                                <td class="text-bold-500">{{ $role->permissions->count() }}</td>
+                                                <td class="text-bold-500">{{ $postCategory->name }}</td>
+                                                <td class="text-bold-500">{{ $postCategory->slug }}</td>
                                                 <td>
-                                                    <a href="{{ route('role.show', $role->id) }}" class="btn btn-sm btn-outline-primary">Detail</a>
+                                                    <a href="{{ route('post.category.edit', $postCategory->slug) }}" class="btn btn-sm btn-outline-warning">Edit</a>
                                                 </td>
                                             </tr>
                                             @empty
@@ -94,9 +95,9 @@
                                 <!-- Pagination links -->
                                 <div class="row">
                                     <div class="col-12 d-flex justify-content-end">
-                                        {{ $roles->appends(['limit' => $perPage, 'q' => $q])->links() }}
+                                        {{ $postCategories->appends(['limit' => $perPage, 'q' => $q])->links() }}
                                     </div>
-                                </div>
+                                </div>                
                             </div>
                         </div>
                     </div>

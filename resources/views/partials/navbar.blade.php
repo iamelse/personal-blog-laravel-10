@@ -58,7 +58,7 @@
                            $firstName = implode(' ', array_slice($nameArray, 0, 2));
                            @endphp
                            <h6 class="mb-0 text-gray-600">{{ $firstName }}</h6>
-                           <p class="mb-0 text-sm text-gray-600">Administrator</p>
+                           <p class="mb-0 text-sm text-gray-600">{{ Auth::user()->roles[0]->name }}</p>
                        </div>
                        <div class="user-img d-flex align-items-center">
                            <div class="avatar avatar-md">
