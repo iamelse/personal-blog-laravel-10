@@ -9,11 +9,16 @@ use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $perPage = $request->input('limit', 10);
+        $q = $request->input('q', '');
+
+        $roles = Role::where('name', 'LIKE', "%$q%")->paginate($perPage);
+
         return view('dashboard.role.index', [
             'title' => 'Role',
-            'roles' => Role::all()
+            'roles' => $roles,
         ]);
     }
 

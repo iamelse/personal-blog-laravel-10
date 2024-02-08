@@ -43,12 +43,14 @@
                                     <table class="table table-lg">
                                         <thead>
                                             <tr>
+                                                <th>No.</th>
                                                 <th>Permission Name</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @forelse ($permissions as $permission)
                                             <tr>
+                                                <td class="text-bold-500">{{ $loop->iteration }}</td>
                                                 <td class="text-bold-500">{{ $permission->name }}</td>
                                             </tr>
                                             @empty

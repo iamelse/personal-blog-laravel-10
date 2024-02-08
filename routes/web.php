@@ -53,6 +53,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/role', [RoleController::class, 'index'])->name('role.index');
+    Route::get('/role/search', [RoleController::class, 'index'])->name('role.search');
     Route::get('/role/show/{role}', [RoleController::class, 'show'])->name('role.show');
     Route::post('/role/show/{role}/store/permission', [RoleController::class, 'updateRolePermissions'])->name('role.store.permissions');
 
