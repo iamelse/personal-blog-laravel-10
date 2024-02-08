@@ -32,58 +32,51 @@
            <ul class="menu">
                <li class="sidebar-title">Menu</li>
 
-               <li class="sidebar-item">
-                   <a href="{{ route('dashboard') }}" class='sidebar-link'>
-                       <i class="bi bi-grid-fill"></i>
-                       <span>Dashboard</span>
-                   </a>
-               </li>
-
-               <li class="sidebar-title">Article</li>
-
-               <li class="sidebar-item">
+               <li class="sidebar-item{{ request()->is('dashboard*') ? ' active' : '' }}">
+                    <a href="{{ route('dashboard') }}" class='sidebar-link'>
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                
+                <li class="sidebar-title">Article</li>
+                
+                <li class="sidebar-item{{ request()->is('post-category*') ? ' active' : '' }}">
                     <a href="{{ route('post.category.index') }}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Category</span>
                     </a>
                 </li>
-            
-               <li class="sidebar-item">
-                   <a href="{{ route('permission.index') }}" class='sidebar-link'>
-                       <i class="bi bi-grid-fill"></i>
-                       <span>Post</span>
-                   </a>
-               </li>
-
-               <li class="sidebar-title">Setting</li>
-
-               <li class="sidebar-item">
+                
+                <li class="sidebar-title">Setting</li>
+                
+                <li class="sidebar-item{{ request()->is('role*') ? ' active' : '' }}">
                     <a href="{{ route('role.index') }}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Role</span>
                     </a>
                 </li>
-            
-               <li class="sidebar-item">
-                   <a href="{{ route('permission.index') }}" class='sidebar-link'>
-                       <i class="bi bi-grid-fill"></i>
-                       <span>Permission</span>
-                   </a>
-               </li>
+                
+                <li class="sidebar-item{{ request()->is('permission*') ? ' active' : '' }}">
+                    <a href="{{ route('permission.index') }}" class='sidebar-link'>
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Permission</span>
+                    </a>
+                </li>            
 
-               <!--
-               <li class="sidebar-item active has-sub">
-                   <a href="#" class='sidebar-link'>
-                       <i class="bi bi-grid-1x2-fill"></i>
-                       <span>Layouts</span>
-                   </a>
-                   <ul class="submenu active">
-                       <li class="submenu-item active">
-                           <a href="layout-vertical-navbar.html" class="submenu-link">Vertical Navbar</a>
-                       </li>
-                   </ul>
-               </li>
-               -->
+                <!--
+                <li class="sidebar-item active has-sub">
+                    <a href="#" class='sidebar-link'>
+                        <i class="bi bi-grid-1x2-fill"></i>
+                        <span>Layouts</span>
+                    </a>
+                    <ul class="submenu active">
+                        <li class="submenu-item active">
+                            <a href="layout-vertical-navbar.html" class="submenu-link">Vertical Navbar</a>
+                        </li>
+                    </ul>
+                </li>
+                -->
            </ul>
        </div>
    </div>

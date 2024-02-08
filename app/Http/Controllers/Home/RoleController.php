@@ -3,13 +3,15 @@
 namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): View
     {
         $perPage = $request->input('limit', 10);
         $q = $request->input('q', '');
@@ -31,7 +33,7 @@ class RoleController extends Controller
         ]);
     }
 
-    public function show(Role $role)
+    public function show(Role $role): View
     {
         return view('dashboard.role.show', [
             'title' => 'Role Detail',
@@ -40,7 +42,7 @@ class RoleController extends Controller
         ]);
     }
 
-    public function updateRolePermissions(Request $request, Role $role)
+    public function updateRolePermissions(Request $request, Role $role): RedirectResponse
     {
         $request->validate([
             'permissions' => 'array',

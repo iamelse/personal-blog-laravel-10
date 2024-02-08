@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Home;
 use App\Http\Controllers\Controller;
 use App\Models\PostCategory;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class PostCategoryController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): View
     {
         $perPage = $request->input('limit', 10);
         $q = $request->input('q', '');
