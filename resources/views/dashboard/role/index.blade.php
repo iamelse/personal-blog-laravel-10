@@ -43,7 +43,9 @@
                                         <tr>
                                             <td class="text-bold-500">{{ $role->name }}</td>
                                             <td class="text-bold-500">{{ $role->permissions->count() }}</td>
-                                            <td class="text-bold-500">{{ $role->name }}</td>
+                                            <td>
+                                                <a href="{{ route('role.show', $role->id) }}" class="btn btn-primary btn-sm">Detail</a>
+                                            </td>
                                         </tr>
                                         @empty
                                         <tr>
