@@ -59,6 +59,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/create', [PostCategoryController::class, 'create'])->name('post.category.create');
         Route::post('/store', [PostCategoryController::class, 'store'])->name('post.category.store');
         Route::get('/edit/{postCategory}', [PostCategoryController::class, 'edit'])->name('post.category.edit');
+        Route::put('/update/{postCategory}', [PostCategoryController::class, 'update'])->name('post.category.update');
+        Route::delete('/destroy/{postCategory}', [PostCategoryController::class, 'destroy'])->name('post.category.destroy');
     });
 
     Route::prefix('role')->group(function () {

@@ -29,6 +29,14 @@
                     <div class="card">
                         <div class="card-content">
                             <div class="card-header">
+                                <div class="row mb-4">
+                                    <div class="col-6"></div>
+                                    <div class="col-6 text-end">
+                                        <a href="{{ route('post.category.create') }}" class="btn btn-primary btn-sm">
+                                            New Category
+                                        </a>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="col-10 text-start">
                                         <div class="col-1">
@@ -81,8 +89,15 @@
                                                 <td class="text-bold-500">{{ $postCategory->name }}</td>
                                                 <td class="text-bold-500">{{ $postCategory->slug }}</td>
                                                 <td>
-                                                    <a href="{{ route('post.category.edit', $postCategory->slug) }}" class="btn btn-sm btn-outline-warning">Edit</a>
-                                                </td>
+                                                    <div style="display: flex; gap: 5px;">
+                                                        <a href="{{ route('post.category.edit', $postCategory->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
+                                                        <form method="POST" action="{{ route('post.category.destroy', $postCategory->id) }}">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                                        </form>
+                                                    </div>
+                                                </td>                                                
                                             </tr>
                                             @empty
                                             <tr>

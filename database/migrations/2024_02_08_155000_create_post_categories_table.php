@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('post_categories', function (Blueprint $table) {
             $table->id();
-            $table->text('name');
-            $table->text('slug');
+            $table->string('name');
+            $table->string('slug')->unique();
             $table->timestamps();
         });
     }
