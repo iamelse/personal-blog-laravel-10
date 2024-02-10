@@ -47,6 +47,13 @@
                         <span>Category</span>
                     </a>
                 </li>
+
+                <li class="sidebar-item{{ request()->is('post*') && !request()->is('post-category*') ? ' active' : '' }}">
+                    <a href="{{ route('post.index') }}" class='sidebar-link'>
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Post</span>
+                    </a>
+                </li>
                 
                 <li class="sidebar-title">Setting</li>
                 

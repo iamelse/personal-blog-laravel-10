@@ -5,6 +5,7 @@ use App\Http\Controllers\Home\DashboardController;
 use App\Http\Controllers\Home\PermissionController;
 use App\Http\Controllers\Home\RoleController;
 use App\Http\Controllers\Home\PostCategoryController;
+use App\Http\Controllers\Home\PostController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -61,6 +62,16 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/edit/{postCategory}', [PostCategoryController::class, 'edit'])->name('post.category.edit');
         Route::put('/update/{postCategory}', [PostCategoryController::class, 'update'])->name('post.category.update');
         Route::delete('/destroy/{postCategory}', [PostCategoryController::class, 'destroy'])->name('post.category.destroy');
+    });
+
+    Route::prefix('post')->group(function () {
+        Route::get('/', [PostController::class, 'index'])->name('post.index');
+        Route::get('/search', [PostController::class, 'index'])->name('post.search');
+        Route::get('/create', [PostController::class, 'create'])->name('post.create');
+        Route::post('/store', [PostController::class, 'store'])->name('post.store');
+        Route::get('/edit/{post}', [PostController::class, 'edit'])->name('post.edit');
+        Route::put('/update/{post}', [PostController::class, 'update'])->name('post.update');
+        Route::delete('/destroy/{post}', [PostController::class, 'destroy'])->name('post.destroy');
     });
 
     Route::prefix('role')->group(function () {
