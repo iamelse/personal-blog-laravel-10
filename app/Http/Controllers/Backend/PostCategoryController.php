@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Home;
+namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\PostCategory;
@@ -37,7 +37,7 @@ class PostCategoryController extends Controller
             });
         })->paginate($perPage);
 
-        return view('dashboard.post_category.index', [
+        return view('backend.post_category.index', [
             'title' => 'Post Category',
             'postCategories' => $postCategories,
             'perPage' => $perPage,
@@ -49,7 +49,7 @@ class PostCategoryController extends Controller
     {
         $categoryId = uniqid();
 
-        return view('dashboard.post_category.create', [
+        return view('backend.post_category.create', [
             'title' => 'New Category',
             'categoryId' => $categoryId
         ]);
@@ -71,7 +71,7 @@ class PostCategoryController extends Controller
 
     public function edit(PostCategory $postCategory): View 
     {
-        return view('dashboard.post_category.edit', [
+        return view('backend.post_category.edit', [
             'title' => 'Edit Category',
             'postCategory' => $postCategory
         ]);

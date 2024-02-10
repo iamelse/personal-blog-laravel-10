@@ -1,11 +1,11 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Home\DashboardController;
-use App\Http\Controllers\Home\PermissionController;
-use App\Http\Controllers\Home\RoleController;
-use App\Http\Controllers\Home\PostCategoryController;
-use App\Http\Controllers\Home\PostController;
+use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\PermissionController;
+use App\Http\Controllers\Backend\RoleController;
+use App\Http\Controllers\Backend\PostCategoryController;
+use App\Http\Controllers\Backend\PostController;
 use Illuminate\Support\Facades\Route;
 
 /*

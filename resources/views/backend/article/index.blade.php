@@ -39,20 +39,37 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-10 text-start">
-                                        <div class="col-1">
-                                            <form method="GET" action="{{ route('post.index') }}">
-                                                <select name="limit" class="form-select col-2" onchange="this.form.submit()">
-                                                    <option value="10" {{ request('limit') == 10 ? 'selected' : '' }}>10</option>
-                                                    <option value="25" {{ request('limit') == 25 ? 'selected' : '' }}>25</option>
-                                                    <option value="50" {{ request('limit') == 50 ? 'selected' : '' }}>50</option>
-                                                    <option value="100" {{ request('limit') == 100 ? 'selected' : '' }}>100</option>
-                                                </select>
-                                            </form>
-                                        </div>
+                                        <div class="row">
+                                            <div class="col-1">
+                                                <form method="GET" action="{{ route('post.index') }}">
+                                                    <label for="limit" class="fw-bold">Limit:</label>
+                                                    <select name="limit" id="limit" class="form-select col-2" onchange="this.form.submit()">
+                                                        <option value="10" {{ request('limit') == 10 ? 'selected' : '' }}>10</option>
+                                                        <option value="25" {{ request('limit') == 25 ? 'selected' : '' }}>25</option>
+                                                        <option value="50" {{ request('limit') == 50 ? 'selected' : '' }}>50</option>
+                                                        <option value="100" {{ request('limit') == 100 ? 'selected' : '' }}>100</option>
+                                                    </select>
+                                                </form>
+                                            </div>
+                                            <div class="col-2">
+                                                <form method="GET" action="{{ route('post.index') }}">
+                                                    <label for="category_id" class="fw-bold">Category:</label>
+                                                    <select name="category_id" id="category_id" class="form-select col-2" onchange="this.form.submit()">
+                                                        <option value="" {{ request('category_id') === null ? 'selected' : '' }}>All Categories</option>
+                                                        @foreach($categories as $category)
+                                                            <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
+                                                                {{ $category->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </form>
+                                            </div>
+                                        </div>                                        
                                     </div>
-                                    <div class="col-2 text-end">
+                                    <div class="col-2">
                                         <form method="GET" action="{{ route('post.search') }}">
                                             <div class="form-group mandatory">
+                                                <label for="search" class="fw-bold">Search:</label>
                                                 <input
                                                     type="text"
                                                     class="form-control @error('q') is-invalid @enderror"
@@ -107,7 +124,7 @@
                                             </tr>
                                             @empty
                                             <tr>
-                                                <td class="text-center" colspan="4">No Data</td>
+                                                <td class="text-center" colspan="6">No Data</td>
                                             </tr>
                                             @endforelse
                                         </tbody>
@@ -116,7 +133,7 @@
                                 <!-- Pagination links -->
                                 <div class="row">
                                     <div class="col-12 d-flex justify-content-end">
-                                        {{ $posts->appends(['limit' => $perPage, 'q' => $q])->links() }}
+                                        {{ $posts->appends(['limit' => $perPage, 'q' => $q, $categoryFilter => 'categoryFilter'])->links() }}
                                     </div>
                                 </div>                
                             </div>

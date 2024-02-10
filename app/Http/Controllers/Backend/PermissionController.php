@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Home;
+namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
@@ -12,7 +12,7 @@ class PermissionController extends Controller
 {
     public function index(): View
     {
-        return view('dashboard.permission.index', [
+        return view('backend.permission.index', [
             'title' => 'Permission',
             'permissions' => Permission::all()
         ]);
@@ -20,7 +20,7 @@ class PermissionController extends Controller
 
     public function create(): View
     {
-        return view('dashboard.permission.create', [
+        return view('backend.permission.create', [
             'title' => 'New Permission',
         ]);
     }

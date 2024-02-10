@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Home;
+namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -10,7 +10,7 @@ class DashboardController extends Controller
 {
     public function index(): View
     {
-        return view('dashboard.dashboard',[
+        return view('backend.dashboard',[
             'title' => 'Dashboard'
         ]);
     }

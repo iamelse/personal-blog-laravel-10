@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Home;
+namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Post;
+use App\Models\PostCategory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -27,27 +28,38 @@ class PostController extends Controller
     {
         $perPage = $request->input('limit', 10);
         $q = $request->input('q', '');
+        $categoryFilter = $request->input('category_id', null);
         $columns = ['name', 'slug'];
 
-        $posts = Post::with('category')->when($q, function ($query) use ($q, $columns) {
-            $query->where(function ($subquery) use ($q, $columns) {
-                foreach ($columns as $column) {
-                    $subquery->orWhere($column, 'LIKE', "%$q%");
-                }
+        $query = Post::with('category')
+            ->when($categoryFilter, function ($query) use ($categoryFilter) {
+                $query->where('post_category_id', $categoryFilter);
+            })
+            ->when($q, function ($query) use ($q, $columns) {
+                $query->where(function ($subquery) use ($q, $columns) {
+                    foreach ($columns as $column) {
+                        $subquery->orWhere($column, 'LIKE', "%$q%");
+                    }
+                });
             });
-        })->paginate($perPage);
 
-        return view('dashboard.article.index', [
+        $posts = $query->paginate($perPage);
+
+        $categories = PostCategory::all();
+
+        return view('backend.article.index', [
             'title' => 'Post',
             'posts' => $posts,
+            'categories' => $categories,
             'perPage' => $perPage,
             'q' => $q,
+            'categoryFilter' => $categoryFilter,
         ]);
     }
 
     public function create(): View 
     {
-        return view('dashboard.article.create', [
+        return view('backend.article.create', [
             'title' => 'New Post'
         ]);
     }
@@ -68,7 +80,7 @@ class PostController extends Controller
 
     public function edit(Post $post): View 
     {
-        return view('dashboard.article.edit', [
+        return view('backend.article.edit', [
             'title' => 'Edit Post',
             'post' => $post
         ]);

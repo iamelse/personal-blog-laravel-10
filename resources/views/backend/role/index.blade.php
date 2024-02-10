@@ -1,4 +1,3 @@
-
 @extends('template.main')
 
 @section('content')
@@ -29,18 +28,11 @@
                     <div class="card">
                         <div class="card-content">
                             <div class="card-header">
-                                <div class="row mb-4">
-                                    <div class="col-6"></div>
-                                    <div class="col-6 text-end">
-                                        <a href="{{ route('post.category.create') }}" class="btn btn-primary btn-sm">
-                                            New Category
-                                        </a>
-                                    </div>
-                                </div>
                                 <div class="row">
                                     <div class="col-10 text-start">
                                         <div class="col-1">
-                                            <form method="GET" action="{{ route('post.category.index') }}">
+                                            <form method="GET" action="{{ route('role.index') }}">
+                                                <label for="limit" class="fw-bold">Limit:</label>
                                                 <select name="limit" class="form-select col-2" onchange="this.form.submit()">
                                                     <option value="10" {{ request('limit') == 10 ? 'selected' : '' }}>10</option>
                                                     <option value="25" {{ request('limit') == 25 ? 'selected' : '' }}>25</option>
@@ -50,9 +42,10 @@
                                             </form>
                                         </div>
                                     </div>
-                                    <div class="col-2 text-end">
-                                        <form method="GET" action="{{ route('post.category.search') }}">
+                                    <div class="col-2">
+                                        <form method="GET" action="{{ route('role.search') }}">
                                             <div class="form-group mandatory">
+                                                <label for="search" class="fw-bold">Search:</label>
                                                 <input
                                                     type="text"
                                                     class="form-control @error('q') is-invalid @enderror"
@@ -77,27 +70,20 @@
                                         <thead>
                                             <tr>
                                                 <th>No.</th>
-                                                <th>Post Category Name</th>
-                                                <th>Slug</th>
+                                                <th>Role Name</th>
+                                                <th>Total Permission</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @forelse ($postCategories as $postCategory)
+                                            @forelse ($roles as $role)
                                             <tr>
                                                 <td class="text-bold-500">{{ $loop->iteration }}</td>
-                                                <td class="text-bold-500">{{ $postCategory->name }}</td>
-                                                <td class="text-bold-500">{{ $postCategory->slug }}</td>
+                                                <td class="text-bold-500">{{ $role->name }}</td>
+                                                <td class="text-bold-500">{{ $role->permissions->count() }}</td>
                                                 <td>
-                                                    <div style="display: flex; gap: 5px;">
-                                                        <a href="{{ route('post.category.edit', $postCategory->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
-                                                        <form method="POST" action="{{ route('post.category.destroy', $postCategory->id) }}">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
-                                                        </form>
-                                                    </div>
-                                                </td>                                                
+                                                    <a href="{{ route('role.show', $role->id) }}" class="btn btn-sm btn-outline-primary">Detail</a>
+                                                </td>
                                             </tr>
                                             @empty
                                             <tr>
@@ -110,9 +96,9 @@
                                 <!-- Pagination links -->
                                 <div class="row">
                                     <div class="col-12 d-flex justify-content-end">
-                                        {{ $postCategories->appends(['limit' => $perPage, 'q' => $q])->links() }}
+                                        {{ $roles->appends(['limit' => $perPage, 'q' => $q])->links() }}
                                     </div>
-                                </div>                
+                                </div>
                             </div>
                         </div>
                     </div>

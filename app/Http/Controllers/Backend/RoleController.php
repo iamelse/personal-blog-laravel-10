@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Home;
+namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
@@ -25,7 +25,7 @@ class RoleController extends Controller
             });
         })->paginate($perPage);
 
-        return view('dashboard.role.index', [
+        return view('backend.role.index', [
             'title' => 'Role',
             'roles' => $roles,
             'perPage' => $perPage,
@@ -35,7 +35,7 @@ class RoleController extends Controller
 
     public function show(Role $role): View
     {
-        return view('dashboard.role.show', [
+        return view('backend.role.show', [
             'title' => 'Role Detail',
             'role' => $role,
             'permissions' => Permission::all()
