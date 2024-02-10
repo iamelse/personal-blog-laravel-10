@@ -32,7 +32,7 @@
            <ul class="menu">
                <li class="sidebar-title">Menu</li>
 
-               <li class="sidebar-item{{ request()->is('dashboard*') ? ' active' : '' }}">
+               <li class="sidebar-item{{ request()->is('backend/dashboard*') ? ' active' : '' }}">
                     <a href="{{ route('dashboard') }}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Dashboard</span>
@@ -41,14 +41,14 @@
                 
                 <li class="sidebar-title">Article</li>
                 
-                <li class="sidebar-item{{ request()->is('post-category*') ? ' active' : '' }}">
+                <li class="sidebar-item{{ request()->is('backend/post-category*') ? ' active' : '' }}">
                     <a href="{{ route('post.category.index') }}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Category</span>
                     </a>
                 </li>
 
-                <li class="sidebar-item{{ request()->is('post*') && !request()->is('post-category*') ? ' active' : '' }}">
+                <li class="sidebar-item{{ request()->is('backend/post*') && !request()->is('backend/post-category*') ? ' active' : '' }}">
                     <a href="{{ route('post.index') }}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Post</span>
@@ -57,14 +57,14 @@
                 
                 <li class="sidebar-title">Setting</li>
                 
-                <li class="sidebar-item{{ request()->is('role*') ? ' active' : '' }}">
+                <li class="sidebar-item{{ request()->is('backend/role*') ? ' active' : '' }}">
                     <a href="{{ route('role.index') }}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Role</span>
                     </a>
                 </li>
                 
-                <li class="sidebar-item{{ request()->is('permission*') ? ' active' : '' }}">
+                <li class="sidebar-item{{ request()->is('backend/permission*') ? ' active' : '' }}">
                     <a href="{{ route('permission.index') }}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Permission</span>

@@ -89,12 +89,14 @@ class PostController extends Controller
     public function update(Request $request, Post $post): RedirectResponse
     {
         $request->validate([
-            'title' => 'required|string|max:255'
+            'title' => 'required|string|max:255',
+            'content' => 'required'
         ]);
 
         $post->update([
             'title' => $request->title,
-            'slug' => $this->generateUniqueSlug($request->title)
+            'slug' => $this->generateUniqueSlug($request->title),
+            'body' => $request->content
         ]);
 
         return redirect()->route('post.index')->with('success', 'Post updated successfully');

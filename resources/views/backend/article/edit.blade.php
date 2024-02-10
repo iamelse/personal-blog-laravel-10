@@ -35,7 +35,7 @@
 
                                 <div class="form-group mandatory mb-3">
                                     <label class="form-label">Content</label>
-                                    <textarea id="editor" class="form-control" name="content" rows="10" cols="50"></textarea>
+                                    <textarea id="editor" class="form-control" name="content" rows="10" cols="50">{{ $post->body }}</textarea>
                                 </div>                                
 
                                 <div class="row">
