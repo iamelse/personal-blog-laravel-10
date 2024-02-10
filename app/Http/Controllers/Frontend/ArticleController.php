@@ -22,10 +22,16 @@ class ArticleController extends Controller
     public function show($slug): View
     {
         $post = Post::where('slug', $slug)->firstOrFail();
+        $relatedPosts = Post::where('post_category_id', $post->post_category_id)
+                            ->where('slug', '!=', $post->slug)
+                            ->inRandomOrder()
+                            ->limit(4)
+                            ->get();
 
         return view('frontend.article.show', [
             'title' => $post->title,
-            'post' => $post
+            'post' => $post,
+            'relatedPosts' => $relatedPosts
         ]);
     }
 }

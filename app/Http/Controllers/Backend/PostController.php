@@ -29,7 +29,7 @@ class PostController extends Controller
         $perPage = $request->input('limit', 10);
         $q = $request->input('q', '');
         $categoryFilter = $request->input('category_id', null);
-        $columns = ['name', 'slug'];
+        $columns = ['title', 'slug'];
 
         $query = Post::with('category')
             ->when($categoryFilter, function ($query) use ($categoryFilter) {
