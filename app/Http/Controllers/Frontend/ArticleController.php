@@ -11,10 +11,10 @@ class ArticleController extends Controller
 {
     public function index(): View
     {
-        $posts = Post::orderBy('created_at', 'DESC')->get();
+        $posts = Post::orderBy('created_at', 'DESC')->paginate(10);
 
         return view('frontend.article.index', [
-            'title' => '',
+            'title' => 'My Article',
             'posts' => $posts
         ]);
     }
@@ -24,7 +24,7 @@ class ArticleController extends Controller
         $post = Post::where('slug', $slug)->firstOrFail();
 
         return view('frontend.article.show', [
-            'title' => '',
+            'title' => $post->title,
             'post' => $post
         ]);
     }
