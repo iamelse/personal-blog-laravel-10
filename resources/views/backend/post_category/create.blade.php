@@ -37,19 +37,23 @@
                                         <div class="col-12">
                                             <div class="form-group mandatory mb-3">
                                                 <label class="form-label">Category Name</label>
-                                                <input
-                                                    type="text"
-                                                    class="form-control @error('category_name') is-invalid @enderror"
-                                                    placeholder="Category Name"
-                                                    name="category_name"
-                                                    value="{{ old('category_name') }}"
-                                                />
+                                                <input type="text" class="form-control @error('category_name') is-invalid @enderror" placeholder="Category Name" name="category_name" id="name" value="{{ old('category_name') }}" />
                                                 @error('category_name')
                                                     <span class="invalid-feedback" role="alert">
                                                         <strong>{{ $message }}</strong>
                                                     </span>
                                                 @enderror
-                                            </div>                                      
+                                            </div>   
+
+                                            <div class="form-group mandatory mb-3">
+                                                <label class="form-label">Slug</label>
+                                                <input type="text" class="form-control @error('slug') is-invalid @enderror" placeholder="Slug" name="slug" id="slug" value="{{ old('slug') }}" readonly/>
+                                                @error('slug')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                            </div>                                   
                                         </div>
                                     </div>
 
@@ -73,5 +77,15 @@
 @endsection
 
 @push('scripts')
+<script>
+    const name = document.querySelector('#name');
+    const slug = document.querySelector('#slug');
 
+    name.addEventListener('change', function() {
+        fetch("{{ route('api.post.category.check.slug') }}?name=" + encodeURIComponent(name.value))
+            .then(response => response.json())
+            .then(data => slug.value = data.slug)
+            .catch(error => console.error('Error:', error));
+    });
+</script>
 @endpush

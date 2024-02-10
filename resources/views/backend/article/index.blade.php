@@ -106,7 +106,7 @@
                                             <tr>
                                                 <td class="text-bold-500">{{ $loop->iteration }}</td>
                                                 <td>
-                                                    <img src="{{ $post->cover ?? '' }}" class="w-50 rounded-3">
+                                                    <img src="{{ asset('/' . $post->cover) }}" class="rounded-3" style="width: 100px;">
                                                 </td>
                                                 <td class="text-bold-500">{{ $post->category->name ?? '' }}</td>
                                                 <td class="text-bold-500">{{ $post->title ?? '' }}</td>

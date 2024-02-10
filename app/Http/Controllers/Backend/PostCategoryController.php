@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\PostCategory;
+use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -11,18 +12,13 @@ use Illuminate\View\View;
 
 class PostCategoryController extends Controller
 {
-    private function generateUniqueSlug(String $name): String
+    public function checkSlug(Request $request)
     {
-        $slug = Str::slug($name);
-        $counter = 1;
+        $slug = SlugService::createSlug(PostCategory::class, 'slug', $request->name);
 
-        while (PostCategory::where('slug', $slug)->exists()) {
-            $slug = Str::slug($name) . '-' . $counter++;
-        }
-
-        return $slug;
+        return response()->json(['slug' => $slug]);
     }
-
+    
     public function index(Request $request): View
     {
         $perPage = $request->input('limit', 10);
@@ -58,12 +54,13 @@ class PostCategoryController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'category_name' => 'required|string|max:255'
+            'category_name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:post_categories',
         ]);
 
         PostCategory::create([
             'name' => $request->category_name,
-            'slug' => $this->generateUniqueSlug($request->category_name)
+            'slug' => $request->slug
         ]);
 
         return redirect()->route('post.category.index')->with('success', 'Post category created successfully');
@@ -80,12 +77,13 @@ class PostCategoryController extends Controller
     public function update(Request $request, PostCategory $postCategory): RedirectResponse
     {
         $request->validate([
-            'category_name' => 'required|string|max:255'
+            'category_name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:post_categories,slug,' . $postCategory->id,
         ]);
 
         $postCategory->update([
             'name' => $request->category_name,
-            'slug' => $this->generateUniqueSlug($request->category_name)
+            'slug' => $request->slug
         ]);
 
         return redirect()->route('post.category.index')->with('success', 'Post category updated successfully');
