@@ -45,7 +45,13 @@
                             </div>
                             <hr class="card-hr">
                             @empty
-                            No Post Available
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <p class="l-card-text">
+                                        No Post Available
+                                    </p>
+                                </div>
+                            </div>
                             @endforelse
                         </div>
                         <!-- Pagination links -->
