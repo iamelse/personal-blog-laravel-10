@@ -1,0 +1,44 @@
+.nav-link {
+    font-weight: 600 !important;
+}
+
+.nav-item .nav-link {
+    color: var(--navbar-link-text-color) !important;
+}
+
+.nav-item .nav-link.active {
+    color: var(--navbar-link-active-color) !important;
+}
+
+.nav-item .nav-link:hover {
+    color: var(--navbar-link-text-color-hover) !important;
+}
+
+.has-search .form-control {
+    border-radius: 5rem;
+    border: none;
+    background-color: var(--search-form-color);
+    padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.2rem;
+    text-align: center;
+    pointer-events: none;
+    color: var(--search-icon-form-color);
+}
+
+a.btn-switch-mode {
+    text-decoration: none;
+    color: var(--navbar-link-text-color);
+}
+
+a.btn-switch-mode:hover {
+    text-decoration: none;
+    color: var(--navbar-link-text-color-hover);
+}

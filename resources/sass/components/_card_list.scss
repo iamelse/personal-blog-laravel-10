@@ -1,0 +1,41 @@
+.dash-date-list-card {
+    font-size: 0.8rem;
+    color: var(--l-text-primary);
+}
+
+.date-list-card {
+    font-size: 0.8rem;
+    color: var(--l-text-p);
+}
+
+.l-card-title {
+    font-size: 1.1rem !important;
+    color: var(--l-text-dark) !important;
+    font-weight: bold !important;
+}
+
+.l-card-text {
+    font-size: 0.9rem !important;
+    color: var(--l-text-p) !important;
+}
+
+.card-img-left.l-card-img {
+    width: 6rem;
+    height: 6rem;
+    border-radius: 0.5rem;
+}
+
+hr.card-hr {
+    margin-top: -0.1rem;
+    color: var(--l-text-p);
+}
+
+a.arrow-card-link {
+    color: var(--l-text-primary);
+}
+
+a:hover h5.l-card-title {
+    color: var(--l-text-primary) !important;
+}
+
+
