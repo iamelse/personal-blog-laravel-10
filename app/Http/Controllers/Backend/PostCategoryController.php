@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\PostCategory;
 use Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -12,7 +13,7 @@ use Illuminate\View\View;
 
 class PostCategoryController extends Controller
 {
-    public function checkSlug(Request $request)
+    public function checkSlug(Request $request): JsonResponse
     {
         $slug = SlugService::createSlug(PostCategory::class, 'slug', $request->name);
 
