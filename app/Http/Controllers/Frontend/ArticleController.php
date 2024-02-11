@@ -21,7 +21,7 @@ class ArticleController extends Controller
 
     public function show($slug): View
     {
-        $post = Post::where('slug', $slug)->firstOrFail();
+        $post = Post::with('author', 'category')->where('slug', $slug)->firstOrFail();
         $relatedPosts = Post::where('post_category_id', $post->post_category_id)
                             ->where('slug', '!=', $post->slug)
                             ->inRandomOrder()

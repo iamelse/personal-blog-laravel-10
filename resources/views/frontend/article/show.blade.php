@@ -79,15 +79,35 @@
                 <!-- First col -->
                 <div class="col-lg-12">
 
-                    <section class="col-lg-12 pb-2">
-                        <h1 class="text l-text-dark display-5 fw-bold">
-                            {{ $post->title }}
-                        </h1>
-                    </section>
+                    <article class="col-lg-12 pb-2">
+                        <header>
+                            <h1 class="text l-text-dark display-5 fw-bold">
+                                {{ $post->title }}
+                            </h1>
+                            <div class="d-flex align-items-center my-4">
+                                <img src="https://via.placeholder.com/150" alt="Profile Image" class="me-2 rounded-circle" style="width: 45px; height: 45px; object-fit: cover;">
+                                <div class="post-metadata">
+                                    <span class="author l-text-dark">{{ $post->author->name }}</span>
+                                    <span class="category l-text-dark">in {{ $post->category->name }}</span>
+                                    <div class="time">
+                                        @php
+                                            $totalWords = str_word_count(strip_tags($post->body));
+                                            $readingSpeed = 200;
 
-                    <section class="col-lg-12 pb-2">
-                        {!! $post->body !!}
-                    </section>
+                                            $estimatedTime = ceil($totalWords / $readingSpeed);
+                                        @endphp
+                                        <small class="date l-text-p">{{ $estimatedTime }} mins read</small>
+                                        <small class="date l-text-p">.</small>
+                                        <small class="date l-text-p">{{ \Carbon\Carbon::parse($post->created_at)->format('M d, Y') }}</small>
+                                    </div>
+                                </div>
+                                                                
+                            </div>                                                      
+                        </header>
+                        <div class="content">
+                            {!! $post->body !!}
+                        </div>
+                    </article>                    
                 </div>
                 <!-- End first col -->
 

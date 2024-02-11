@@ -18,9 +18,11 @@ return new class extends Migration
             $table->string('slug')->nullable()->unique();
             $table->longText('body')->nullable();
             $table->unsignedBigInteger('post_category_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->timestamps();
 
             $table->foreign('post_category_id')->references('id')->on('post_categories')->onDelete('set null');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
         });
     }
 

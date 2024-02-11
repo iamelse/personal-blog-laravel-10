@@ -83,6 +83,7 @@ class PostController extends Controller
 
             $post = Post::create([
                 'post_category_id' => $request->post_category_id,
+                'user_id' => auth()->user()->id,
                 'title' => $request->title,
                 'slug' => $request->slug,
                 'cover' => $postDirectory . '/' . $fileName,
@@ -130,6 +131,7 @@ class PostController extends Controller
 
             $post->update([
                 'post_category_id' => $request->post_category_id,
+                'user_id' => auth()->user()->id,
                 'title' => $request->title,
                 'slug' => $request->slug,
                 'cover' => $postDirectory . '/' . $fileName,
