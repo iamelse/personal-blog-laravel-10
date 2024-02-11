@@ -54,13 +54,13 @@
                                             <div class="col-2">
                                                 <form method="GET" action="{{ route('post.index') }}">
                                                     <label for="category_id" class="fw-bold">Category:</label>
-                                                    <select name="category_id" id="category_id" class="form-select col-2" onchange="this.form.submit()">
+                                                    <select name="category_id" id="selectPostCategory" class="form-select col-2" onchange="this.form.submit()">
                                                         <option value="" {{ request('category_id') === null ? 'selected' : '' }}>All Categories</option>
-                                                        @foreach($categories as $category)
-                                                            <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
-                                                                {{ $category->name }}
-                                                            </option>
-                                                        @endforeach
+                                                            @foreach($categories as $category)
+                                                                <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
+                                                                    {{ $category->name }}
+                                                                </option>
+                                                            @endforeach
                                                     </select>
                                                 </form>
                                             </div>
@@ -147,3 +147,15 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $( '#selectPostCategory' ).select2( {
+        theme: 'bootstrap-5',
+    } );
+</script>
+@endpush

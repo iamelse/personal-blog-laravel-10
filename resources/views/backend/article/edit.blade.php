@@ -49,8 +49,8 @@
                             
                                 <div class="form-group mb-3 mandatory">
                                     <label class="form-label">Categories</label>
-                                    <select class="form-select @error('post_category_id') is-invalid @enderror" name="post_category_id">
-                                        <option>--Select categories--</option>
+                                    <select class="form-select @error('post_category_id') is-invalid @enderror" name="post_category_id" id="selectPostCategory">
+                                        <option value="">--Select categories--</option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}" {{ old('post_category_id', $post->post_category_id) == $category->id ? 'selected' : '' }}>
                                                 {{ $category->name }}
@@ -90,6 +90,15 @@
 @endsection
 
 @push('scripts')
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $( '#selectPostCategory' ).select2( {
+        theme: 'bootstrap-5',
+    } );
+</script>
 <script>
     CKEDITOR.replace('editor', {
         on: {
