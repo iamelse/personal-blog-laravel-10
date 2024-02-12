@@ -16,6 +16,18 @@
     font-size: 16px;
 }
 
+html {
+    position: relative;
+    min-height: 100%;
+    padding-bottom: 8rem;
+}
+
 body {
     font-family: 'Inter', sans-serif !important;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }
