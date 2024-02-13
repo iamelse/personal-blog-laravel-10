@@ -26,19 +26,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-3 d-flex justify-content-center">
-                            @if (optional($user)->image_profile)
-                                @php
-                                    $imagePath = public_path(optional($user)->image_profile);
-                                @endphp
-                        
-                                @if (File::exists($imagePath))
-                                    <img src="{{ asset(optional($user)->image_profile) }}" alt="User Avatar" class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover;">
-                                @else
-                                    <img src="https://via.placeholder.com/150" alt="User Avatar" class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover;">
-                                @endif
-                            @else
-                                <img src="https://via.placeholder.com/150" alt="User Avatar" class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover;">
-                            @endif
+                            <img src="{{ empty($user->image_profile) ? 'https://via.placeholder.com/150' : (Storage::disk('public_uploads')->exists($user->image_profile) ? asset('uploads/' . $user->image_profile) : 'https://via.placeholder.com/150') }}" class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover;">
                         </div>                        
                         <div class="col-9">
                             <form action="{{ route('profile.update') }}" method="post" enctype="multipart/form-data">

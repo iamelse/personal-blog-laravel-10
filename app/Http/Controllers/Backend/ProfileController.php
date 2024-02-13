@@ -6,12 +6,33 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
+    private function uploadImage($params)
+    {
+        $file = $params['file'];
+        $directory = $params['directory'];
+        $oldImagePath = $params['oldImagePath'];
+        $diskName = $params['diskName'];
+        
+        $imageProfileName = time() . '.' . $file->getClientOriginalExtension();
+        $imageProfileDirectory = $directory;
+
+        $file->storeAs($imageProfileDirectory, $imageProfileName, $diskName);
+
+        if (!empty($oldImagePath)) {
+            if (Storage::disk($diskName)->exists($oldImagePath)) {
+                Storage::disk($diskName)->delete($oldImagePath);
+            }
+        }
+
+        return $imageProfileDirectory . '/' . $imageProfileName;
+    }
+
     public function index(): View
     {
         return view('backend.profile',[
@@ -30,31 +51,21 @@ class ProfileController extends Controller
         ]);
 
         $user = Auth::user();
+        $diskName = config('filesystems.default');
 
         if ($request->hasFile('image_profile')) {
-            $imageProfile = $request->file('image_profile');
-            $imageProfileName = time() . '.' . $imageProfile->getClientOriginalExtension();
-            $imageProfileDirectory = 'uploads/user_profiles';
-            $imageProfile->move(public_path($imageProfileDirectory), $imageProfileName);
-        
-            if (!empty($user->image_profile)) {
-                $oldImageProfilePath = public_path($user->image_profile);
-                if (File::exists($oldImageProfilePath)) {
-                    File::delete($oldImageProfilePath);
-                }
-            }
-        
-            $user->image_profile = $imageProfileDirectory . '/' . $imageProfileName;
-            $user->name = $request->name;
-            $user->username = $request->username;
-            $user->email = $request->email;
-            $user->save();
-        } else {
-            $user->name = $request->name;
-            $user->username = $request->username;
-            $user->email = $request->email;
-            $user->save();
-        }        
+            $user->image_profile = $this->uploadImage([
+                'file' => $request->file('image_profile'),
+                'directory' => 'user_profiles',
+                'oldImagePath' => $user->image_profile,
+                'diskName' => $diskName,
+            ]);
+        }
+
+        $user->name = $request->name;
+        $user->username = $request->username;
+        $user->email = $request->email;
+        $user->save();
 
         return redirect()->route('profile.index')->with('success', 'Profile updated successfully');
     }

@@ -99,18 +99,24 @@
     } );
 </script>
 <script>
-    CKEDITOR.replace('editor', {
-        on: {
-            instanceReady: function (event) {
-                this.dataProcessor.htmlFilter.addRules({
-                    elements: {
-                        p: function (el) {
-                            el.addClass('l-card-text');
-                        }
-                    }
-                });
+    var options = {
+        filebrowserImageBrowseUrl: '/laravel-filemanager?type=Images',
+        filebrowserImageUploadUrl: '/laravel-filemanager/upload?type=Images&_token=',
+        filebrowserBrowseUrl: '/laravel-filemanager?type=Files',
+        filebrowserUploadUrl: '/laravel-filemanager/upload?type=Files&_token=',
+        clipboard_handleImages: false
+    };
+</script>
+<script>
+    CKEDITOR.replace('editor', options);
+    CKEDITOR.instances.editor.on('instanceReady', function (event) {
+        this.dataProcessor.htmlFilter.addRules({
+            elements: {
+                p: function (el) {
+                    el.addClass('l-card-text');
+                }
             }
-        }
+        });
     });
 </script>
 <script>
