@@ -69,7 +69,14 @@
                         <i class="bi bi-grid-fill"></i>
                         <span>Permission</span>
                     </a>
-                </li>            
+                </li>   
+                
+                <li class="sidebar-item{{ request()->is('backend/user*') ? ' active' : '' }}">
+                    <a href="{{ route('user.index') }}" class='sidebar-link'>
+                        <i class="bi bi-grid-fill"></i>
+                        <span>User</span>
+                    </a>
+                </li>
 
                 <!--
                 <li class="sidebar-item active has-sub">

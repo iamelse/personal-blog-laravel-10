@@ -6,6 +6,7 @@ use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\Backend\PostCategoryController;
 use App\Http\Controllers\Backend\PostController;
 use App\Http\Controllers\Backend\ProfileController;
+use App\Http\Controllers\Backend\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['auth']], function () {
@@ -47,6 +48,16 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/', [PermissionController::class, 'index'])->name('permission.index');
             Route::get('/create', [PermissionController::class, 'create'])->name('permission.create');
             Route::post('/store', [PermissionController::class, 'store'])->name('permission.store');
+        });
+
+        Route::prefix('user')->group(function () {
+            Route::get('/', [UserController::class, 'index'])->name('user.index');
+            Route::get('/search', [UserController::class, 'index'])->name('user.search');
+            Route::get('/create', [UserController::class, 'create'])->name('user.create');
+            Route::post('/store', [UserController::class, 'store'])->name('user.store');
+            Route::get('/edit/{user}', [UserController::class, 'edit'])->name('user.edit');
+            Route::put('/update/{user}', [UserController::class, 'update'])->name('user.update');
+            Route::delete('/destroy/{user}', [UserController::class, 'destroy'])->name('user.destroy');
         });
     });
 });
