@@ -24,6 +24,18 @@ class DatabaseSeeder extends Seeder
             'password' => 'password'
         ]);
 
+        \App\Models\User::factory()->create([
+            'name' => 'Tatang Basher',
+            'username' => 'tatang',
+            'email' => 'tatang@gmail.com',
+            'password' => 'password'
+        ]);
+
+        \App\Models\PostCategory::factory()->create([
+            'name' => 'Coding',
+            'slug' => 'coding',
+        ]);
+
         $this->call(RoleSeeder::class);
         $this->call(PermissionSeeder::class);
     }

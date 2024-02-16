@@ -55,28 +55,43 @@
                     </a>
                 </li>
                 
-                <li class="sidebar-title">Setting</li>
-                
+                @php
+                    $user = auth()->user();
+                    $roleVisible = Gate::allows('view_roles', $user->roles);
+                    $permissionVisible = Gate::allows('view_permissions', $user->roles);
+                    $userVisible = Gate::allows('view_users', $user->roles);
+                @endphp
+
+                @if ($roleVisible || $permissionVisible || $userVisible)
+                    <li class="sidebar-title">Setting</li>
+                @endif
+
+                @can('view_roles', $user->roles)
                 <li class="sidebar-item{{ request()->is('backend/role*') ? ' active' : '' }}">
                     <a href="{{ route('role.index') }}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Role</span>
                     </a>
                 </li>
-                
+                @endcan
+
+                @can('view_permissions', $user->roles)
                 <li class="sidebar-item{{ request()->is('backend/permission*') ? ' active' : '' }}">
                     <a href="{{ route('permission.index') }}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Permission</span>
                     </a>
-                </li>   
-                
+                </li>
+                @endcan
+
+                @can('view_users', $user->roles)
                 <li class="sidebar-item{{ request()->is('backend/user*') ? ' active' : '' }}">
                     <a href="{{ route('user.index') }}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>User</span>
                     </a>
                 </li>
+                @endcan   
 
                 <!--
                 <li class="sidebar-item active has-sub">

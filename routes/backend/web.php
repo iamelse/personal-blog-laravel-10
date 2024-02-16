@@ -28,20 +28,20 @@ Route::group(['middleware' => ['auth']], function () {
         });
 
         Route::prefix('post')->group(function () {
-            Route::get('/', [PostController::class, 'index'])->name('post.index');
-            Route::get('/search', [PostController::class, 'index'])->name('post.search');
-            Route::get('/create', [PostController::class, 'create'])->name('post.create');
-            Route::post('/store', [PostController::class, 'store'])->name('post.store');
-            Route::get('/edit/{post}', [PostController::class, 'edit'])->name('post.edit');
-            Route::put('/update/{post}', [PostController::class, 'update'])->name('post.update');
-            Route::delete('/destroy/{post}', [PostController::class, 'destroy'])->name('post.destroy');
+            Route::get('/', [PostController::class, 'index'])->middleware(['can:view_posts'])->name('post.index');
+            Route::get('/search', [PostController::class, 'index'])->middleware(['can:view_posts'])->name('post.search');
+            Route::get('/create', [PostController::class, 'create'])->middleware(['can:create_posts'])->name('post.create');
+            Route::post('/store', [PostController::class, 'store'])->middleware(['can:create_posts'])->name('post.store');
+            Route::get('/edit/{post}', [PostController::class, 'edit'])->middleware(['can:edit_posts'])->name('post.edit');
+            Route::put('/update/{post}', [PostController::class, 'update'])->middleware(['can:edit_posts'])->name('post.update');
+            Route::delete('/destroy/{post}', [PostController::class, 'destroy'])->middleware(['can:destroy_posts'])->name('post.destroy');
         });
 
         Route::prefix('role')->group(function () {
-            Route::get('/', [RoleController::class, 'index'])->name('role.index');
-            Route::get('/search', [RoleController::class, 'index'])->name('role.search');
-            Route::get('/show/{role}', [RoleController::class, 'show'])->name('role.show');
-            Route::post('/show/{role}/store/permission', [RoleController::class, 'updateRolePermissions'])->name('role.store.permissions');
+            Route::get('/', [RoleController::class, 'index'])->middleware(['can:view_roles'])->name('role.index');
+            Route::get('/search', [RoleController::class, 'index'])->middleware(['can:view_roles'])->name('role.search');
+            Route::get('/show/{role}', [RoleController::class, 'show'])->middleware(['can:view_detail_roles'])->name('role.show');
+            Route::post('/show/{role}/store/permission', [RoleController::class, 'updateRolePermissions'])->middleware(['can:view_detail_roles'])->name('role.store.permissions');
         });
 
         Route::prefix('permission')->group(function () {
