@@ -47,6 +47,13 @@
                         <span>Experience</span>
                     </a>
                 </li>
+
+                <li class="sidebar-item{{ request()->is('backend/resume/education*') ? ' active' : '' }}">
+                    <a href="{{ route('education.index') }}" class='sidebar-link'>
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Education</span>
+                    </a>
+                </li>
                 
                 <li class="sidebar-title">Article Tab</li>
                 

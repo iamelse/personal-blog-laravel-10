@@ -6,8 +6,8 @@ use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\Backend\PostCategoryController;
 use App\Http\Controllers\Backend\PostController;
 use App\Http\Controllers\Backend\ProfileController;
+use App\Http\Controllers\Backend\Resume\EducationController;
 use App\Http\Controllers\Backend\Resume\ExperienceController;
-use App\Http\Controllers\Backend\ResumeController;
 use App\Http\Controllers\Backend\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +37,18 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/edit/{post}', [PostController::class, 'edit'])->middleware(['can:edit_posts'])->name('post.edit');
             Route::put('/update/{post}', [PostController::class, 'update'])->middleware(['can:edit_posts'])->name('post.update');
             Route::delete('/destroy/{post}', [PostController::class, 'destroy'])->middleware(['can:destroy_posts'])->name('post.destroy');
+        });
+
+        Route::prefix('resume')->group(function () {
+            Route::prefix('education')->group(function () {
+                Route::get('/', [EducationController::class, 'index'])->name('education.index');
+                Route::get('/search', [EducationController::class, 'index'])->name('education.search');
+                Route::get('/create', [EducationController::class, 'create'])->name('education.create');
+                Route::post('/store', [EducationController::class, 'store'])->name('education.store');
+                Route::get('/edit/{education}', [EducationController::class, 'edit'])->name('education.edit');
+                Route::put('/update/{education}', [EducationController::class, 'update'])->name('education.update');
+                Route::delete('/destroy/{education}', [EducationController::class, 'destroy'])->name('education.destroy');
+            });
         });
 
         Route::prefix('resume')->group(function () {

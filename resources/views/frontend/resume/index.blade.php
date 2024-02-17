@@ -54,50 +54,36 @@
                     <section class="col-lg-12 pb-2">
                     
                         <h5 class="text l-text-dark fw-bold my-3">Education</h5>
-    
-                        <div class="row mb-2">
-                            <div class="col-1">
-                                <div class="l-circle-container l-card-border-color shadow-sm mb-2">
-                                    <div class="l-circle-content">
-                                        <img style="width: 2.5rem;" src="https://media.licdn.com/dms/image/C560BAQEoyrFTMXUzfQ/company-logo_200_200/0/1630641536852?e=2147483647&v=beta&t=CFe-X1z8WrD6wSVkivXQng_vxHgaN1_oOFZO6Gr72FU" alt="">
-                                        <!-- <i class='bx bxs-folder-open'></i> -->
+
+                        @forelse ($educations as $education)
+                            <div class="row mb-2">
+                                <div class="col-1">
+                                    <div class="l-circle-container l-card-border-color shadow-sm mb-2">
+                                        <div class="l-circle-content">
+                                            <img style="width: {{ $education->school_logo_size }}rem;" src="{{ asset('/' . $education->school_logo) }}" alt="">
+                                            <!-- <i class='bx bxs-folder-open'></i> -->
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-    
-                            <div class="col ps-4">
-                                <span class="date-list-card">DEC 24, 2023 . PRESENT</span>
-                                <h6 class="l-text-dark fw-bold mt-2">Senior Front-end Engineer</h6>
-                                <h6 class="l-text-dark">Google</h6>
-                                <p class="l-card-text">
-                                    In my role as a Senior Software Engineer for Google, 
-                                    I am responsible for developing and maintaining the 
-                                    Chrome Web Experience.
-                                </p>
-                            </div>
-                        </div>
-    
-                        <div class="row mb-2">
-                            <div class="col-1">
-                                <div class="l-circle-container l-card-border-color shadow-sm mb-2">
-                                    <div class="l-circle-content">
-                                        <img style="width: 2.5rem;" src="https://media.licdn.com/dms/image/C560BAQEoyrFTMXUzfQ/company-logo_200_200/0/1630641536852?e=2147483647&v=beta&t=CFe-X1z8WrD6wSVkivXQng_vxHgaN1_oOFZO6Gr72FU" alt="">
-                                        <!-- <i class='bx bxs-folder-open'></i> -->
-                                    </div>
+        
+                                <div class="col ps-4">
+                                    <span class="date-list-card text-uppercase">
+                                        {{ \Carbon\Carbon::parse($education->start_date)->format('M d, Y') }}
+                                        . 
+                                        {{ $education->end_date ? \Carbon\Carbon::parse($education->end_date)->format('M d, Y') : 'PRESENT' }}
+                                    </span>
+                                    <h6 class="l-text-dark fw-bold mt-2">{{ $education->degree }}, {{ $education->major }}</h6>
+                                    <h6 class="l-text-dark">{{ $education->school_name }}</h6>
+                                    <p class="l-card-text">
+                                        {{ $education->desc }}
+                                    </p>
                                 </div>
                             </div>
-    
-                            <div class="col ps-4">
-                                <span class="date-list-card">DEC 24, 2023 . PRESENT</span>
-                                <h6 class="l-text-dark fw-bold mt-2">Senior Front-end Engineer</h6>
-                                <h6 class="l-text-dark">Google</h6>
-                                <p class="l-card-text">
-                                    In my role as a Senior Software Engineer for Google, 
-                                    I am responsible for developing and maintaining the 
-                                    Chrome Web Experience.
-                                </p>
-                            </div>
-                        </div>
+                        @empty
+                            <p class="l-card-text text-center">
+                                No Data
+                            </p>
+                        @endforelse
     
                     </section>
     

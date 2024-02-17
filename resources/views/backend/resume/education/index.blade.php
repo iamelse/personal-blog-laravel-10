@@ -32,15 +32,15 @@
                                 <div class="row mb-4">
                                     <div class="col-6"></div>
                                     <div class="col-6 text-end">
-                                        <a href="{{ route('experience.create') }}" class="btn btn-primary btn-sm">
-                                            New Experience
+                                        <a href="{{ route('education.create') }}" class="btn btn-primary btn-sm">
+                                            New Education
                                         </a>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-10 text-start">
                                         <div class="col-1">
-                                            <form method="GET" action="{{ route('experience.index') }}">
+                                            <form method="GET" action="{{ route('education.index') }}">
                                                 <label for="limit" class="fw-bold">Limit:</label>
                                                 <select name="limit" class="form-select col-2" onchange="this.form.submit()">
                                                     <option value="10" {{ request('limit') == 10 ? 'selected' : '' }}>10</option>
@@ -52,7 +52,7 @@
                                         </div>
                                     </div>
                                     <div class="col-2">
-                                        <form method="GET" action="{{ route('experience.search') }}">
+                                        <form method="GET" action="{{ route('education.search') }}">
                                             <div class="form-group mandatory">
                                                 <label for="search" class="fw-bold">Search:</label>
                                                 <input
@@ -79,25 +79,27 @@
                                         <thead>
                                             <tr>
                                                 <th>No.</th>
-                                                <th>Company Logo</th>
-                                                <th>Position Name</th>
-                                                <th>Company Name</th>
+                                                <th>School Logo</th>
+                                                <th>Degree</th>
+                                                <th>Major</th>
+                                                <th>School Name</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @forelse ($experiences as $experience)
+                                            @forelse ($educations as $education)
                                             <tr>
                                                 <td class="text-bold-500">{{ $loop->iteration }}</td>
                                                 <td>
-                                                    <img src="{{ asset('/' . $experience->company_logo) }}" class="rounded-3" style="width: 100px; height: 100px; object-fit: cover;">
+                                                    <img src="{{ asset('/' . $education->school_logo) }}" class="rounded-3" style="width: 100px; height: 100px; object-fit: cover;">
                                                 </td>
-                                                <td class="text-bold-500">{{ $experience->position_name }}</td>
-                                                <td class="text-bold-500">{{ $experience->company_name }}</td>
+                                                <td class="text-bold-500">{{ $education->degree }}</td>
+                                                <td class="text-bold-500">{{ $education->major }}</td>
+                                                <td class="text-bold-500">{{ $education->school_name }}</td>
                                                 <td>
                                                     <div style="display: flex; gap: 5px;">
-                                                        <a href="{{ route('experience.edit', $experience->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
-                                                        <form method="POST" action="{{ route('experience.destroy', $experience->id) }}">
+                                                        <a href="{{ route('education.edit', $education->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
+                                                        <form method="POST" action="{{ route('education.destroy', $education->id) }}">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
@@ -116,7 +118,7 @@
                                 <!-- Pagination links -->
                                 <div class="row">
                                     <div class="col-12 d-flex justify-content-end">
-                                        {{ $experiences->appends(['limit' => $perPage, 'q' => $q])->links() }}
+                                        {{ $educations->appends(['limit' => $perPage, 'q' => $q])->links() }}
                                     </div>
                                 </div>                
                             </div>
