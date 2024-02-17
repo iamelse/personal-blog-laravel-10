@@ -38,8 +38,17 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
+
+                <li class="sidebar-title">Resume Tab</li>
                 
-                <li class="sidebar-title">Article</li>
+                <li class="sidebar-item{{ request()->is('backend/resume/experience*') ? ' active' : '' }}">
+                    <a href="{{ route('experience.index') }}" class='sidebar-link'>
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Experience</span>
+                    </a>
+                </li>
+                
+                <li class="sidebar-title">Article Tab</li>
                 
                 <li class="sidebar-item{{ request()->is('backend/post-category*') ? ' active' : '' }}">
                     <a href="{{ route('post.category.index') }}" class='sidebar-link'>

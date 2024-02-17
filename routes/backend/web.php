@@ -6,6 +6,8 @@ use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\Backend\PostCategoryController;
 use App\Http\Controllers\Backend\PostController;
 use App\Http\Controllers\Backend\ProfileController;
+use App\Http\Controllers\Backend\Resume\ExperienceController;
+use App\Http\Controllers\Backend\ResumeController;
 use App\Http\Controllers\Backend\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -35,6 +37,18 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/edit/{post}', [PostController::class, 'edit'])->middleware(['can:edit_posts'])->name('post.edit');
             Route::put('/update/{post}', [PostController::class, 'update'])->middleware(['can:edit_posts'])->name('post.update');
             Route::delete('/destroy/{post}', [PostController::class, 'destroy'])->middleware(['can:destroy_posts'])->name('post.destroy');
+        });
+
+        Route::prefix('resume')->group(function () {
+            Route::prefix('experience')->group(function () {
+                Route::get('/', [ExperienceController::class, 'index'])->name('experience.index');
+                Route::get('/search', [ExperienceController::class, 'index'])->name('experience.search');
+                Route::get('/create', [ExperienceController::class, 'create'])->name('experience.create');
+                Route::post('/store', [ExperienceController::class, 'store'])->name('experience.store');
+                Route::get('/edit/{experience}', [ExperienceController::class, 'edit'])->name('experience.edit');
+                Route::put('/update/{experience}', [ExperienceController::class, 'update'])->name('experience.update');
+                Route::delete('/destroy/{experience}', [ExperienceController::class, 'destroy'])->name('experience.destroy');
+            });
         });
 
         Route::prefix('role')->group(function () {
