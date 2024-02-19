@@ -54,6 +54,21 @@
                         <span>Education</span>
                     </a>
                 </li>
+
+                <li class="sidebar-item has-sub {{ request()->is('backend/resume/skill*') ? 'active' : '' }}">
+                    <a href="#" class='sidebar-link'>
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Skills</span>
+                    </a>
+                    <ul class="submenu active">
+                        <li class="submenu-item {{ request()->is('backend/resume/skill/technical*') ? 'active' : '' }}">
+                            <a href="{{ route('skill.technical.index') }}" class="submenu-link">Technical</a>
+                        </li>
+                        <li class="submenu-item">
+                            <a href="" class="submenu-link">Language</a>
+                        </li>
+                    </ul>
+                </li>
                 
                 <li class="sidebar-title">Article Tab</li>
                 

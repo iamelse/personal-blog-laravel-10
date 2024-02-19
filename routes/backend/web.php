@@ -8,6 +8,7 @@ use App\Http\Controllers\Backend\PostController;
 use App\Http\Controllers\Backend\ProfileController;
 use App\Http\Controllers\Backend\Resume\EducationController;
 use App\Http\Controllers\Backend\Resume\ExperienceController;
+use App\Http\Controllers\Backend\Resume\TechnicalSkillController;
 use App\Http\Controllers\Backend\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -60,6 +61,20 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::get('/edit/{experience}', [ExperienceController::class, 'edit'])->name('experience.edit');
                 Route::put('/update/{experience}', [ExperienceController::class, 'update'])->name('experience.update');
                 Route::delete('/destroy/{experience}', [ExperienceController::class, 'destroy'])->name('experience.destroy');
+            });
+        });
+
+        Route::prefix('resume')->group(function () {
+            Route::prefix('skill')->group(function () {
+                Route::prefix('technical')->group(function () { 
+                    Route::get('/', [TechnicalSkillController::class, 'index'])->name('skill.technical.index');
+                    Route::get('/search', [TechnicalSkillController::class, 'index'])->name('skill.technical.search');
+                    Route::get('/create', [TechnicalSkillController::class, 'create'])->name('skill.technical.create');
+                    Route::post('/store', [TechnicalSkillController::class, 'store'])->name('skill.technical.store');
+                    Route::get('/edit/{technicalSkill}', [TechnicalSkillController::class, 'edit'])->name('skill.technical.edit');
+                    Route::put('/update/{technicalSkill}', [TechnicalSkillController::class, 'update'])->name('skill.technical.update');
+                    Route::delete('/destroy/{technicalSkill}', [TechnicalSkillController::class, 'destroy'])->name('skill.technical.destroy');
+                });
             });
         });
 

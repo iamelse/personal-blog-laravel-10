@@ -96,76 +96,27 @@
                         <div class="card l-card-border-color px-3">
                             <div class="card-body">
                                 <h5 class="l-card-title l-text-dark">Technical Skills</h5>
-                                <div class="row mt-3">
-                                    <div class="col text-start">
-                                        <p class="l-text-dark fw-bold">
-                                            <span class="dash-date-list-card">
-                                                —
-                                                &nbsp;
-                                            </span>
-                                            React
-                                        </p>
+                                <div class="mt-3"></div>
+                                @forelse ($technicalSkills as $technicalSkill)
+                                    <div class="row">
+                                        <div class="col text-start">
+                                            <p class="l-text-dark fw-bold">
+                                                <span class="dash-date-list-card">
+                                                    —
+                                                    &nbsp;
+                                                </span>
+                                                {{ $technicalSkill->name }}
+                                            </p>
+                                        </div>
+                                        <div class="col text-end">
+                                            <p class="l-card-text">{{ $technicalSkill->level }}</p>
+                                        </div>
                                     </div>
-                                    <div class="col text-end">
-                                        <p class="l-card-text">Mahir</p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col text-start">
-                                        <p class="l-text-dark fw-bold">
-                                            <span class="dash-date-list-card">
-                                                —
-                                                &nbsp;
-                                            </span>
-                                            Laravel
-                                        </p>
-                                    </div>
-                                    <div class="col text-end">
-                                        <p class="l-card-text">Mahir</p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col text-start">
-                                        <p class="l-text-dark fw-bold">
-                                            <span class="dash-date-list-card">
-                                                —
-                                                &nbsp;
-                                            </span>
-                                            Bootstrap
-                                        </p>
-                                    </div>
-                                    <div class="col text-end">
-                                        <p class="l-card-text">Mahir</p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col text-start">
-                                        <p class="l-text-dark fw-bold">
-                                            <span class="dash-date-list-card">
-                                                —
-                                                &nbsp;
-                                            </span>
-                                            Tailwind CSS
-                                        </p>
-                                    </div>
-                                    <div class="col text-end">
-                                        <p class="l-card-text">Mahir</p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col text-start">
-                                        <p class="l-text-dark fw-bold">
-                                            <span class="dash-date-list-card">
-                                                —
-                                                &nbsp;
-                                            </span>
-                                            React
-                                        </p>
-                                    </div>
-                                    <div class="col text-end">
-                                        <p class="l-card-text">Mahir</p>
-                                    </div>
-                                </div>
+                                @empty
+                                    <p class="l-card-text text-center">
+                                        No Data
+                                    </p>
+                                @endforelse
                             </div>
                         </div>                  
                     </section>
