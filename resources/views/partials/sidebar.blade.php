@@ -64,8 +64,8 @@
                         <li class="submenu-item {{ request()->is('backend/resume/skill/technical*') ? 'active' : '' }}">
                             <a href="{{ route('skill.technical.index') }}" class="submenu-link">Technical</a>
                         </li>
-                        <li class="submenu-item">
-                            <a href="" class="submenu-link">Language</a>
+                        <li class="submenu-item {{ request()->is('backend/resume/skill/language*') ? 'active' : '' }}">
+                            <a href="{{ route('skill.language.index') }}" class="submenu-link">Language</a>
                         </li>
                     </ul>
                 </li>

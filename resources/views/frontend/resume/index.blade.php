@@ -124,27 +124,28 @@
                     <section class="col-lg-12 mb-4">
                         <div class="card l-card-border-color px-3">
                             <div class="card-body">
-                                <h5 class="l-card-title l-text-dark">Languages</h5>
-                                <div class="row mt-3">
-                                    <div class="col text-start">
-                                        <p class="l-text-dark fw-bold">
-                                            Indonesia
-                                        </p>
+                                <h5 class="l-card-title l-text-dark">Language</h5>
+                                <div class="mt-3"></div>
+                                @forelse ($languageSkills as $languageSkill)
+                                    <div class="row">
+                                        <div class="col text-start">
+                                            <p class="l-text-dark fw-bold">
+                                                <span class="dash-date-list-card">
+                                                    —
+                                                    &nbsp;
+                                                </span>
+                                                {{ $languageSkill->name }}
+                                            </p>
+                                        </div>
+                                        <div class="col text-end">
+                                            <p class="l-card-text">{{ $languageSkill->level }}</p>
+                                        </div>
                                     </div>
-                                    <div class="col text-end">
-                                        <p class="l-card-text">Mahir</p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col text-start">
-                                        <p class="l-text-dark fw-bold">
-                                            English
-                                        </p>
-                                    </div>
-                                    <div class="col text-end">
-                                        <p class="l-card-text">Mahir</p>
-                                    </div>
-                                </div>
+                                @empty
+                                    <p class="l-card-text text-center">
+                                        No Data
+                                    </p>
+                                @endforelse
                             </div>
                         </div>                  
                     </section>

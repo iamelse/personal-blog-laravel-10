@@ -8,6 +8,7 @@ use App\Http\Controllers\Backend\PostController;
 use App\Http\Controllers\Backend\ProfileController;
 use App\Http\Controllers\Backend\Resume\EducationController;
 use App\Http\Controllers\Backend\Resume\ExperienceController;
+use App\Http\Controllers\Backend\Resume\LanguageSkillController;
 use App\Http\Controllers\Backend\Resume\TechnicalSkillController;
 use App\Http\Controllers\Backend\UserController;
 use Illuminate\Support\Facades\Route;
@@ -74,6 +75,16 @@ Route::group(['middleware' => ['auth']], function () {
                     Route::get('/edit/{technicalSkill}', [TechnicalSkillController::class, 'edit'])->name('skill.technical.edit');
                     Route::put('/update/{technicalSkill}', [TechnicalSkillController::class, 'update'])->name('skill.technical.update');
                     Route::delete('/destroy/{technicalSkill}', [TechnicalSkillController::class, 'destroy'])->name('skill.technical.destroy');
+                });
+
+                Route::prefix('language')->group(function () { 
+                    Route::get('/', [LanguageSkillController::class, 'index'])->name('skill.language.index');
+                    Route::get('/search', [LanguageSkillController::class, 'index'])->name('skill.language.search');
+                    Route::get('/create', [LanguageSkillController::class, 'create'])->name('skill.language.create');
+                    Route::post('/store', [LanguageSkillController::class, 'store'])->name('skill.language.store');
+                    Route::get('/edit/{languageSkill}', [LanguageSkillController::class, 'edit'])->name('skill.language.edit');
+                    Route::put('/update/{languageSkill}', [LanguageSkillController::class, 'update'])->name('skill.language.update');
+                    Route::delete('/destroy/{languageSkill}', [LanguageSkillController::class, 'destroy'])->name('skill.language.destroy');
                 });
             });
         });
