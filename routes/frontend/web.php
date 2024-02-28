@@ -12,7 +12,10 @@ Route::get('/', [HomeController::class, 'index'])->name('home.index');
 
 Route::get('/about', [AboutController::class, 'index'])->name('about.index');
 
-Route::get('/project', [ProjectController::class, 'index'])->name('project.index');
+Route::prefix('project')->group(function () {
+    Route::get('/', [ProjectController::class, 'index'])->name('project.index');
+    Route::get('/{slug}', [ProjectController::class, 'show'])->name('project.show');
+});
 
 Route::get('/resume', [ResumeController::class, 'index'])->name('resume.index');
 

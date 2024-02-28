@@ -6,6 +6,7 @@ use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\Backend\PostCategoryController;
 use App\Http\Controllers\Backend\PostController;
 use App\Http\Controllers\Backend\ProfileController;
+use App\Http\Controllers\Backend\ProjectController;
 use App\Http\Controllers\Backend\Resume\EducationController;
 use App\Http\Controllers\Backend\Resume\ExperienceController;
 use App\Http\Controllers\Backend\Resume\LanguageSkillController;
@@ -20,6 +21,16 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update.password');
 
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        Route::prefix('project')->group(function () { 
+            Route::get('/', [ProjectController::class, 'index'])->name('backend.project.index');
+            Route::get('/search', [ProjectController::class, 'index'])->name('backend.project.search');
+            Route::get('/create', [ProjectController::class, 'create'])->name('backend.project.create');
+            Route::post('/store', [ProjectController::class, 'store'])->name('backend.project.store');
+            Route::get('/edit/{project}', [ProjectController::class, 'edit'])->name('backend.project.edit');
+            Route::put('/update/{project}', [ProjectController::class, 'update'])->name('backend.project.update');
+            Route::delete('/destroy/{project}', [ProjectController::class, 'destroy'])->name('backend.project.destroy');
+        });
 
         Route::prefix('post-category')->group(function () {
             Route::get('/', [PostCategoryController::class, 'index'])->name('post.category.index');
