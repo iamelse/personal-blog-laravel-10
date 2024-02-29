@@ -32,10 +32,17 @@
            <ul class="menu">
                <li class="sidebar-title">Menu</li>
 
-               <li class="sidebar-item{{ request()->is('backend/dashboard*') ? ' active' : '' }}">
+                <li class="sidebar-item{{ request()->is('backend/dashboard*') ? ' active' : '' }}">
                     <a href="{{ route('dashboard') }}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Dashboard</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item{{ request()->is('backend/about*') ? ' active' : '' }}">
+                    <a href="{{ route('backend.about.index') }}" class='sidebar-link'>
+                        <i class="bi bi-grid-fill"></i>
+                        <span>About</span>
                     </a>
                 </li>
 

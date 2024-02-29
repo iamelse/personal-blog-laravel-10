@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\AboutController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\PermissionController;
 use App\Http\Controllers\Backend\RoleController;
@@ -21,6 +22,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update.password');
 
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        Route::prefix('about')->group(function () { 
+            Route::get('/', [AboutController::class, 'index'])->name('backend.about.index');
+            Route::put('/update', [AboutController::class, 'update'])->name('backend.about.update');
+        });
 
         Route::prefix('project')->group(function () { 
             Route::get('/', [ProjectController::class, 'index'])->name('backend.project.index');
