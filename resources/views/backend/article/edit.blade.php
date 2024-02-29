@@ -113,7 +113,7 @@
         this.dataProcessor.htmlFilter.addRules({
             elements: {
                 p: function (el) {
-                    el.addClass('l-card-text');
+                    el.addClass('l-text-p');
                 }
             }
         });
