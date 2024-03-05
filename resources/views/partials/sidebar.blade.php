@@ -39,6 +39,13 @@
                     </a>
                 </li>
 
+                <li class="sidebar-item{{ request()->is('backend/home*') ? ' active' : '' }}">
+                    <a href="{{ route('backend.home.index') }}" class='sidebar-link'>
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Home</span>
+                    </a>
+                </li>
+
                 <li class="sidebar-item{{ request()->is('backend/about*') ? ' active' : '' }}">
                     <a href="{{ route('backend.about.index') }}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>

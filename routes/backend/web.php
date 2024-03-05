@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Backend\AboutController;
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\HomeController;
 use App\Http\Controllers\Backend\PermissionController;
 use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\Backend\PostCategoryController;
@@ -22,6 +23,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update.password');
 
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        Route::prefix('home')->group(function () { 
+            Route::get('/', [HomeController::class, 'index'])->name('backend.home.index');
+            Route::put('/update', [HomeController::class, 'update'])->name('backend.home.update');
+            Route::put('/update/image', [HomeController::class, 'updateImage'])->name('backend.home.update.image');
+        });
 
         Route::prefix('about')->group(function () { 
             Route::get('/', [AboutController::class, 'index'])->name('backend.about.index');

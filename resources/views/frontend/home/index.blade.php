@@ -10,19 +10,13 @@
                 <div class="col-lg-8">
                     <section class="col-lg-12 pb-2">
                     
-                        <div class="container mb-3">
-                            <img src="https://areatopik.com/wp-content/uploads/2022/10/Kobo-Nangis.jpg" class="rounded-circle img-fluid" style="width: 75px; height: 75px; object-fit: cover;">
-                        </div>
+                        @if ($home->image || $home->url)
+                            <div class="container mb-3">
+                                <img src="{{ $home->image ?? $home->url }}" class="rounded-circle img-fluid" style="width: 75px; height: 75px; object-fit: cover;">
+                            </div>
+                        @endif
                         
-    
-                        <h1 class="text l-text-dark display-5 fw-bold">
-                            I write about coding and being a <span class="text l-text-primary">full-time</span> maker.
-                        </h1>
-                        <p class="text l-text-p fs-5">
-                            Writer, Speaker, Developer, and Co-Founder of Code.co, 
-                            and AppForYou. I write about coding, startups, 
-                            and my journey as a full-time maker.
-                        </p>
+                        {!! $home ? $home->body : '<p class="text text-center l-text-p">No Data</p>' !!}
                     </section>
                 </div>
                 <!-- End first col -->
