@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Home;
+use App\Models\PostCategory;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -12,10 +13,15 @@ class HomeController extends Controller
     public function index(): View
     {
         $home = Home::first();
-        
+        $postCategories = PostCategory::withCount('posts')
+                                    ->orderByDesc('posts_count')
+                                    ->take(4)
+                                    ->get();
+
         return view('frontend.home.index', [
             'title' => 'Home',
-            'home' => $home
+            'home' => $home,
+            'postCategories' => $postCategories
         ]);
     }
 }
