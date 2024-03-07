@@ -74,7 +74,7 @@
                                                 </div>
                                                 <hr class="card-hr">
                                             @empty
-                                                <p class="l-card-text my-3 text-center">No posts available in this category.</p>
+                                                <p class="l-text-p my-3 text-center">No posts available in this category.</p>
                                             @endforelse
                                         </div>
                                     </div>
@@ -86,7 +86,7 @@
         
                         </section>
                     @else
-                        <p class="l-card-text my-3 text-center">No data.</p>
+                        <p class="l-text-p text my-3 text-center">No data.</p>
                     @endunless
                 </div>
                 <!-- End first col -->
@@ -118,46 +118,30 @@
                         <h5 class="text l-text-dark fw-bold my-3">Open-Source Projects</h5>
                         <!-- Opens source projects -->
                         <div class="row">
-                            <div class="col-lg-6">
-                                <div class="card l-card-border-color px-3">
-                                    <div class="card-body mt-2">
-                                        <div class="circle-container l-card-border-color shadow-sm mb-2">
-                                            <div class="circle-content">
-                                              <i class='bx bxs-folder-open'></i>
+                            @forelse ($projects as $project)
+                                <div class="col-lg-6">
+                                    <div class="card l-card-border-color px-3">
+                                        <div class="card-body mt-2">
+                                            <div class="circle-container l-card-border-color shadow-sm mb-2">
+                                                <div class="circle-content">
+                                                <i class='bx bxs-folder-open'></i>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <h5 class="l-card-title l-text-dark">Awesome Container Tinkering</h5>
-                                        <p class="l-card-text">
-                                            Solutions for running containers locally and remotely.
-                                        </p>
-                                        <div class="row text-end">
-                                            <a class="arrow-card-link" href="">
-                                                <i class='bx bx-right-arrow-alt bx-sm'></i>
-                                            </a>
+                                            <h5 class="l-card-title l-text-dark">Awesome Container Tinkering</h5>
+                                            <p class="l-card-text">
+                                                Solutions for running containers locally and remotely.
+                                            </p>
+                                            <div class="row text-end">
+                                                <a class="arrow-card-link" href="">
+                                                    <i class='bx bx-right-arrow-alt bx-sm'></i>
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="card l-card-border-color px-3">
-                                    <div class="card-body mt-2">
-                                        <div class="circle-container l-card-border-color shadow-sm mb-2">
-                                            <div class="circle-content">
-                                              <i class='bx bxs-folder-open'></i>
-                                            </div>
-                                        </div>
-                                        <h5 class="l-card-title l-text-dark">Awesome Container Tinkering</h5>
-                                        <p class="l-card-text">
-                                            Solutions for running containers locally and remotely.
-                                        </p>
-                                        <div class="row text-end">
-                                            <a class="arrow-card-link" href="">
-                                                <i class='bx bx-right-arrow-alt bx-sm'></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            @empty
+                                <p class="text text-center l-text-p">No Data</p>
+                            @endforelse
                         </div>
                         <!-- End opens source projects -->
                     </section>
