@@ -22,6 +22,28 @@ class Post extends Model
         ];
     }
 
+    public function scopeFilter($query, $filters = [])
+    {
+        $q = $filters['q'] ?? null;
+        $perPage = $filters['perPage'] ?? 10;
+        $columns = $filters['columns'] ?? [];
+        $category_id = $filters['category_id'] ?? null;
+
+        return $query->with('category')
+            ->when($category_id, function ($query) use ($category_id) {
+                $query->where('post_category_id', $category_id);
+            })
+            ->when($q, function ($query) use ($q, $columns) {
+                $query->where(function ($subquery) use ($q, $columns) {
+                    foreach ($columns as $column) {
+                        $subquery->orWhere($column, 'LIKE', "%$q%");
+                    }
+                });
+            })
+            ->orderByDesc('created_at')
+            ->paginate($perPage);
+    }
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(PostCategory::class, 'post_category_id', 'id');

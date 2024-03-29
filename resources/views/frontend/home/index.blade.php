@@ -90,6 +90,7 @@
                     @endunless
                 </div>
                 <!-- End first col -->
+                <!--
                 <div class="col-lg-4">
                     <section class="my-3">
                         <div class="card l-card-border-color px-3">
@@ -108,6 +109,7 @@
                         </div>                  
                     </section>
                 </div>
+                -->
             </div>
             <!-- End second row -->
             
@@ -119,7 +121,7 @@
                         <!-- Opens source projects -->
                         <div class="row">
                             @forelse ($projects as $project)
-                                <div class="col-lg-6">
+                                <div class="col-lg-6 col-md-6 col-sm-6 pb-3">
                                     <div class="card l-card-border-color px-3">
                                         <div class="card-body mt-2">
                                             <div class="circle-container l-card-border-color shadow-sm mb-2">
@@ -127,9 +129,9 @@
                                                 <i class='bx bxs-folder-open'></i>
                                                 </div>
                                             </div>
-                                            <h5 class="l-card-title l-text-dark">Awesome Container Tinkering</h5>
+                                            <h5 class="l-card-title l-text-dark">{{ $project->title }}</h5>
                                             <p class="l-card-text">
-                                                Solutions for running containers locally and remotely.
+                                                {{ \Illuminate\Support\Str::limit(strip_tags($project->desc), 80) }}
                                             </p>
                                             <div class="row text-end">
                                                 <a class="arrow-card-link" href="">

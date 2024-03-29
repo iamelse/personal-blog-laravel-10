@@ -42,8 +42,9 @@
                 <i class='bx bx-sun bx-sm' ></i>
             </a>
 
+            <!-- 
             <a href="/" class="btn l-btn-primary">Subscribe</a>
-                          
+            -->
 
         </div>
     </div>

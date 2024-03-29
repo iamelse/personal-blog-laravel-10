@@ -3,9 +3,9 @@
       <hr class="card-hr">
       <div class="row py-4">
         <div class="col-md-6">
-          <p class="text l-text-p l-card-text">Copyright © Iamelse. All rights reserved.</p>
+          <p class="text-center text-lg-start text-md-start l-text-p l-card-text">Copyright © Iamelse. All rights reserved.</p>
         </div>
-        <div class="col-md-6 text-md-end">
+        <div class="col-md-6 text-center text-lg-end text-md-end">
           <!-- Social Media Icons with Boxicons -->
           <ul class="list-inline">
             <li class="list-inline-item">

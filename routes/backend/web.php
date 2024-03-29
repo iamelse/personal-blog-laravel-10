@@ -57,7 +57,6 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::prefix('post')->group(function () {
             Route::get('/', [PostController::class, 'index'])->middleware(['can:view_posts'])->name('post.index');
-            Route::get('/search', [PostController::class, 'index'])->middleware(['can:view_posts'])->name('post.search');
             Route::get('/create', [PostController::class, 'create'])->middleware(['can:create_posts'])->name('post.create');
             Route::post('/store', [PostController::class, 'store'])->middleware(['can:create_posts'])->name('post.store');
             Route::get('/edit/{post}', [PostController::class, 'edit'])->middleware(['can:edit_posts'])->name('post.edit');

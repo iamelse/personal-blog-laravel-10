@@ -23,35 +23,23 @@ class PostController extends Controller
 
     public function index(Request $request): View
     {
-        $perPage = $request->input('limit', 10);
-        $q = $request->input('q', '');
-        $categoryFilter = $request->input('category_id', null);
-        $columns = ['title', 'slug'];
-
-        $query = Post::with('category')
-            ->orderBy('created_at', 'desc')
-            ->when($categoryFilter, function ($query) use ($categoryFilter) {
-                $query->where('post_category_id', $categoryFilter);
-            })
-            ->when($q, function ($query) use ($q, $columns) {
-                $query->where(function ($subquery) use ($q, $columns) {
-                    foreach ($columns as $column) {
-                        $subquery->orWhere($column, 'LIKE', "%$q%");
-                    }
-                });
-            });
-
-        $posts = $query->paginate($perPage);
-
+        $filters = [
+            'q' => $request->input('q', ''),
+            'perPage' => $request->input('limit', 10),
+            'category_id' => $request->input('category_id', null),
+            'columns' => ['title', 'slug']
+        ];
+        
+        $posts = Post::filter($filters);
         $categories = PostCategory::all();
 
         return view('backend.article.index', [
             'title' => 'Post',
             'posts' => $posts,
             'categories' => $categories,
-            'perPage' => $perPage,
-            'q' => $q,
-            'categoryFilter' => $categoryFilter,
+            'perPage' => $filters['perPage'],
+            'q' => $filters['q'],
+            'category_id' => $filters['category_id'],
         ]);
     }
 

@@ -49,6 +49,9 @@
                                                         <option value="50" {{ request('limit') == 50 ? 'selected' : '' }}>50</option>
                                                         <option value="100" {{ request('limit') == 100 ? 'selected' : '' }}>100</option>
                                                     </select>
+                                                    <input type="hidden" name="category_id" value="{{ request('category_id') }}">
+                                                    <input type="hidden" name="q" value="{{ request('q') }}">
+                                                    <input type="hidden" name="page" value="{{ request('page') }}">
                                                 </form>
                                             </div>
                                             <div class="col-2">
@@ -62,12 +65,15 @@
                                                                 </option>
                                                             @endforeach
                                                     </select>
+                                                    <input type="hidden" name="limit" value="{{ request('limit') }}">
+                                                    <input type="hidden" name="q" value="{{ request('q') }}">
+                                                    <input type="hidden" name="page" value="{{ request('page') }}">
                                                 </form>
                                             </div>
                                         </div>                                        
                                     </div>
                                     <div class="col-2">
-                                        <form method="GET" action="{{ route('post.search') }}">
+                                        <form method="GET" action="{{ route('post.index') }}">
                                             <div class="form-group mandatory">
                                                 <label for="search" class="fw-bold">Search:</label>
                                                 <input
@@ -82,11 +88,14 @@
                                                         <strong>{{ $message }}</strong>
                                                     </span>
                                                 @enderror
+                                                <input type="hidden" name="limit" value="{{ request('limit') }}">
+                                                <input type="hidden" name="category_id" value="{{ request('category_id') }}">
+                                                <input type="hidden" name="page" value="{{ request('page') }}">
                                             </div>
                                         </form>
                                     </div>
                                 </div>
-                            </div>
+                            </div                            
                             <div class="card-body">
                                 <!-- Table with outer spacing -->
                                 <div class="table-responsive">
@@ -133,7 +142,7 @@
                                 <!-- Pagination links -->
                                 <div class="row">
                                     <div class="col-12 d-flex justify-content-end">
-                                        {{ $posts->appends(['limit' => $perPage, 'q' => $q, $categoryFilter => 'categoryFilter'])->links() }}
+                                        {{ $posts->appends(['limit' => $perPage, 'q' => $q, 'category_id' => $category_id])->links() }}
                                     </div>
                                 </div>                
                             </div>
