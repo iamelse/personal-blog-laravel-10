@@ -18,40 +18,39 @@
                                 @method('PUT')                                
 
                                 <div class="form-group">
-
                                     <div class="form-group">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="radioType" id="imageUploadRadio" value="image" {{ old('radioType', $home->image ? 'image' : '') == 'image' ? 'checked' : '' }}>
+                                            <input class="form-check-input" type="radio" name="radioType" id="imageUploadRadio" value="image" {{ old('radioType', $home ? ($home->image ? 'image' : '') : 'image') == 'image' ? 'checked' : '' }}>
                                             <label class="form-check-label mb-1">
                                                 Image Upload
                                             </label>
                                         </div>
-    
+                                
                                         <div id="imageUpload" class="mb-3">
-                                            <input type="file" class="form-control" name="imageInput" id="imageInput" value="{{ old('imageInput', $home->image) }}">
+                                            <input type="file" class="form-control" name="imageInput" id="imageInput" value="{{ old('imageInput', $home ? $home->image : '') }}">
                                         </div>
                                     </div>
                                 
                                     <div class="form-group">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="radioType" id="urlRadio" value="url" {{ old('radioType', $home->url ? 'url' : '') == 'url' ? 'checked' : '' }}>
+                                            <input class="form-check-input" type="radio" name="radioType" id="urlRadio" value="url" {{ old('radioType', $home ? ($home->url ? 'url' : '') : '') == 'url' ? 'checked' : '' }}>
                                             <label class="form-check-label mb-1">
                                                 URL Link
                                             </label>
                                         </div>
-    
+                                
                                         <div id="urlInput" class="mb-3">
-                                            <input type="text" class="form-control" name="urlLink" id="urlLink" value="{{ old('urlLink', $home->url) }}" placeholder="Enter URL here">
+                                            <input type="text" class="form-control" name="urlLink" id="urlLink" value="{{ old('urlLink', $home ? $home->url : '') }}" placeholder="Enter URL here">
                                         </div>
-                                    </div>    
-
+                                    </div>
+                                
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="radioType" id="removeImageRadio" value="removeImage">
                                         <label class="form-check-label mb-1">
                                             Remove Image
                                         </label>
                                     </div>
-                                </div>                            
+                                </div>                                                            
                             
                                 <div class="row">
                                     <div class="col-12 d-flex justify-content-end">

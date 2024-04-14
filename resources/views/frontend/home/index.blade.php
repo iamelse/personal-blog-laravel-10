@@ -10,13 +10,21 @@
                 <div class="col-lg-8">
                     <section class="col-lg-12 pb-2">
                     
-                        @if ($home->image || $home->url)
-                            <div class="container mb-3">
-                                <img src="{{ $home->image ?? $home->url }}" class="rounded-circle img-fluid" style="width: 75px; height: 75px; object-fit: cover;">
-                            </div>
+                        @if ($home)
+                            @if ($home->image && file_exists(public_path($home->image)))
+                                <div class="container mb-3">
+                                    <img src="{{ $home->image }}" class="rounded-circle img-fluid" style="width: 75px; height: 75px; object-fit: cover;">
+                                </div>
+                            @elseif ($home->url)
+                                <div class="container mb-3">
+                                    <img src="{{ $home->url }}" class="rounded-circle img-fluid" style="width: 75px; height: 75px; object-fit: cover;">
+                                </div>
+                            @endif
+                            
+                            {!! $home ? $home->body : '<p class="text text-center l-text-p">No Data</p>' !!}
+                        @else
+                            
                         @endif
-                        
-                        {!! $home ? $home->body : '<p class="text text-center l-text-p">No Data</p>' !!}
                     </section>
                 </div>
                 <!-- End first col -->

@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Post;
 use App\Models\PostCategory;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -26,8 +27,10 @@ class PostFactory extends Factory
     public function definition()
     {
         $categoryId = PostCategory::inRandomOrder()->value('id');
+        $userId = User::inRandomOrder()->value('id');
 
         return [
+            'user_id' => $userId,
             'cover' => $this->faker->imageUrl(),
             'title' => $this->faker->sentence,
             'slug' => $this->faker->unique()->slug,
