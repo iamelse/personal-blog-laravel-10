@@ -81,6 +81,7 @@
                                                 <th>No.</th>
                                                 <th>Post Category Name</th>
                                                 <th>Slug</th>
+                                                <th>Display on Homepage</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -90,6 +91,14 @@
                                                 <td class="text-bold-500">{{ $loop->iteration }}</td>
                                                 <td class="text-bold-500">{{ $postCategory->name }}</td>
                                                 <td class="text-bold-500">{{ $postCategory->slug }}</td>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="true" name="isChecked_{{ $postCategory->id }}" id="showInHomepageCheckbox_{{ $postCategory->id }}" data-category-id="{{ $postCategory->id }}" {{ $postCategory->show_in_homepage ? 'checked' : '' }}>
+                                                        <label class="form-check-label" for="showInHomepageCheckbox_{{ $postCategory->id }}">
+                                                            Display on Homepage
+                                                        </label>
+                                                    </div>
+                                                </td>                                                                                                
                                                 <td>
                                                     <div style="display: flex; gap: 5px;">
                                                         <a href="{{ route('post.category.edit', $postCategory->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
@@ -126,3 +135,42 @@
     </div>
 </div>
 @endsection
+@push('scripts')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        function enforceConstraints() {
+            var checkedCount = $('.form-check-input:checked').length;
+
+            $('.form-check-input').each(function() {
+                var isChecked = $(this).is(':checked');
+                $(this).prop('disabled', checkedCount >= 4 && !isChecked || checkedCount === 1 && isChecked);
+            });
+        }
+
+        $('.form-check-input').change(function(){
+            var categoryId = $(this).data('category-id');
+            var isChecked = $(this).is(':checked') ? 1 : 0;
+
+            $.ajax({
+                url: '{{ route("api.post.category.updateVisibility") }}',
+                type: 'PUT',
+                data: {
+                    categoryId: categoryId,
+                    isChecked: isChecked
+                },
+                success: function(){
+                    console.log('Visibility updated successfully');
+                },
+                error: function(xhr, status, error){
+                    console.error('Error updating visibility:', error);
+                }
+            });
+
+            enforceConstraints();
+        });
+
+        enforceConstraints();
+    });
+</script>
+@endpush

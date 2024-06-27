@@ -96,4 +96,22 @@ class PostCategoryController extends Controller
 
         return redirect()->route('post.category.index')->with('success', 'Post category deleted successfully');
     }
+
+    public function updateVisibility(Request $request)
+    {
+        $categoryId = $request->input('categoryId');
+        $isChecked = $request->input('isChecked');
+
+        $category = PostCategory::find($categoryId);
+
+        if ($category) {
+            $category->update([
+                'show_in_homepage' => $isChecked
+            ]);
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false], 404);
+    }
+
 }

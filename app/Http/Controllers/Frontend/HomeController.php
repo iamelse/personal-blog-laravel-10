@@ -15,6 +15,7 @@ class HomeController extends Controller
     {
         $home = Home::first();
         $postCategories = PostCategory::withCount('posts')
+                                    ->where('show_in_homepage', true)
                                     ->orderByDesc('posts_count')
                                     ->take(4)
                                     ->get();

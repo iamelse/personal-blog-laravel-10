@@ -30,6 +30,7 @@ class PostCategoryFactory extends Factory
         return [
             'name' => $name,
             'slug' => Str::slug($name, '-'),
+            'show_in_homepage' => false
         ];
     }
 }

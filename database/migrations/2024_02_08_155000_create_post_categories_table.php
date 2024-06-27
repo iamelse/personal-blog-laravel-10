@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('slug')->unique()->nullable();
+            $table->boolean('show_in_homepage')->default(false);
             $table->timestamps();
         });
     }
