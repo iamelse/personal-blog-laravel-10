@@ -22,6 +22,7 @@ Route::get('/resume', [ResumeController::class, 'index'])->name('resume.index');
 Route::get('/subscribe', [SubscribeController::class, 'index'])->name('subscribe.index');
 
 Route::prefix('article')->group(function () {
+    Route::get('/search', [ArticleController::class, 'searchAnArticle'])->name('article.search');
     Route::get('/', [ArticleController::class, 'index'])->name('article.index');
     Route::get('/{slug}', [ArticleController::class, 'show'])->name('article.show');
 });

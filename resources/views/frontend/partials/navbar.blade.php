@@ -11,36 +11,40 @@
                 </li>
             
                 <li class="nav-item me-1">
-                    <a class="nav-link {{ request()->is('about') ? 'active' : '' }}" href="{{ route('about.index') }}">About</a>
+                    <a class="nav-link {{ request()->is('about*') ? 'active' : '' }}" href="{{ route('about.index') }}">About</a>
                 </li>
             
                 <li class="nav-item me-1">
-                    <a class="nav-link {{ request()->is('project') ? 'active' : '' }}" href="{{ route('project.index') }}">Projects</a>
+                    <a class="nav-link {{ request()->is('project*') ? 'active' : '' }}" href="{{ route('project.index') }}">Projects</a>
                 </li>
             
                 <li class="nav-item me-1">
-                    <a class="nav-link {{ request()->is('resume') ? 'active' : '' }}" href="{{ route('resume.index') }}">Resume</a>
+                    <a class="nav-link {{ request()->is('resume*') ? 'active' : '' }}" href="{{ route('resume.index') }}">Resume</a>
                 </li>
             
+                <!--
                 <li class="nav-item me-1">
-                    <a class="nav-link {{ request()->is('subscribe') ? 'active' : '' }}" href="{{ route('subscribe.index') }}">Subscribe</a>
+                    <a class="nav-link {{ request()->is('subscribe*') ? 'active' : '' }}" href="{{ route('subscribe.index') }}">Subscribe</a>
                 </li>
+                -->
             
                 <li class="nav-item me-1">
-                    <a class="nav-link {{ request()->is('article') ? 'active' : '' }}" href="{{ route('article.index') }}">Article</a>
+                    <a class="nav-link {{ request()->is('article*') ? 'active' : '' }}" href="{{ route('article.index') }}">Article</a>
                 </li>
             </ul>            
 
-            <form class="d-flex me-3" role="search">
+            <form class="d-flex me-3" role="search" action="{{ route('article.search') }}" method="GET">
                 <div class="form-group has-search">
                     <span class="fa fa-search form-control-feedback"></span>
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" name="query" value="{{ request()->query('query') }}" placeholder="Looking for a specific article?">
                 </div>
-            </form>
+            </form>          
 
+            <!--
             <a class="btn-switch-mode me-3" href="">
                 <i class='bx bx-sun bx-sm' ></i>
             </a>
+            -->
 
             <!-- 
             <a href="/" class="btn l-btn-primary">Subscribe</a>

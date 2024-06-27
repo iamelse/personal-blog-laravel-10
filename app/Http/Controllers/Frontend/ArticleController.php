@@ -9,6 +9,18 @@ use Illuminate\View\View;
 
 class ArticleController extends Controller
 {
+    public function searchAnArticle(Request $request)
+    {
+        $query = $request->input('query');
+    
+        $posts = Post::where('title', 'LIKE', '%' . $query . '%')->paginate(10);
+        
+        return view('frontend.article.index', [
+            'posts' => $posts,
+            'title' => 'Looking for ' . '"' . $query .'"'. ' in articles'
+        ]);
+    }
+
     public function index(): View
     {
         $posts = Post::orderBy('created_at', 'DESC')->paginate(10);

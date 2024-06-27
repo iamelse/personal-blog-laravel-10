@@ -19,6 +19,7 @@
                 <!-- End first col -->
 
                 <!-- Second col -->
+                <!--
                 <div class="col-lg-4">
                     <section class="col-lg-12 my-3">
                         <div class="card l-card-border-color px-3">
@@ -37,6 +38,7 @@
                         </div>                  
                     </section>
                 </div>
+                -->
                 <!-- End second col -->
             </div>
 

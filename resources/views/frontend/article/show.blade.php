@@ -18,57 +18,7 @@
 
 <body>
     <!-- Navbar -->
-    <nav class="navbar fixed-top py-3 navbar-expand-lg bg-white">
-        <div class="container">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    
-                    <li class="nav-item me-1">
-                        <a class="nav-link active" aria-current="page" href="/">Home</a>
-                    </li>
-
-                    <li class="nav-item me-1">
-                        <a class="nav-link" href="/about">About</a>
-                    </li>
-
-                    <li class="nav-item me-1">
-                        <a class="nav-link" href="/project">Projects</a>
-                    </li>
-
-                    <li class="nav-item me-1">
-                        <a class="nav-link" href="/resume">Resume</a>
-                    </li>
-
-                    <li class="nav-item me-1">
-                        <a class="nav-link" href="/subscribe">Subscribe</a>
-                    </li>
-
-                    <li class="nav-item me-1">
-                        <a class="nav-link" href="/article">Article</a>
-                    </li>
-
-                </ul>
-
-                <form class="d-flex me-3" role="search">
-                    <div class="form-group has-search">
-                        <span class="fa fa-search form-control-feedback"></span>
-                        <input type="text" class="form-control">
-                    </div>
-                </form>
-
-                <a class="btn-switch-mode me-3" href="">
-                    <i class='bx bx-sun bx-sm' ></i>
-                </a>
-
-                <a href="/" class="btn l-btn-primary">Subscribe</a>
-                              
-
-            </div>
-        </div>
-    </nav>
+    @include('frontend.partials.navbar')
     <!-- End Navbar -->
 
     <!-- Main content -->
