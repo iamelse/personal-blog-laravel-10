@@ -13,10 +13,6 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // \App\Models\User::factory(10)->create();
-
-        \App\Models\PostCategory::factory(20)->create();
-        \App\Models\Post::factory(30)->create();
-
         \App\Models\Home::create([
             'url' => 'https://areatopik.com/wp-content/uploads/2022/10/Kobo-Nangis.jpg',
             'image' => NULL,
@@ -63,8 +59,16 @@ class DatabaseSeeder extends Seeder
 
         \App\Models\PostCategory::factory()->create([
             'name' => 'Coding',
+            'show_in_homepage' => 1,
             'slug' => 'coding',
         ]);
+
+        \App\Models\PostCategory::factory(20)->create();
+        \App\Models\Post::factory(30)->state(function (array $attributes) {
+          return [
+              'user_id' => rand(1, 2),
+          ];
+      })->create();
 
         $this->call(RoleSeeder::class);
         $this->call(PermissionSeeder::class);
