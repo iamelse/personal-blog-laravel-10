@@ -25,34 +25,34 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         Route::prefix('home')->group(function () { 
-            Route::get('/', [HomeController::class, 'index'])->name('backend.home.index');
-            Route::put('/update', [HomeController::class, 'update'])->name('backend.home.update');
-            Route::put('/update/image', [HomeController::class, 'updateImage'])->name('backend.home.update.image');
+            Route::get('/', [HomeController::class, 'index'])->middleware(['can:view_home'])->name('backend.home.index');
+            Route::put('/update', [HomeController::class, 'update'])->middleware(['can:update_home'])->name('backend.home.update');
+            Route::put('/update/image', [HomeController::class, 'updateImage'])->middleware(['can:update_image_home'])->name('backend.home.update.image');
         });
 
         Route::prefix('about')->group(function () { 
-            Route::get('/', [AboutController::class, 'index'])->name('backend.about.index');
-            Route::put('/update', [AboutController::class, 'update'])->name('backend.about.update');
+            Route::get('/', [AboutController::class, 'index'])->middleware(['can:view_about'])->name('backend.about.index');
+            Route::put('/update', [AboutController::class, 'update'])->middleware(['can:update_about'])->name('backend.about.update');
         });
 
         Route::prefix('project')->group(function () { 
-            Route::get('/', [ProjectController::class, 'index'])->name('backend.project.index');
-            Route::get('/search', [ProjectController::class, 'index'])->name('backend.project.search');
-            Route::get('/create', [ProjectController::class, 'create'])->name('backend.project.create');
-            Route::post('/store', [ProjectController::class, 'store'])->name('backend.project.store');
-            Route::get('/edit/{project}', [ProjectController::class, 'edit'])->name('backend.project.edit');
-            Route::put('/update/{project}', [ProjectController::class, 'update'])->name('backend.project.update');
-            Route::delete('/destroy/{project}', [ProjectController::class, 'destroy'])->name('backend.project.destroy');
+            Route::get('/', [ProjectController::class, 'index'])->middleware(['can:view_projects'])->name('backend.project.index');
+            Route::get('/search', [ProjectController::class, 'index'])->middleware(['can:search_projects'])->name('backend.project.search');
+            Route::get('/create', [ProjectController::class, 'create'])->middleware(['can:create_projects'])->name('backend.project.create');
+            Route::post('/store', [ProjectController::class, 'store'])->middleware(['can:store_projects'])->name('backend.project.store');
+            Route::get('/edit/{project}', [ProjectController::class, 'edit'])->middleware(['can:edit_projects'])->name('backend.project.edit');
+            Route::put('/update/{project}', [ProjectController::class, 'update'])->middleware(['can:update_projects'])->name('backend.project.update');
+            Route::delete('/destroy/{project}', [ProjectController::class, 'destroy'])->middleware(['can:destroy_projects'])->name('backend.project.destroy');
         });
 
         Route::prefix('post-category')->group(function () {
-            Route::get('/', [PostCategoryController::class, 'index'])->name('post.category.index');
-            Route::get('/search', [PostCategoryController::class, 'index'])->name('post.category.search');
-            Route::get('/create', [PostCategoryController::class, 'create'])->name('post.category.create');
-            Route::post('/store', [PostCategoryController::class, 'store'])->name('post.category.store');
-            Route::get('/edit/{postCategory}', [PostCategoryController::class, 'edit'])->name('post.category.edit');
-            Route::put('/update/{postCategory}', [PostCategoryController::class, 'update'])->name('post.category.update');
-            Route::delete('/destroy/{postCategory}', [PostCategoryController::class, 'destroy'])->name('post.category.destroy');
+            Route::get('/', [PostCategoryController::class, 'index'])->middleware(['can:view_post_categories'])->name('post.category.index');
+            Route::get('/search', [PostCategoryController::class, 'index'])->middleware(['can:view_post_categories'])->name('post.category.search');
+            Route::get('/create', [PostCategoryController::class, 'create'])->middleware(['can:create_post_categories'])->name('post.category.create');
+            Route::post('/store', [PostCategoryController::class, 'store'])->middleware(['can:create_post_categories'])->name('post.category.store');
+            Route::get('/edit/{postCategory}', [PostCategoryController::class, 'edit'])->middleware(['can:edit_post_categories'])->name('post.category.edit');
+            Route::put('/update/{postCategory}', [PostCategoryController::class, 'update'])->middleware(['can:edit_post_categories'])->name('post.category.update');
+            Route::delete('/destroy/{postCategory}', [PostCategoryController::class, 'destroy'])->middleware(['can:destroy_post_categories'])->name('post.category.destroy');
         });
 
         Route::prefix('post')->group(function () {
@@ -66,48 +66,44 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::prefix('resume')->group(function () {
             Route::prefix('education')->group(function () {
-                Route::get('/', [EducationController::class, 'index'])->name('education.index');
-                Route::get('/search', [EducationController::class, 'index'])->name('education.search');
-                Route::get('/create', [EducationController::class, 'create'])->name('education.create');
-                Route::post('/store', [EducationController::class, 'store'])->name('education.store');
-                Route::get('/edit/{education}', [EducationController::class, 'edit'])->name('education.edit');
-                Route::put('/update/{education}', [EducationController::class, 'update'])->name('education.update');
-                Route::delete('/destroy/{education}', [EducationController::class, 'destroy'])->name('education.destroy');
+                Route::get('/', [EducationController::class, 'index'])->middleware(['can:view_education'])->name('education.index');
+                Route::get('/search', [EducationController::class, 'index'])->middleware(['can:view_education'])->name('education.search');
+                Route::get('/create', [EducationController::class, 'create'])->middleware(['can:create_education'])->name('education.create');
+                Route::post('/store', [EducationController::class, 'store'])->middleware(['can:create_education'])->name('education.store');
+                Route::get('/edit/{education}', [EducationController::class, 'edit'])->middleware(['can:edit_education'])->name('education.edit');
+                Route::put('/update/{education}', [EducationController::class, 'update'])->middleware(['can:edit_education'])->name('education.update');
+                Route::delete('/destroy/{education}', [EducationController::class, 'destroy'])->middleware(['can:destroy_education'])->name('education.destroy');
             });
-        });
-
-        Route::prefix('resume')->group(function () {
+        
             Route::prefix('experience')->group(function () {
-                Route::get('/', [ExperienceController::class, 'index'])->name('experience.index');
-                Route::get('/search', [ExperienceController::class, 'index'])->name('experience.search');
-                Route::get('/create', [ExperienceController::class, 'create'])->name('experience.create');
-                Route::post('/store', [ExperienceController::class, 'store'])->name('experience.store');
-                Route::get('/edit/{experience}', [ExperienceController::class, 'edit'])->name('experience.edit');
-                Route::put('/update/{experience}', [ExperienceController::class, 'update'])->name('experience.update');
-                Route::delete('/destroy/{experience}', [ExperienceController::class, 'destroy'])->name('experience.destroy');
+                Route::get('/', [ExperienceController::class, 'index'])->middleware(['can:view_experience'])->name('experience.index');
+                Route::get('/search', [ExperienceController::class, 'index'])->middleware(['can:view_experience'])->name('experience.search');
+                Route::get('/create', [ExperienceController::class, 'create'])->middleware(['can:create_experience'])->name('experience.create');
+                Route::post('/store', [ExperienceController::class, 'store'])->middleware(['can:create_experience'])->name('experience.store');
+                Route::get('/edit/{experience}', [ExperienceController::class, 'edit'])->middleware(['can:edit_experience'])->name('experience.edit');
+                Route::put('/update/{experience}', [ExperienceController::class, 'update'])->middleware(['can:edit_experience'])->name('experience.update');
+                Route::delete('/destroy/{experience}', [ExperienceController::class, 'destroy'])->middleware(['can:destroy_experience'])->name('experience.destroy');
             });
-        });
-
-        Route::prefix('resume')->group(function () {
-            Route::prefix('skill')->group(function () {
+        
+            Route::prefix('skill')->group(function () { 
                 Route::prefix('technical')->group(function () { 
-                    Route::get('/', [TechnicalSkillController::class, 'index'])->name('skill.technical.index');
-                    Route::get('/search', [TechnicalSkillController::class, 'index'])->name('skill.technical.search');
-                    Route::get('/create', [TechnicalSkillController::class, 'create'])->name('skill.technical.create');
-                    Route::post('/store', [TechnicalSkillController::class, 'store'])->name('skill.technical.store');
-                    Route::get('/edit/{technicalSkill}', [TechnicalSkillController::class, 'edit'])->name('skill.technical.edit');
-                    Route::put('/update/{technicalSkill}', [TechnicalSkillController::class, 'update'])->name('skill.technical.update');
-                    Route::delete('/destroy/{technicalSkill}', [TechnicalSkillController::class, 'destroy'])->name('skill.technical.destroy');
+                    Route::get('/', [TechnicalSkillController::class, 'index'])->middleware(['can:view_technical_skills'])->name('skill.technical.index');
+                    Route::get('/search', [TechnicalSkillController::class, 'index'])->middleware(['can:view_technical_skills'])->name('skill.technical.search');
+                    Route::get('/create', [TechnicalSkillController::class, 'create'])->middleware(['can:create_technical_skills'])->name('skill.technical.create');
+                    Route::post('/store', [TechnicalSkillController::class, 'store'])->middleware(['can:create_technical_skills'])->name('skill.technical.store');
+                    Route::get('/edit/{technicalSkill}', [TechnicalSkillController::class, 'edit'])->middleware(['can:edit_technical_skills'])->name('skill.technical.edit');
+                    Route::put('/update/{technicalSkill}', [TechnicalSkillController::class, 'update'])->middleware(['can:edit_technical_skills'])->name('skill.technical.update');
+                    Route::delete('/destroy/{technicalSkill}', [TechnicalSkillController::class, 'destroy'])->middleware(['can:destroy_technical_skills'])->name('skill.technical.destroy');
                 });
-
+        
                 Route::prefix('language')->group(function () { 
-                    Route::get('/', [LanguageSkillController::class, 'index'])->name('skill.language.index');
-                    Route::get('/search', [LanguageSkillController::class, 'index'])->name('skill.language.search');
-                    Route::get('/create', [LanguageSkillController::class, 'create'])->name('skill.language.create');
-                    Route::post('/store', [LanguageSkillController::class, 'store'])->name('skill.language.store');
-                    Route::get('/edit/{languageSkill}', [LanguageSkillController::class, 'edit'])->name('skill.language.edit');
-                    Route::put('/update/{languageSkill}', [LanguageSkillController::class, 'update'])->name('skill.language.update');
-                    Route::delete('/destroy/{languageSkill}', [LanguageSkillController::class, 'destroy'])->name('skill.language.destroy');
+                    Route::get('/', [LanguageSkillController::class, 'index'])->middleware(['can:view_language_skills'])->name('skill.language.index');
+                    Route::get('/search', [LanguageSkillController::class, 'index'])->middleware(['can:view_language_skills'])->name('skill.language.search');
+                    Route::get('/create', [LanguageSkillController::class, 'create'])->middleware(['can:create_language_skills'])->name('skill.language.create');
+                    Route::post('/store', [LanguageSkillController::class, 'store'])->middleware(['can:create_language_skills'])->name('skill.language.store');
+                    Route::get('/edit/{languageSkill}', [LanguageSkillController::class, 'edit'])->middleware(['can:edit_language_skills'])->name('skill.language.edit');
+                    Route::put('/update/{languageSkill}', [LanguageSkillController::class, 'update'])->middleware(['can:edit_language_skills'])->name('skill.language.update');
+                    Route::delete('/destroy/{languageSkill}', [LanguageSkillController::class, 'destroy'])->middleware(['can:destroy_language_skills'])->name('skill.language.destroy');
                 });
             });
         });
@@ -120,19 +116,19 @@ Route::group(['middleware' => ['auth']], function () {
         });
 
         Route::prefix('permission')->group(function () {
-            Route::get('/', [PermissionController::class, 'index'])->name('permission.index');
-            Route::get('/create', [PermissionController::class, 'create'])->name('permission.create');
-            Route::post('/store', [PermissionController::class, 'store'])->name('permission.store');
+            Route::get('/', [PermissionController::class, 'index'])->middleware(['can:view_permissions'])->name('permission.index');
+            Route::get('/create', [PermissionController::class, 'create'])->middleware(['can:create_permissions'])->name('permission.create');
+            Route::post('/store', [PermissionController::class, 'store'])->middleware(['can:create_permissions'])->name('permission.store');
         });
-
+        
         Route::prefix('user')->group(function () {
-            Route::get('/', [UserController::class, 'index'])->name('user.index');
-            Route::get('/search', [UserController::class, 'index'])->name('user.search');
-            Route::get('/create', [UserController::class, 'create'])->name('user.create');
-            Route::post('/store', [UserController::class, 'store'])->name('user.store');
-            Route::get('/edit/{user}', [UserController::class, 'edit'])->name('user.edit');
-            Route::put('/update/{user}', [UserController::class, 'update'])->name('user.update');
-            Route::delete('/destroy/{user}', [UserController::class, 'destroy'])->name('user.destroy');
+            Route::get('/', [UserController::class, 'index'])->middleware(['can:view_users'])->name('user.index');
+            Route::get('/search', [UserController::class, 'index'])->middleware(['can:view_users'])->name('user.search');
+            Route::get('/create', [UserController::class, 'create'])->middleware(['can:create_users'])->name('user.create');
+            Route::post('/store', [UserController::class, 'store'])->middleware(['can:create_users'])->name('user.store');
+            Route::get('/edit/{user}', [UserController::class, 'edit'])->middleware(['can:edit_users'])->name('user.edit');
+            Route::put('/update/{user}', [UserController::class, 'update'])->middleware(['can:edit_users'])->name('user.update');
+            Route::delete('/destroy/{user}', [UserController::class, 'destroy'])->middleware(['can:destroy_users'])->name('user.destroy');
         });
     });
 });
