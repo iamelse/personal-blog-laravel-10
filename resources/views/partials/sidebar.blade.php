@@ -1,166 +1,122 @@
+@php
+    $sidebarMenuLists = [
+        ['route' => 'dashboard', 'icon' => 'bx bx-home', 'label' => 'Dashboard', 'permission' => 'view_dashboard'],
+        'Menu' => [
+            ['route' => 'backend.home.index', 'icon' => 'bx bx-home-alt', 'label' => 'Home', 'permission' => 'view_home'],
+            ['route' => 'backend.about.index', 'icon' => 'bx bx-info-circle', 'label' => 'About', 'permission' => 'view_about'],
+        ],
+        'Projects Tab' => [
+            ['route' => 'backend.project.index', 'icon' => 'bx bx-folder', 'label' => 'Project', 'permission' => 'view_projects'],
+        ],
+        'Resume Tab' => [
+            ['route' => 'experience.index', 'icon' => 'bx bx-briefcase', 'label' => 'Experience', 'permission' => 'view_experience'],
+            ['route' => 'education.index', 'icon' => 'bx bx-book', 'label' => 'Education', 'permission' => 'view_education'],
+            [
+                'label' => 'Skills', 'icon' => 'bx bx-code', 'submenu' => [
+                    ['route' => 'skill.technical.index', 'label' => 'Technical', 'permission' => 'view_technical_skills'],
+                    ['route' => 'skill.language.index', 'label' => 'Language', 'permission' => 'view_language_skills'],
+                ]
+            ],
+        ],
+        'Article Tab' => [
+            ['route' => 'post.category.index', 'icon' => 'bx bx-category', 'label' => 'Category', 'permission' => 'view_post_categories'],
+            ['route' => 'post.index', 'icon' => 'bx bx-news', 'label' => 'Post', 'permission' => 'view_posts'],
+        ],
+        'Setting' => [
+            ['route' => 'role.index', 'icon' => 'bx bx-user-circle', 'label' => 'Role', 'permission' => 'view_roles'],
+            ['route' => 'user.index', 'icon' => 'bx bx-user', 'label' => 'User', 'permission' => 'view_users'],
+        ],
+    ];
+
+    function hasPermission($items) {
+        foreach ($items as $item) {
+            if (isset($item['submenu'])) {
+                if (hasPermission($item['submenu'])) {
+                    return true;
+                }
+            } elseif (isset($item['permission']) && auth()->user()->can($item['permission'])) {
+                return true;
+            }
+        }
+        return false;
+    }
+@endphp
+
 <div id="sidebar">
-   <div class="sidebar-wrapper active">
-       <div class="sidebar-header position-relative">
-           <div class="d-flex justify-content-between align-items-center">
-               <div class="logo">
-                   <a href="index.html">
-                       <img src="{{ asset('assets/compiled/svg/logo.svg') }}" alt="Logo" srcset="">
-                   </a>
-               </div>
-               <div class="theme-toggle d-flex gap-2  align-items-center mt-2">
-                   <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
-                       role="img" class="iconify iconify--system-uicons" width="20" height="20"
-                       preserveAspectRatio="xMidYMid meet" viewBox="0 0 21 21">
-                       <!-- SVG Path Content -->
-                   </svg>
-                   <div class="form-check form-switch fs-6">
-                       <input class="form-check-input  me-0" type="checkbox" id="toggle-dark" style="cursor: pointer">
-                       <label class="form-check-label"></label>
-                   </div>
-                   <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
-                       role="img" class="iconify iconify--mdi" width="20" height="20"
-                       preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
-                       <!-- SVG Path Content -->
-                   </svg>
-               </div>
-               <div class="sidebar-toggler  x">
-                   <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
-               </div>
-           </div>
-       </div>
-       <div class="sidebar-menu">
-           <ul class="menu">
-               <li class="sidebar-title">Menu</li>
-
-                <li class="sidebar-item{{ request()->is('backend/dashboard*') ? ' active' : '' }}">
-                    <a href="{{ route('dashboard') }}" class='sidebar-link'>
-                        <i class="bi bi-grid-fill"></i>
-                        <span>Dashboard</span>
+    <div class="sidebar-wrapper active">
+        <div class="sidebar-header position-relative">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="logo">
+                    <a href="{{ route('dashboard') }}">
+                        <img src="{{ asset('assets/compiled/svg/logo.svg') }}" alt="Logo" srcset="">
                     </a>
-                </li>
-
-                <li class="sidebar-item{{ request()->is('backend/home*') ? ' active' : '' }}">
-                    <a href="{{ route('backend.home.index') }}" class='sidebar-link'>
-                        <i class="bi bi-grid-fill"></i>
-                        <span>Home</span>
-                    </a>
-                </li>
-
-                <li class="sidebar-item{{ request()->is('backend/about*') ? ' active' : '' }}">
-                    <a href="{{ route('backend.about.index') }}" class='sidebar-link'>
-                        <i class="bi bi-grid-fill"></i>
-                        <span>About</span>
-                    </a>
-                </li>
-
-                <li class="sidebar-title">Projects Tab</li>
-
-                <li class="sidebar-item{{ request()->is('backend/project*') ? ' active' : '' }}">
-                    <a href="{{ route('backend.project.index') }}" class='sidebar-link'>
-                        <i class="bi bi-grid-fill"></i>
-                        <span>Project</span>
-                    </a>
-                </li>
-
-                <li class="sidebar-title">Resume Tab</li>
-                
-                <li class="sidebar-item{{ request()->is('backend/resume/experience*') ? ' active' : '' }}">
-                    <a href="{{ route('experience.index') }}" class='sidebar-link'>
-                        <i class="bi bi-grid-fill"></i>
-                        <span>Experience</span>
-                    </a>
-                </li>
-
-                <li class="sidebar-item{{ request()->is('backend/resume/education*') ? ' active' : '' }}">
-                    <a href="{{ route('education.index') }}" class='sidebar-link'>
-                        <i class="bi bi-grid-fill"></i>
-                        <span>Education</span>
-                    </a>
-                </li>
-
-                <li class="sidebar-item has-sub {{ request()->is('backend/resume/skill*') ? 'active' : '' }}">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-grid-fill"></i>
-                        <span>Skills</span>
-                    </a>
-                    <ul class="submenu active">
-                        <li class="submenu-item {{ request()->is('backend/resume/skill/technical*') ? 'active' : '' }}">
-                            <a href="{{ route('skill.technical.index') }}" class="submenu-link">Technical</a>
-                        </li>
-                        <li class="submenu-item {{ request()->is('backend/resume/skill/language*') ? 'active' : '' }}">
-                            <a href="{{ route('skill.language.index') }}" class="submenu-link">Language</a>
-                        </li>
-                    </ul>
-                </li>
-                
-                <li class="sidebar-title">Article Tab</li>
-                
-                <li class="sidebar-item{{ request()->is('backend/post-category*') ? ' active' : '' }}">
-                    <a href="{{ route('post.category.index') }}" class='sidebar-link'>
-                        <i class="bi bi-grid-fill"></i>
-                        <span>Category</span>
-                    </a>
-                </li>
-
-                <li class="sidebar-item{{ request()->is('backend/post*') && !request()->is('backend/post-category*') ? ' active' : '' }}">
-                    <a href="{{ route('post.index') }}" class='sidebar-link'>
-                        <i class="bi bi-grid-fill"></i>
-                        <span>Post</span>
-                    </a>
-                </li>
-                
-                @php
-                    $user = auth()->user();
-                    $roleVisible = Gate::allows('view_roles', $user->roles);
-                    $permissionVisible = Gate::allows('view_permissions', $user->roles);
-                    $userVisible = Gate::allows('view_users', $user->roles);
-                @endphp
-
-                @if ($roleVisible || $permissionVisible || $userVisible)
-                    <li class="sidebar-title">Setting</li>
-                @endif
-
-                @can('view_roles', $user->roles)
-                <li class="sidebar-item{{ request()->is('backend/role*') ? ' active' : '' }}">
-                    <a href="{{ route('role.index') }}" class='sidebar-link'>
-                        <i class="bi bi-grid-fill"></i>
-                        <span>Role</span>
-                    </a>
-                </li>
-                @endcan
-
-                @can('view_permissions', $user->roles)
-                <li class="sidebar-item{{ request()->is('backend/permission*') ? ' active' : '' }}">
-                    <a href="{{ route('permission.index') }}" class='sidebar-link'>
-                        <i class="bi bi-grid-fill"></i>
-                        <span>Permission</span>
-                    </a>
-                </li>
-                @endcan
-
-                @can('view_users', $user->roles)
-                <li class="sidebar-item{{ request()->is('backend/user*') ? ' active' : '' }}">
-                    <a href="{{ route('user.index') }}" class='sidebar-link'>
-                        <i class="bi bi-grid-fill"></i>
-                        <span>User</span>
-                    </a>
-                </li>
-                @endcan   
-
-                <!--
-                <li class="sidebar-item active has-sub">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-grid-1x2-fill"></i>
-                        <span>Layouts</span>
-                    </a>
-                    <ul class="submenu active">
-                        <li class="submenu-item active">
-                            <a href="layout-vertical-navbar.html" class="submenu-link">Vertical Navbar</a>
-                        </li>
-                    </ul>
-                </li>
-                -->
-           </ul>
-       </div>
-   </div>
+                </div>
+                <div class="theme-toggle d-flex gap-2 align-items-center mt-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" class="iconify iconify--system-uicons" width="20" height="20" viewBox="0 0 21 21">
+                        <!-- SVG Path Content -->
+                    </svg>
+                    <div class="form-check form-switch fs-6">
+                        <input class="form-check-input me-0" type="checkbox" id="toggle-dark" style="cursor: pointer">
+                        <label class="form-check-label"></label>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" class="iconify iconify--mdi" width="20" height="20" viewBox="0 0 24 24">
+                        <!-- SVG Path Content -->
+                    </svg>
+                </div>
+                <div class="sidebar-toggler x">
+                    <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="sidebar-menu">
+            <ul class="menu">
+                @foreach($sidebarMenuLists as $key => $items)
+                    @if(is_int($key))
+                        @can($items['permission'] ?? '')
+                            <li class="sidebar-item{{ request()->routeIs($items['route']) ? ' active' : '' }}">
+                                <a href="{{ route($items['route']) }}" class='sidebar-link'>
+                                    <i class="{{ $items['icon'] }}"></i>
+                                    <span>{{ $items['label'] }}</span>
+                                </a>
+                            </li>
+                        @endcan
+                    @else
+                        @if(hasPermission($items))
+                            <li class="sidebar-title">{{ $key }}</li>
+                            @foreach($items as $item)
+                                @if(isset($item['submenu']))
+                                    @if(hasPermission($item['submenu']))
+                                        <li class="sidebar-item has-sub {{ request()->is('backend/resume/skill*') ? ' active' : '' }}">
+                                            <a href="#" class='sidebar-link'>
+                                                <i class="{{ $item['icon'] }}"></i>
+                                                <span>{{ $item['label'] }}</span>
+                                            </a>
+                                            <ul class="submenu active">
+                                                @foreach($item['submenu'] as $submenuItem)
+                                                    @can($submenuItem['permission'])
+                                                        <li class="submenu-item {{ request()->routeIs($submenuItem['route']) ? 'active' : '' }}">
+                                                            <a href="{{ route($submenuItem['route']) }}" class="submenu-link">{{ $submenuItem['label'] }}</a>
+                                                        </li>
+                                                    @endcan
+                                                @endforeach
+                                            </ul>
+                                        </li>
+                                    @endif
+                                @else
+                                    @can($item['permission'])
+                                        <li class="sidebar-item{{ request()->routeIs($item['route']) ? ' active' : '' }}">
+                                            <a href="{{ route($item['route']) }}" class='sidebar-link'>
+                                                <i class="{{ $item['icon'] }}"></i>
+                                                <span>{{ $item['label'] }}</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                @endif
+                            @endforeach
+                        @endif
+                    @endif
+                @endforeach
+            </ul>
+        </div>
+    </div>
 </div>

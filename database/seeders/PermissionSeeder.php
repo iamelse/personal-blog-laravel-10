@@ -16,6 +16,7 @@ class PermissionSeeder extends Seeder
     public function run()
     {
         $permissions = [
+            'view_dashboard',
             'view_home',
             'update_home',
             'update_image_home',
@@ -54,8 +55,8 @@ class PermissionSeeder extends Seeder
             'destroy_language_skills',
             'view_roles',
             'view_detail_roles',
-            'view_permissions',
-            'create_permissions',
+            //'view_permissions',
+            //'create_permissions',
             'view_users',
             'create_users',
             'edit_users',

@@ -9,6 +9,7 @@ use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\View\View;
 
@@ -30,7 +31,7 @@ class PostController extends Controller
             'columns' => ['title', 'slug']
         ];
         
-        $posts = Post::filter($filters);
+        $posts = $this->_getFilteredPosts($filters);
         $categories = PostCategory::all();
 
         return view('backend.article.index', [
@@ -85,6 +86,8 @@ class PostController extends Controller
 
     public function edit(Post $post): View 
     {
+        $this->_authorizePost($post);
+    
         return view('backend.article.edit', [
             'title' => 'Edit Post',
             'post' => $post,
@@ -94,6 +97,8 @@ class PostController extends Controller
 
     public function update(Request $request, Post $post): RedirectResponse
     {
+        $this->_authorizePost($post);
+
         $request->validate([
             'title' => 'required|string|max:255',
             'post_category_id' => 'required',
@@ -138,6 +143,8 @@ class PostController extends Controller
 
     public function destroy(Post $post): RedirectResponse
     {
+        $this->_authorizePost($post);
+
         if (!empty($post->cover)) {
             $coverPath = public_path($post->cover);
             if (File::exists($coverPath)) {
@@ -149,4 +156,23 @@ class PostController extends Controller
 
         return redirect()->route('post.index')->with('success', 'Post deleted successfully');
     }
+
+    private function _getFilteredPosts($filters)
+    {
+        $user = Auth::user();
+
+        if ($user->roles[0]->name === "Master") {
+            return Post::filter($filters);
+        } else {
+            return Post::where('user_id', $user->id)->filter($filters);
+        }
+    }
+
+    private function _authorizePost(Post $post): void
+    {
+        if (!Auth::user()->roles[0]->name === "Master" && $post->user_id !== Auth::id()) {
+            abort(404, 'Not found.');
+        }
+    }
+
 }

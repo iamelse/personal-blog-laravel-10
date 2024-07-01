@@ -3,7 +3,6 @@
 use App\Http\Controllers\Backend\AboutController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\HomeController;
-use App\Http\Controllers\Backend\PermissionController;
 use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\Backend\PostCategoryController;
 use App\Http\Controllers\Backend\PostController;
@@ -22,7 +21,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
         Route::put('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update.password');
 
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['can:view_dashboard'])->name('dashboard');
 
         Route::prefix('home')->group(function () { 
             Route::get('/', [HomeController::class, 'index'])->middleware(['can:view_home'])->name('backend.home.index');
@@ -115,11 +114,13 @@ Route::group(['middleware' => ['auth']], function () {
             Route::post('/show/{role}/store/permission', [RoleController::class, 'updateRolePermissions'])->middleware(['can:view_detail_roles'])->name('role.store.permissions');
         });
 
+        /**
         Route::prefix('permission')->group(function () {
             Route::get('/', [PermissionController::class, 'index'])->middleware(['can:view_permissions'])->name('permission.index');
             Route::get('/create', [PermissionController::class, 'create'])->middleware(['can:create_permissions'])->name('permission.create');
             Route::post('/store', [PermissionController::class, 'store'])->middleware(['can:create_permissions'])->name('permission.store');
         });
+        */
         
         Route::prefix('user')->group(function () {
             Route::get('/', [UserController::class, 'index'])->middleware(['can:view_users'])->name('user.index');

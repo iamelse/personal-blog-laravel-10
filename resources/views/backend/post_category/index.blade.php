@@ -81,7 +81,9 @@
                                                 <th>No.</th>
                                                 <th>Post Category Name</th>
                                                 <th>Slug</th>
-                                                <th>Display on Homepage</th>
+                                                @if (auth()->user()->roles[0]->name === "Master")
+                                                    <th>Display on Homepage</th>
+                                                @endif
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -91,6 +93,7 @@
                                                 <td class="text-bold-500">{{ $loop->iteration }}</td>
                                                 <td class="text-bold-500">{{ $postCategory->name }}</td>
                                                 <td class="text-bold-500">{{ $postCategory->slug }}</td>
+                                                @if (auth()->user()->roles[0]->name === "Master")
                                                 <td>
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox" value="true" name="isChecked_{{ $postCategory->id }}" id="showInHomepageCheckbox_{{ $postCategory->id }}" data-category-id="{{ $postCategory->id }}" {{ $postCategory->show_in_homepage ? 'checked' : '' }}>
@@ -98,7 +101,8 @@
                                                             Display on Homepage
                                                         </label>
                                                     </div>
-                                                </td>                                                                                                
+                                                </td>
+                                                @endif                                                                                                
                                                 <td>
                                                     <div style="display: flex; gap: 5px;">
                                                         <a href="{{ route('post.category.edit', $postCategory->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>

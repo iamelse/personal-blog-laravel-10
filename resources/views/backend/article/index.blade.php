@@ -105,6 +105,7 @@
                                                 <th>No.</th>
                                                 <th>Cover</th>
                                                 <th>Category</th>
+                                                <th>Author</th>
                                                 <th>Post Title</th>
                                                 <th>Slug</th>
                                                 <th>Action</th>
@@ -118,6 +119,7 @@
                                                     <img src="{{ asset('/' . $post->cover) }}" class="rounded-3" style="width: 100px; height: 100px; object-fit: cover;">
                                                 </td>
                                                 <td class="text-bold-500">{{ $post->category->name ?? '' }}</td>
+                                                <td class="text-bold-500">{{ $post?->author?->name }}</td>
                                                 <td class="text-bold-500">{{ $post->title ?? '' }}</td>
                                                 <td class="text-bold-500">{{ $post->slug ?? '' }}</td>
                                                 <td>
