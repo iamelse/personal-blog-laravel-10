@@ -27,12 +27,14 @@
                                     @enderror
                                 </div>
                             
+                                @can('update_about', $about)
                                 <div class="row">
                                     <div class="col-12 d-flex justify-content-end">
                                         <button type="submit" class="btn btn-primary me-1 mb-1">Update</button>
                                         <a href="{{ route('backend.about.index') }}" class="btn btn-light-secondary me-1 mb-1">Cancel</a>
                                     </div>
                                 </div>
+                                @endcan
                             </form>                            
                         </div>
                     </div>
