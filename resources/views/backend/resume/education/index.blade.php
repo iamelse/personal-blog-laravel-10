@@ -29,6 +29,7 @@
                     <div class="card">
                         <div class="card-content">
                             <div class="card-header">
+                                @can('create_education', $educations)
                                 <div class="row mb-4">
                                     <div class="col-6"></div>
                                     <div class="col-6 text-end">
@@ -37,6 +38,7 @@
                                         </a>
                                     </div>
                                 </div>
+                                @endcan
                                 <div class="row">
                                     <div class="col-10 text-start">
                                         <div class="col-1">
@@ -98,18 +100,22 @@
                                                 <td class="text-bold-500">{{ $education->school_name }}</td>
                                                 <td>
                                                     <div style="display: flex; gap: 5px;">
+                                                        @can('edit_education', $educations)
                                                         <a href="{{ route('education.edit', $education->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
+                                                        @endcan
+                                                        @can('destroy_education', $educations)
                                                         <form method="POST" action="{{ route('education.destroy', $education->id) }}">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                                                         </form>
+                                                        @endcan
                                                     </div>
                                                 </td>                                                
                                             </tr>
                                             @empty
                                             <tr>
-                                                <td class="text-center" colspan="5">No Data</td>
+                                                <td class="text-center" colspan="6">No Data</td>
                                             </tr>
                                             @endforelse
                                         </tbody>

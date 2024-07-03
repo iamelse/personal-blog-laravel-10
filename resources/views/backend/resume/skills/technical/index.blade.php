@@ -29,6 +29,7 @@
                     <div class="card">
                         <div class="card-content">
                             <div class="card-header">
+                                @can('edit_technical_skillss', $technicalSkills)
                                 <div class="row mb-4">
                                     <div class="col-6"></div>
                                     <div class="col-6 text-end">
@@ -37,6 +38,7 @@
                                         </a>
                                     </div>
                                 </div>
+                                @endcan
                                 <div class="row">
                                     <div class="col-10 text-start">
                                         <div class="col-1">
@@ -92,12 +94,16 @@
                                                 <td class="text-bold-500">{{ $technicalSkill->level }}</td>
                                                 <td>
                                                     <div style="display: flex; gap: 5px;">
+                                                        @can('edit_technical_skills', $technicalSkill)
                                                         <a href="{{ route('skill.technical.edit', $technicalSkill->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
+                                                        @endcan
+                                                        @can('destroy_technical_skills', $technicalSkill)
                                                         <form method="POST" action="{{ route('skill.technical.destroy', $technicalSkill->id) }}">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                                                         </form>
+                                                        @endcan
                                                     </div>
                                                 </td>                                                
                                             </tr>

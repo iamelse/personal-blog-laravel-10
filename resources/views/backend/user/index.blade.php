@@ -29,6 +29,7 @@
                     <div class="card">
                         <div class="card-content">
                             <div class="card-header">
+                                @can('create_users', $users)
                                 <div class="row mb-4">
                                     <div class="col-6"></div>
                                     <div class="col-6 text-end">
@@ -37,6 +38,7 @@
                                         </a>
                                     </div>
                                 </div>
+                                @endcan
                                 <div class="row">
                                     <div class="col-10 text-start">
                                         <div class="col-1">
@@ -94,12 +96,16 @@
                                                 <td class="text-bold-500">{{ $user->email }}</td>
                                                 <td>
                                                     <div style="display: flex; gap: 5px;">
+                                                        @can('edit_users', $user)
                                                         <a href="{{ route('user.edit', $user->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
+                                                        @endcan
+                                                        @can('destroy_users', $user)
                                                         <form method="POST" action="{{ route('user.destroy', $user->id) }}">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                                                         </form>
+                                                        @endcan
                                                     </div>
                                                 </td>                                                
                                             </tr>
