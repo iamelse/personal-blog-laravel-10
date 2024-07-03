@@ -38,9 +38,9 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/', [ProjectController::class, 'index'])->middleware(['can:view_projects'])->name('backend.project.index');
             Route::get('/search', [ProjectController::class, 'index'])->middleware(['can:search_projects'])->name('backend.project.search');
             Route::get('/create', [ProjectController::class, 'create'])->middleware(['can:create_projects'])->name('backend.project.create');
-            Route::post('/store', [ProjectController::class, 'store'])->middleware(['can:store_projects'])->name('backend.project.store');
+            Route::post('/store', [ProjectController::class, 'store'])->middleware(['can:create_projects'])->name('backend.project.store');
             Route::get('/edit/{project}', [ProjectController::class, 'edit'])->middleware(['can:edit_projects'])->name('backend.project.edit');
-            Route::put('/update/{project}', [ProjectController::class, 'update'])->middleware(['can:update_projects'])->name('backend.project.update');
+            Route::put('/update/{project}', [ProjectController::class, 'update'])->middleware(['can:edit_projects'])->name('backend.project.update');
             Route::delete('/destroy/{project}', [ProjectController::class, 'destroy'])->middleware(['can:destroy_projects'])->name('backend.project.destroy');
         });
 

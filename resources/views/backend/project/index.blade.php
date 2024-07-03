@@ -29,6 +29,7 @@
                     <div class="card">
                         <div class="card-content">
                             <div class="card-header">
+                                @can('create_projects', $projects)
                                 <div class="row mb-4">
                                     <div class="col-6"></div>
                                     <div class="col-6 text-end">
@@ -37,6 +38,7 @@
                                         </a>
                                     </div>
                                 </div>
+                                @endcan
                                 <div class="row">
                                     <div class="col-10 text-start">
                                         <div class="row">
@@ -94,12 +96,16 @@
                                                 <td class="text-bold-500">{{ $project->slug ?? '' }}</td>
                                                 <td>
                                                     <div style="display: flex; gap: 5px;">
+                                                        @can('edit_projects', $projects)
                                                         <a href="{{ route('backend.project.edit', $project->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
+                                                        @endcan
+                                                        @can('destroy_projects', $projects)
                                                         <form method="POST" action="{{ route('backend.project.destroy', $project->id) }}">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                                                         </form>
+                                                        @endcan
                                                     </div>
                                                 </td>                                                
                                             </tr>
