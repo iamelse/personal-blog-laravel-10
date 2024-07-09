@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Backend\AboutController;
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\DeveloperController;
 use App\Http\Controllers\Backend\HomeController;
 use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\Backend\PostCategoryController;
@@ -130,6 +131,12 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/edit/{user}', [UserController::class, 'edit'])->middleware(['can:edit_users'])->name('user.edit');
             Route::put('/update/{user}', [UserController::class, 'update'])->middleware(['can:edit_users'])->name('user.update');
             Route::delete('/destroy/{user}', [UserController::class, 'destroy'])->middleware(['can:destroy_users'])->name('user.destroy');
+        });
+
+        Route::prefix('developer')->group(function () {
+            Route::get('/', [DeveloperController::class, 'index'])->middleware(['can:view_developer'])->name('developer.index');
+            Route::post('/cache/routes', [DeveloperController::class, 'cacheRoutes'])->middleware(['can:view_developer'])->name('cache.routes');
+            Route::post('/migrate/fresh/seed', [DeveloperController::class, 'databaseMigrateFreshAndSeed'])->middleware(['can:view_developer'])->name('database.migrate.fresh.seed');
         });
     });
 });
