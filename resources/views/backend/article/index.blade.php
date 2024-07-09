@@ -133,7 +133,7 @@
                                                         <form method="POST" action="{{ route('post.destroy', $post->id) }}">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                                            <button type="submit" class="btn btn-sm btn-outline-danger" id="delete-btn">Delete</button>
                                                         </form>
                                                         @endcan
                                                     </div>
@@ -164,6 +164,58 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+        const deleteButtons = document.querySelectorAll('#delete-btn');
+
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+                const form = this.closest('form');
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    customClass: {
+                        confirmButton: 'btn btn-primary mx-1',
+                        cancelButton: 'btn btn-danger mx-1'
+                    },
+                    buttonsStyling: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+
+        @if($errors->any())
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'error',
+                title: 'Oops, something went wrong.',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        @endif
+
+        @if(session('success'))
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        @endif
+</script>
+@endpush
 
 @push('scripts')
 <!-- Scripts -->

@@ -103,7 +103,7 @@
                                                         <form method="POST" action="{{ route('backend.project.destroy', $project->id) }}">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                                            <button type="submit" class="btn btn-sm btn-outline-danger" id="delete-btn">Delete</button>
                                                         </form>
                                                         @endcan
                                                     </div>
@@ -138,6 +138,55 @@
 @push('scripts')
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+        const deleteButtons = document.querySelectorAll('#delete-btn');
+
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+                const form = this.closest('form');
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    customClass: {
+                        confirmButton: 'btn btn-primary mx-1',
+                        cancelButton: 'btn btn-danger mx-1'
+                    },
+                    buttonsStyling: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+
+        @if($errors->any())
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'error',
+                title: 'Oops, something went wrong.',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        @endif
+
+        @if(session('success'))
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        @endif
+</script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     $( '#selectPostCategory' ).select2( {

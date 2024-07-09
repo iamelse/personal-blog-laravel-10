@@ -53,6 +53,22 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+        @if($errors->any())
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'error',
+                title: 'There are errors in the form!',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        @endif
+</script>
+@endpush
+
+@push('scripts')
 <script>
     const name = document.querySelector('#name');
     const slug = document.querySelector('#slug');

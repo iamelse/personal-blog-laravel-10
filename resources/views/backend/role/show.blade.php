@@ -95,6 +95,33 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+        @if($errors->any())
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'error',
+                title: 'There are errors in the form!',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        @endif
+
+        @if(session('success'))
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        @endif
+</script>
+@endpush
+
+@push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const checkAll = document.getElementById('checkAll');

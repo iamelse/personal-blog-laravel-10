@@ -47,6 +47,7 @@
 @push('scripts')
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     var options = {
         filebrowserImageBrowseUrl: '/laravel-filemanager?type=Images',
@@ -83,5 +84,28 @@
     function headingClass(el) {
         el.addClass('text l-text-dark fw-bold my-3');
     }
+
+    @if($errors->any())
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'error',
+                title: 'Oops, something went wrong.',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        @endif
+
+        @if(session('success'))
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        @endif
+
 </script>
 @endpush

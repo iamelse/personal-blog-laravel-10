@@ -145,6 +145,19 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    @if($errors->any())
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'error',
+            title: 'There are errors in the form!',
+            showConfirmButton: false,
+            timer: 3000
+        });
+    @endif
+</script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     flatpickr("#start_date", {

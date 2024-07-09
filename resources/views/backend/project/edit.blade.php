@@ -65,6 +65,19 @@
 @push('scripts')
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    @if($errors->any())
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'error',
+            title: 'There are errors in the form!',
+            showConfirmButton: false,
+            timer: 3000
+        });
+    @endif
+</script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     $( '#selectPostCategory' ).select2( {
