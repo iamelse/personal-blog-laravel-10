@@ -90,7 +90,7 @@
                 toast: true,
                 position: 'top-end',
                 icon: 'error',
-                title: 'Oops, something went wrong.',
+                title: 'There are errors in the form!',
                 showConfirmButton: false,
                 timer: 3000
             });
