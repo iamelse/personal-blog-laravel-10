@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Backend\InitialSetupController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,7 +35,11 @@ Route::get('/subscribe', function () {
     return view('frontend.subscribe');
 });
 
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login')->middleware('guest');
+Route::get('/setup', [InitialSetupController::class, 'showInitialSetupPage'])->name('initial.setup');
+Route::post('/setup/migrate', [InitialSetupController::class, 'runInitialMigrations'])->name('initial.setup.migrate');
+Route::post('/setup/seed', [InitialSetupController::class, 'runInitialSeeder'])->name('initial.setup.seed');
+
+Route::get('/login', [LoginController::class, 'showLoginForm'])->middleware(['check.initial.setup'])->name('login')->middleware('guest');
 Route::post('/authenticate', [LoginController::class, 'authenticate'])->name('authenticate')->middleware('guest');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
