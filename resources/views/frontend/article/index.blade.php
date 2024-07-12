@@ -23,10 +23,31 @@
                             and Qonto. Here is what to expect by subscribing:
                         </p>
 
-                        <div class="card-list">
+                        @forelse ($postCategories as $postCategory)
+                            @php
+                                $isActive = request()->query('category') == $postCategory->slug;
+                            @endphp
+                            <form action="{{ route('article.search') }}" method="GET" class="d-inline">
+                                <input type="hidden" name="category" value="{{ $postCategory->slug }}">
+                                <input type="hidden" name="query" value="{{ request()->query('query') }}">
+                                <button type="submit" class="btn btn-sm {{ $isActive ? 'btn-primary' : 'btn-outline-primary' }} fw-bold">
+                                    {{ $postCategory->name }}
+                                </button>
+                            </form>
+                        @empty
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <p class="l-card-text">
+                                        No Post Categories Available
+                                    </p>
+                                </div>
+                            </div>
+                        @endforelse
+
+                        <div class="card-list mt-3">
                             @forelse ($posts as $post)
                             <div class="card flex-row border-0">
-                                <img class="card-img-left l-card-img align-self-center" src="{{ $post->cover }}"/>
+                                <img class="card-img-left l-card-img align-self-center" src="{{ asset($post?->cover) }}"/>
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-start">
                                         <div>
