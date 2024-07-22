@@ -59,7 +59,8 @@ class PermissionSeeder extends Seeder
             'edit_users',
             'destroy_users',
             'view_developer',
-            'view_information'
+            'view_information',
+            'go_to_laravel_filemanager'
         ];
 
         foreach ($permissions as $permission) {
