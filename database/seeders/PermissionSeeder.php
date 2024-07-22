@@ -58,7 +58,8 @@ class PermissionSeeder extends Seeder
             'create_users',
             'edit_users',
             'destroy_users',
-            'view_developer'
+            'view_developer',
+            'view_information'
         ];
 
         foreach ($permissions as $permission) {

@@ -5,7 +5,7 @@
         <div class="page-heading">
             <div class="page-title">
                 <h3>Home</h3>
-                <p class="text-subtitle text-muted">Manage and update the content of your home page here.</p>
+                <p class="text-subtitle text-muted">Manage and update the content of your Home page here.</p>
             </div>
         </div>        
 
@@ -71,8 +71,8 @@
                                 @can('update_image_home', $home)
                                     <div class="row">
                                         <div class="col-12 d-flex justify-content-end">
-                                            <button type="submit" class="btn btn-primary me-1 mb-1">Update</button>
-                                            <a href="{{ route('backend.home.index') }}" class="btn btn-light-secondary me-1 mb-1">Cancel</a>
+                                            <button type="submit" class="btn btn-sm btn-primary me-1 mb-1">Update</button>
+                                            <a href="{{ route('backend.home.index') }}" class="btn btn-sm btn-light-secondary me-1 mb-1">Cancel</a>
                                         </div>
                                     </div>
                                 @endcan
@@ -103,8 +103,8 @@
                                 @can('update_home', $home)
                                 <div class="row">
                                     <div class="col-12 d-flex justify-content-end">
-                                        <button type="submit" class="btn btn-primary me-1 mb-1">Update</button>
-                                        <a href="{{ route('backend.home.index') }}" class="btn btn-light-secondary me-1 mb-1">Cancel</a>
+                                        <button type="submit" class="btn btn-sm btn-primary me-1 mb-1">Update</button>
+                                        <a href="{{ route('backend.home.index') }}" class="btn btn-sm btn-light-secondary me-1 mb-1">Cancel</a>
                                     </div>
                                 </div>
                                 @endcan
