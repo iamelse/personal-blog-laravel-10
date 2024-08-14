@@ -102,6 +102,7 @@
                                             <th>Author</th>
                                             <th>Post Title</th>
                                             <th>Slug</th>
+                                            <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -116,6 +117,28 @@
                                             <td class="text-bold-500">{{ $post?->author?->name }}</td>
                                             <td class="text-bold-500">{{ $post->title ?? '' }}</td>
                                             <td class="text-bold-500">{{ $post->slug ?? '' }}</td>
+                                            @php
+                                                $status = $post->status;
+                                            @endphp
+
+                                            <td class="text-bold-500">
+                                                @switch($status)
+                                                    @case(\App\Enums\PostStatus::DRAFT->value)
+                                                        <span class="badge rounded-pill bg-secondary">Draft</span>
+                                                        @break
+
+                                                    @case(\App\Enums\PostStatus::SCHEDULED->value)
+                                                        <span class="badge rounded-pill bg-warning text-dark">Scheduled</span>
+                                                        @break
+
+                                                    @case(\App\Enums\PostStatus::PUBLISHED->value)
+                                                        <span class="badge rounded-pill bg-success">Published</span>
+                                                        @break
+
+                                                    @default
+                                                        <span class="badge rounded-pill bg-light text-dark">Unknown</span>
+                                                @endswitch
+                                            </td>
                                             <td>
                                                 <div style="display: flex; gap: 5px;">
                                                     @can('edit_posts', $post)

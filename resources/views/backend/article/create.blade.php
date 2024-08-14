@@ -75,7 +75,17 @@
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
-                                </div>                                
+                                </div>     
+                                
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Post Schedule</label>
+                                    <input type="text" class="form-control @error('published_at') is-invalid @enderror" placeholder="Select Date and Time" name="published_at" id="published_at" value="{{ old('published_at') }}"/>
+                                    @error('published_at')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
 
                                 <div class="row">
                                     <div class="col-12 d-flex justify-content-end">
@@ -91,6 +101,19 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+    flatpickr("#published_at", {
+        enableTime: true,
+        dateFormat: "Y/m/d H:i",
+        minDate: new Date(),
+    });
+</script>
+@endpush
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
