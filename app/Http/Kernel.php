@@ -66,5 +66,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
         'check.initial.setup' => \App\Http\Middleware\CheckInitialSetup::class,
+        'post.visitor.counter' => \App\Http\Middleware\PostVisitorCounter::class,
+        'track.visitor' => \App\Http\Middleware\TrackVisitor::class
     ];
 }

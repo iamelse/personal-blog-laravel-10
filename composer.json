@@ -10,6 +10,7 @@
         "doctrine/dbal": "^3.8",
         "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "^2.5",
+        "jenssegers/agent": "^2.6",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
@@ -35,6 +36,9 @@
         }
     },
     "autoload-dev": {
+        "files": [
+            "app/Helpers/GreetingHelper.php"
+        ],
         "psr-4": {
             "Tests\\": "tests/"
         }
