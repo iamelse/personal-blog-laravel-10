@@ -138,6 +138,7 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/', [DeveloperController::class, 'index'])->middleware(['can:view_developer'])->name('developer.index');
             Route::post('/cache/routes', [DeveloperController::class, 'cacheRoutes'])->middleware(['can:view_developer'])->name('cache.routes');
             Route::post('/migrate/fresh/seed', [DeveloperController::class, 'databaseMigrateFreshAndSeed'])->middleware(['can:view_developer'])->name('database.migrate.fresh.seed');
+            Route::post('/factory/code/run', [DeveloperController::class, 'factoryCodeRunner'])->middleware(['can:view_developer'])->name('factory.code.runner');
         });
 
         Route::prefix('details')->group(function () {

@@ -65,10 +65,10 @@ class DatabaseSeeder extends Seeder
 
         \App\Models\PostCategory::factory(20)->create();
         \App\Models\Post::factory(30)->state(function (array $attributes) {
-          return [
-              'user_id' => rand(1, 2),
-          ];
-      })->create();
+            return [
+                'user_id' => rand(1, 2),
+            ];
+        })->create();
 
         $this->call(RoleSeeder::class);
         $this->call(PermissionSeeder::class);

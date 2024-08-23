@@ -75,7 +75,7 @@ class PostViewAnalyticsServices
     public function getViewsHistoriesForWeek()
     {
         $data = PostView::select(DB::raw('view_date, SUM(view_count) as total_views'))
-            ->whereBetween('view_date', [now()->subDays(8)->toDateString(), now()->toDateString()])
+            ->whereBetween('view_date', [now()->subDays(7)->toDateString(), now()->toDateString()])
             ->groupBy('view_date')
             ->orderBy('view_date', 'asc')
             ->get();
