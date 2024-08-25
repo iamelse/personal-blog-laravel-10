@@ -118,6 +118,39 @@
                     </div>
                 </div>
             </section>
+
+            <section class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Popular Posts</h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- Table to display popular posts -->
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Views</th>
+                                    <th>Published Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($mostViewedPosts as $mostViewedPost)
+                                <tr>
+                                    <td>{{ $mostViewedPost->title }}</td>
+                                    <td class="views-cell" data-views="{{ $mostViewedPost->total_views }}">{{ $mostViewedPost->total_views }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($mostViewedPost->published_at)->format('D d M, Y') }}</td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="3" class="text-center">No Data</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>            
         </div>
 
         <div class="col-12 col-lg-3">
@@ -193,6 +226,23 @@
         
         chartPostView.render();
         chartVisitorCountries.render();
+    });
+</script>
+
+<script>
+    function formatNumber(num) {
+        if (num >= 1e6) {
+            return (num / 1e6).toFixed(1) + 'M';
+        } else if (num >= 1e3) {
+            return (num / 1e3).toFixed(1) + 'K';
+        } else {
+            return num;
+        }
+    }
+
+    document.querySelectorAll('.views-cell').forEach(cell => {
+        const views = parseInt(cell.getAttribute('data-views'), 10);
+        cell.textContent = formatNumber(views);
     });
 </script>
 @endpush

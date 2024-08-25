@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Post;
 use App\Models\PostView;
 use Illuminate\Support\Facades\DB;
 
@@ -102,6 +103,22 @@ class PostViewAnalyticsServices
         }
 
         return collect($result)->sortBy('view_date');
+    }
+
+    public function mostViewedPost()
+    {
+        $startOfDay = now()->startOfDay();
+        $endOfDay = now()->endOfDay();
+
+        $mostViewedPosts = Post::select('posts.*', DB::raw('SUM(post_views.view_count) as total_views'))
+                                ->join('post_views', 'posts.id', '=', 'post_views.post_id')
+                                ->whereBetween('post_views.created_at', [$startOfDay, $endOfDay])
+                                ->groupBy('posts.id')
+                                ->orderBy('total_views', 'desc')
+                                ->limit(10)
+                                ->get();
+
+        return $mostViewedPosts;
     }
 
     private function _formatDateLabel($date)

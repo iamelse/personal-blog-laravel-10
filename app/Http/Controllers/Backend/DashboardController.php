@@ -32,6 +32,7 @@ class DashboardController extends Controller
             'week' => $this->postAnalyticsServices->getViewsHistoriesForWeek()
         ];
 
+        $mostViewedPosts = $this->postAnalyticsServices->mostViewedPost();
 
         return view('backend.dashboard', [
             'title' => 'Dashboard',
@@ -41,7 +42,8 @@ class DashboardController extends Controller
             'draftedPosts' => Post::where('status', PostStatus::DRAFT)->get(),
             'publishedPosts' => Post::where('status', PostStatus::PUBLISHED)->get(),
             'scheduledPosts' => Post::where('status', PostStatus::SCHEDULED)->get(),
-            'historycalVisitorCountries' => $this->_getTopVisitorCountries()
+            'historycalVisitorCountries' => $this->_getTopVisitorCountries(),
+            'mostViewedPosts' => $mostViewedPosts
         ]);
     }
 
