@@ -58,6 +58,7 @@ class ArticleController extends Controller
         $post = Post::with('author', 'category')->where('status', PostStatus::PUBLISHED)->where('slug', $slug)->firstOrFail();
         $relatedPosts = Post::where('post_category_id', $post->post_category_id)
                             ->where('slug', '!=', $post->slug)
+                            ->where('status', PostStatus::PUBLISHED)
                             ->inRandomOrder()
                             ->limit(4)
                             ->get();
