@@ -74,12 +74,38 @@ class PostViewAnalyticsServices
      */
     public function getViewsHistoriesForWeek()
     {
-        $data = PostView::select(DB::raw('view_date, SUM(view_count) as total_views'))
-            ->whereBetween('view_date', [now()->subDays(7)->toDateString(), now()->toDateString()])
-            ->groupBy('view_date')
-            ->orderBy('view_date', 'asc')
-            ->get();
+        $startDate = now()->subDays(6)->toDateString();
+        $endDate = now()->toDateString();
+        $currentDate = now()->toDateString();
 
-        return $data;
+        $dates = [];
+        for ($date = $startDate; $date <= $endDate; $date = date('Y-m-d', strtotime($date . ' +1 day'))) {
+            $dates[] = $date;
+        }
+
+        $data = PostView::select(DB::raw('view_date, SUM(view_count) as total_views'))
+                    ->whereBetween('view_date', [$startDate, $endDate])
+                    ->groupBy('view_date')
+                    ->orderBy('view_date', 'asc')
+                    ->get()
+                    ->keyBy('view_date');
+
+        $result = [];
+        foreach ($dates as $date) {
+            $isToday = ($date === $currentDate);
+            $result[$date] = [
+                'view_date' => $date,
+                'label' => $isToday ? 'Today' : $this->_formatDateLabel($date),
+                'total_views' => $data->has($date) ? $data[$date]->total_views : 0,
+                'colors' => $isToday ? '#349454' : '#435EBE'
+            ];
+        }
+
+        return collect($result)->sortBy('view_date');
+    }
+
+    private function _formatDateLabel($date)
+    {
+        return date('M j, Y', strtotime($date));
     }
 }

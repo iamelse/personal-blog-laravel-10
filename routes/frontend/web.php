@@ -8,7 +8,7 @@ use App\Http\Controllers\Frontend\ResumeController;
 use App\Http\Controllers\Frontend\SubscribeController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['check.initial.setup', 'track.visitor'])->group(function () {
+Route::middleware(['check.initial.setup'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home.index');
 
     Route::get('/about', [AboutController::class, 'index'])->name('about.index');
@@ -25,6 +25,6 @@ Route::middleware(['check.initial.setup', 'track.visitor'])->group(function () {
     Route::prefix('article')->group(function () {
         Route::get('/search', [ArticleController::class, 'searchAnArticle'])->name('article.search');
         Route::get('/', [ArticleController::class, 'index'])->name('article.index');
-        Route::get('/{slug}', [ArticleController::class, 'show'])->middleware('post.visitor.counter')->name('article.show');
+        Route::get('/{slug}', [ArticleController::class, 'show'])->middleware(['post.visitor.counter', 'track.visitor'])->name('article.show');
     });
 });

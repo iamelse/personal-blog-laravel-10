@@ -15,11 +15,13 @@
 
     @php
         $labels = [];
-        $data = [];
+        $data = []; 
+        $colors = []; //dd($historycalPostViews['week']);
 
         foreach ($historycalPostViews['week'] as $view) {
-            $labels[] = (new DateTime($view->view_date))->format('M j, Y');
-            $data[] = $view->total_views;
+            $labels[] = $view['label'];
+            $data[] = $view['total_views'];
+            $colors[] = $view['colors'];
         }
     @endphp
     
@@ -144,8 +146,7 @@
 <script>
     const labels = @json($labels) || [];
     const data = @json($data) || [];
-    
-    const historycalVisitorCountries = @json($historycalVisitorCountries) || {};
+    const colors = @json($colors) || [];
 
     const optionsPostView = {
         chart: {
@@ -159,8 +160,11 @@
         xaxis: {
             categories: labels
         },
-        colors: ['#435ebe']
+        colors: colors
     };
+
+
+    const historycalVisitorCountries = @json($historycalVisitorCountries) || {};
 
     const optionsVisitorCountries = {
         chart: {
@@ -170,7 +174,7 @@
         },
         series: historycalVisitorCountries.series || [],
         labels: historycalVisitorCountries.labels || [],
-        colors: ['#435ebe', '#55c2e8', '#55c6e2'],
+        colors: historycalVisitorCountries.colors || [],
         legend: {
             position: 'bottom'
         },

@@ -6,6 +6,7 @@ use App\Enums\PostStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Services\PostViewAnalyticsServices;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
@@ -46,8 +47,10 @@ class DashboardController extends Controller
 
     private function _getTopVisitorCountries()
     {
+        $today = Carbon::today();
         $topCountries = DB::table('visitor_statistics')
             ->select('country', DB::raw('DATE(created_at) as visit_date'), DB::raw('COUNT(*) as total_visits'))
+            ->where('date', $today)
             ->groupBy('country', 'visit_date')
             ->orderBy('total_visits', 'desc')
             ->limit(3)
@@ -55,14 +58,33 @@ class DashboardController extends Controller
 
         $countries = [];
         $visits = [];
+        $colors = $this->_generateColors(count($topCountries));
+
         foreach ($topCountries as $country) {
             $countries[] = $country->country;
             $visits[] = $country->total_visits;
         }
 
         return [
+            'colors' => $colors,
             'labels' => $countries,
             'series' => $visits,
         ];
+    }
+
+    private function _generateColors($count)
+    {
+        $colors = [];
+
+        for ($i = 0; $i < $count; $i++) {
+            $colors[] = $this->_randomColor();
+        }
+
+        return $colors;
+    }
+
+    private function _randomColor()
+    {
+        return sprintf('#%06X', mt_rand(0, 0xFFFFFF));
     }
 }

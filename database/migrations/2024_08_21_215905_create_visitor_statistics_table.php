@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('device')->nullable();
             $table->string('os')->nullable();
             $table->string('ip')->nullable();
+            $table->text('full_os_info')->nullable();
+            $table->text('full_client_info')->nullable();
             $table->timestamps();
         });
     }

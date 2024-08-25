@@ -4,16 +4,24 @@ namespace App\Http\Middleware;
 
 use Carbon\Carbon;
 use Closure;
+use DeviceDetector\ClientHints;
+use DeviceDetector\DeviceDetector;
 use Illuminate\Support\Facades\DB;
-use Jenssegers\Agent\Agent;
 use Illuminate\Support\Facades\Http;
 
 class TrackVisitor
 {
     public function handle($request, Closure $next)
     {
+        $userAgent = $_SERVER['HTTP_USER_AGENT'];
+        $clientHints = ClientHints::factory($_SERVER);
+
+        $deviceDetector = new DeviceDetector($userAgent, $clientHints);
+
+        $deviceDetector->parse();
+
         $ip = $request->ip();
-        $userAgent = $request->header('User-Agent');
+        //$userAgent = $request->header('User-Agent');
 
         $browser = $this->_getBrowser($userAgent);
         $device = $this->_getDevice($userAgent);
@@ -30,6 +38,10 @@ class TrackVisitor
                     'device' => $device,
                     'os' => $os,
                     'ip' => $ip,
+                    'full_os_info' => json_encode($deviceDetector->getOs()),
+                    'full_client_info'=> json_encode($deviceDetector->getClient()),
+                ],
+                [
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
                 ]
@@ -40,23 +52,23 @@ class TrackVisitor
 
     private function _getBrowser($userAgent)
     {
-        $agent = new Agent();
-        $agent->setUserAgent($userAgent);
-        return $agent->browser();
+        $deviceDetector = new DeviceDetector($userAgent);
+        $deviceDetector->parse();
+        return $deviceDetector->getClient()['name'] ?? 'Unknown';
     }
 
     private function _getDevice($userAgent)
     {
-        $agent = new Agent();
-        $agent->setUserAgent($userAgent);
-        return $agent->device() ?: 'Unknown';
+        $deviceDetector = new DeviceDetector($userAgent);
+        $deviceDetector->parse();
+        return $deviceDetector->getDeviceName() ?? 'Unknown';
     }
 
     private function _getOS($userAgent)
     {
-        $agent = new Agent();
-        $agent->setUserAgent($userAgent);
-        return $agent->platform();
+        $deviceDetector = new DeviceDetector($userAgent);
+        $deviceDetector->parse();
+        return $deviceDetector->getOs()['name'] ?? 'Unknown';
     }
 
     private function _getCountry($ip)
@@ -64,7 +76,7 @@ class TrackVisitor
         $accessKey = env('IPINFO_TOKEN');
 
         if (!env('RUN_IPINFO')) {
-            return 'Need to activate IPinfo in your env!';
+            return 'IPinfo service is not activated.';
         }
 
         try {
