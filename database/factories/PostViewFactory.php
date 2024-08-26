@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\PostStatus;
 use App\Models\Post;
 use App\Models\PostView;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -18,7 +19,7 @@ class PostViewFactory extends Factory
         $startDate = Carbon::now()->subDays(6);
         $endDate = Carbon::now();
 
-        $postId = Post::inRandomOrder()->first()->id;
+        $postId = Post::where('status', PostStatus::PUBLISHED)->inRandomOrder()->first()->id;
 
         $viewDate = $this->generateUniqueDate($postId, $startDate, $endDate);
 

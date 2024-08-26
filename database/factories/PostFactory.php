@@ -29,13 +29,26 @@ class PostFactory extends Factory
         $categoryId = PostCategory::inRandomOrder()->value('id');
         $userId = User::inRandomOrder()->value('id');
 
-        return [
+        $statusOptions = ['draft', 'published'];
+        
+        $randomKey = array_rand($statusOptions);
+        
+        $status = $statusOptions[$randomKey];
+
+        $data = [
             'user_id' => $userId,
             'cover' => $this->faker->imageUrl(),
             'title' => $this->faker->sentence,
             'slug' => $this->faker->unique()->slug,
             'body' => $this->faker->paragraphs(3, true),
             'post_category_id' => $categoryId,
+            'status' => $status,
         ];
+
+        if ($status === 'published') {
+            $data['published_at'] = now();
+        }
+
+        return $data;
     }
 }

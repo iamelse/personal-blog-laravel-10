@@ -117,8 +117,27 @@
                         <div id="chart-post-view"></div>
                     </div>
                 </div>
-            </section>
+            </section>         
+        </div>
 
+        <div class="col-12 col-lg-3">
+            <section class="section">
+                <div class="row">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Countries</h4>
+                        </div>
+                        <div class="card-body">
+                            <div id="chart-visitor-countries"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
             <section class="section">
                 <div class="card">
                     <div class="card-header">
@@ -150,22 +169,7 @@
                         </table>
                     </div>
                 </div>
-            </section>            
-        </div>
-
-        <div class="col-12 col-lg-3">
-            <section class="section">
-                <div class="row">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Countries</h4>
-                        </div>
-                        <div class="card-body">
-                            <div id="chart-visitor-countries"></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            </section>   
         </div>
     </div>
 

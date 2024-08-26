@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\PostStatus;
 use App\Models\Post;
 use App\Models\PostView;
 use Illuminate\Support\Facades\DB;
@@ -113,6 +114,7 @@ class PostViewAnalyticsServices
         $mostViewedPosts = Post::select('posts.*', DB::raw('SUM(post_views.view_count) as total_views'))
                                 ->join('post_views', 'posts.id', '=', 'post_views.post_id')
                                 ->whereBetween('post_views.created_at', [$startOfDay, $endOfDay])
+                                ->where('status', PostStatus::PUBLISHED)
                                 ->groupBy('posts.id')
                                 ->orderBy('total_views', 'desc')
                                 ->limit(10)

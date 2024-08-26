@@ -10,7 +10,7 @@ class VisitorStatisticsFactory extends Factory
 
     public function definition()
     {
-        $date = $this->faker->date();
+        $date = $this->faker->dateTimeBetween('-1 week', 'now');
         $country = $this->faker->countryCode();
         $browser = $this->faker->word;
         $device = $this->faker->word;
