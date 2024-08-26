@@ -34,7 +34,7 @@ class DashboardController extends Controller
 
         $mostViewedPosts = $this->postAnalyticsServices->mostViewedPost();
 
-        return view('backend.dashboard', [
+        return view('backend.dashboard.index', [
             'title' => 'Dashboard',
             'totalPostViews' => $totalPostViews,
             'historycalPostViews' => $historycalPostViews,
