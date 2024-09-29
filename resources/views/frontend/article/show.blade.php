@@ -13,7 +13,7 @@
 
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
-    <title>Hello World!</title>
+    <title>{{ $title ?? env('APP_NAME') }}</title>
 </head>
 
 <body>
