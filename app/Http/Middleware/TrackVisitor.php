@@ -54,21 +54,21 @@ class TrackVisitor
     {
         $deviceDetector = new DeviceDetector($userAgent);
         $deviceDetector->parse();
-        return $deviceDetector->getClient()['name'] ?? 'Unknown';
+        return ucfirst($deviceDetector->getClient()['name'] ?? 'Unknown');
     }
 
     private function _getDevice($userAgent)
     {
         $deviceDetector = new DeviceDetector($userAgent);
         $deviceDetector->parse();
-        return $deviceDetector->getDeviceName() ?? 'Unknown';
+        return ucfirst($deviceDetector->getDeviceName() ?? 'Unknown');
     }
 
     private function _getOS($userAgent)
     {
         $deviceDetector = new DeviceDetector($userAgent);
         $deviceDetector->parse();
-        return $deviceDetector->getOs()['name'] ?? 'Unknown';
+        return ucfirst($deviceDetector->getOs()['name'] ?? 'Unknown');
     }
 
     private function _getCountry($ip)
