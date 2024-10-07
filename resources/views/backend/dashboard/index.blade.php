@@ -15,8 +15,8 @@
                     </div>                
                 </div>
             </div>
-        </div>
-
+        </div>             
+        
         @php
             $labels = [];
             $data = []; 
@@ -110,7 +110,59 @@
                         </div>
                     </div>
                 </section>
+            </div>
+        </div>
 
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="mb-2">
+                    <div class="row">
+                        <h3 class="col-auto d-flex align-items-center">
+                            Filter :
+                        </h3>
+                        <div class="col">
+                            <form action="{{ url()->current() }}" method="GET" class="row g-3 justify-content-end">
+                                <div class="col-auto">
+                                    <!-- Start Date label and input -->
+                                    <label for="start_date" class="form-label text-sm">Start Date</label>
+                                    <input type="date" id="start_date" name="start_date" class="form-control form-control-sm" value="{{ request('start_date', \Carbon\Carbon::today()->subDays(6)->toDateString()) }}">
+                                </div>
+                        
+                                <div class="col-auto">
+                                    <!-- End Date label and input -->
+                                    <label for="end_date" class="form-label text-sm">End Date</label>
+                                    <input type="date" id="end_date" name="end_date" class="form-control form-control-sm" value="{{ request('end_date', \Carbon\Carbon::today()->toDateString()) }}">
+                                </div>
+                        
+                                <div class="col-auto">
+                                    <!-- Subdays label and select input -->
+                                    <label for="subdays" class="form-label text-sm">Subdays</label>
+                                    <select name="subdays" id="subdays" class="form-select form-select-sm">
+                                        @for ($i = 1; $i <= 30; $i++)
+                                            <option value="{{ $i }}" {{ request('subdays', 6) == $i ? 'selected' : '' }}>
+                                                {{ $i }} day{{ $i > 1 ? 's' : '' }}
+                                            </option>
+                                        @endfor
+                                    </select>
+                                </div>
+                        
+                                <div class="col-auto">
+                                    <!-- Submit button -->
+                                    <label class="form-label d-block">&nbsp;</label> <!-- Spacer for alignment -->
+                                    <button type="submit" class="btn btn-sm btn-primary mb-3">Submit</button>
+                                </div>
+                        
+                                <div class="col-auto">
+                                    <!-- Clear Filter button -->
+                                    <label class="form-label d-block">&nbsp;</label> <!-- Spacer for alignment -->
+                                    <a href="{{ url()->current() }}" class="btn btn-sm btn-secondary mb-3">Clear Filter</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                                                                                   
+                
                 <section class="section">
                     <div class="card">
                         <div class="card-header">

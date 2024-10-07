@@ -5,10 +5,13 @@ namespace App\Services;
 use App\Enums\PostStatus;
 use App\Models\Post;
 use App\Models\PostView;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class PostViewAnalyticsServices
 {
+    protected $topLimit = 5;
+    
     /**
      * Get total views for a given period.
      *
@@ -74,15 +77,20 @@ class PostViewAnalyticsServices
      *
      * @return \Illuminate\Support\Collection
      */
-    public function getViewsHistoriesForWeek()
+    public function getViewsHistoriesForWeek($params = [])
     {
-        $startDate = now()->subDays(6)->toDateString();
-        $endDate = now()->toDateString();
-        $currentDate = now()->toDateString();
+        $endDate = isset($params['end_date']) ? Carbon::parse($params['end_date'])->toDateString() : Carbon::today()->toDateString();
+
+        if (isset($params['start_date'])) {
+            $startDate = Carbon::parse($params['start_date'])->toDateString();
+        } else {
+            $subDays = isset($params['subdays']) ? $params['subdays'] : 6;
+            $startDate = Carbon::parse($endDate)->subDays($subDays)->toDateString();
+        }
 
         $dates = [];
-        for ($date = $startDate; $date <= $endDate; $date = date('Y-m-d', strtotime($date . ' +1 day'))) {
-            $dates[] = $date;
+        for ($d = $startDate; $d <= $endDate; $d = date('Y-m-d', strtotime($d . ' +1 day'))) {
+            $dates[] = $d;
         }
 
         $data = PostView::select(DB::raw('view_date, SUM(view_count) as total_views'))
@@ -93,38 +101,157 @@ class PostViewAnalyticsServices
                     ->keyBy('view_date');
 
         $result = [];
-        foreach ($dates as $date) {
-            $isToday = ($date === $currentDate);
-            $result[$date] = [
-                'view_date' => $date,
-                'label' => $isToday ? 'Today' : $this->_formatDateLabel($date),
-                'total_views' => $data->has($date) ? $data[$date]->total_views : 0,
-                'colors' => $isToday ? '#349454' : '#435EBE'
+        foreach ($dates as $d) {
+            $result[$d] = [
+                'view_date' => $d,
+                'label' => $this->_formatDateLabel($d),
+                'total_views' => $data->has($d) ? $data[$d]->total_views : 0,
+                'colors' => '#435EBE'
             ];
         }
 
         return collect($result)->sortBy('view_date');
     }
 
-    public function mostViewedPost()
+    public function mostViewedPost($params = [])
     {
-        $startOfDay = now()->startOfDay();
-        $endOfDay = now()->endOfDay();
-
-        $mostViewedPosts = Post::select('posts.*', DB::raw('SUM(post_views.view_count) as total_views'))
-                                ->join('post_views', 'posts.id', '=', 'post_views.post_id')
-                                ->whereBetween('post_views.created_at', [$startOfDay, $endOfDay])
-                                ->where('status', PostStatus::PUBLISHED)
-                                ->groupBy('posts.id')
-                                ->orderBy('total_views', 'desc')
-                                ->limit(10)
-                                ->get();
-
+        $mostViewedPosts = Post::with(['views' => function($query) use ($params) {
+                                $query->whereBetween('view_date', [$params['start_date'], $params['end_date']]);
+                            }])
+                            ->select('posts.*', DB::raw('SUM(post_views.view_count) as total_views'))
+                            ->join('post_views', 'posts.id', '=', 'post_views.post_id')
+                            ->whereBetween('post_views.view_date', [$params['start_date'], $params['end_date']])
+                            ->where('status', PostStatus::PUBLISHED)
+                            ->groupBy('posts.id')
+                            ->orderBy('total_views', 'desc')
+                            ->limit(10)
+                            ->get();
+    
         return $mostViewedPosts;
     }
 
-    private function _formatDateLabel($date)
+    public function getTopVisitorCountries($params = [])
+    {
+        $topCountries = DB::table('visitor_statistics')
+            ->select('country', DB::raw('DATE(created_at) as visit_date'), DB::raw('COUNT(*) as total_visits'))
+            ->whereBetween('date', [$params['start_date'], $params['end_date']])
+            ->groupBy('country', 'visit_date')
+            ->orderBy('total_visits', 'desc')
+            ->limit($this->topLimit)
+            ->get();
+
+        $countries = [];
+        $visits = [];
+        $colors = $this->_generateColors(count($topCountries));
+
+        foreach ($topCountries as $country) {
+            $countries[] = $country->country;
+            $visits[] = $country->total_visits;
+        }
+        
+        return [
+            'colors' => $colors,
+            'labels' => $countries,
+            'series' => $visits,
+        ];
+    }
+
+    public function getTopVisitorBrowsers($params = [])
+    {
+        $topBrowsers = DB::table('visitor_statistics')
+            ->select('browser', DB::raw('DATE(created_at) as visit_date'), DB::raw('COUNT(*) as total_visits'))
+            ->whereBetween('date', [$params['start_date'], $params['end_date']])
+            ->groupBy('browser', 'visit_date')
+            ->orderBy('total_visits', 'desc')
+            ->limit($this->topLimit)
+            ->get();
+
+        $browsers = [];
+        $visits = [];
+        $colors = $this->_generateColors(count($topBrowsers));
+
+        foreach ($topBrowsers as $browser) {
+            $browsers[] = $browser->browser;
+            $visits[] = $browser->total_visits;
+        }
+        
+        return [
+            'colors' => $colors,
+            'labels' => $browsers,
+            'series' => $visits,
+        ];
+    }
+
+    public function getTopVisitorDevices($params = [])
+    {
+        $topDevices = DB::table('visitor_statistics')
+            ->select('device', DB::raw('DATE(created_at) as visit_date'), DB::raw('COUNT(*) as total_visits'))
+            ->whereBetween('date', [$params['start_date'], $params['end_date']])
+            ->groupBy('device', 'visit_date')
+            ->orderBy('total_visits', 'desc')
+            ->limit($this->topLimit)
+            ->get();
+
+        $devices = [];
+        $visits = [];
+        $colors = $this->_generateColors(count($topDevices));
+
+        foreach ($topDevices as $device) {
+            $devices[] = $device->device;
+            $visits[] = $device->total_visits;
+        }
+
+        return [
+            'colors' => $colors,
+            'labels' => $devices,
+            'series' => $visits,
+        ];
+    }
+
+    public function getTopVisitorOperatingSystems($params = [])
+    {
+        $topOperatingSystems = DB::table('visitor_statistics')
+            ->select('os', DB::raw('DATE(created_at) as visit_date'), DB::raw('COUNT(*) as total_visits'))
+            ->whereBetween('date', [$params['start_date'], $params['end_date']])
+            ->groupBy('os', 'visit_date')
+            ->orderBy('total_visits', 'desc')
+            ->limit($this->topLimit)
+            ->get();
+
+        $operatingSystems = [];
+        $visits = [];
+        $colors = $this->_generateColors(count($topOperatingSystems));
+
+        foreach ($topOperatingSystems as $os) {
+            $operatingSystems[] = $os->os;
+            $visits[] = $os->total_visits;
+        }
+
+        return [
+            'colors' => $colors,
+            'labels' => $operatingSystems,
+            'series' => $visits,
+        ];
+    }
+
+    public function _formatDateLabel($date)
     {
         return date('M j, Y', strtotime($date));
+    }
+
+    public function _generateColors($count)
+    {
+        $colors = [];
+
+        for ($i = 0; $i < $count; $i++) {
+            $colors[] = $this->_randomColor();
+        }
+
+        return $colors;
+    }
+
+    public function _randomColor()
+    {
+        return sprintf('#%06X', mt_rand(0, 0xFFFFFF));
     }
 }
