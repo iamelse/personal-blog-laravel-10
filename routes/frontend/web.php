@@ -25,6 +25,6 @@ Route::middleware(['check.initial.setup'])->group(function () {
     Route::prefix('article')->group(function () {
         Route::get('/search', [ArticleController::class, 'searchAnArticle'])->name('article.search');
         Route::get('/', [ArticleController::class, 'index'])->name('article.index');
-        Route::get('/{slug}', [ArticleController::class, 'show'])->name('article.show');
+        Route::get('/{slug}', [ArticleController::class, 'show'])->middleware(['post.visitor.counter', 'track.visitor'])->name('article.show');
     });
 });

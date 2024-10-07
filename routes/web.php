@@ -43,7 +43,7 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->middleware(['ch
 Route::post('/authenticate', [LoginController::class, 'authenticate'])->name('authenticate')->middleware('guest');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth'], 'as' => 'laravel-filemanager.'], function () {
+Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth', 'can:go_to_laravel_filemanager'], 'as' => 'laravel-filemanager.'], function () {
     \UniSharp\LaravelFilemanager\Lfm::routes();
 });
 

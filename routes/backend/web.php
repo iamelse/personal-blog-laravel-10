@@ -4,6 +4,7 @@ use App\Http\Controllers\Backend\AboutController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\DeveloperController;
 use App\Http\Controllers\Backend\HomeController;
+use App\Http\Controllers\Backend\InformationController;
 use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\Backend\PostCategoryController;
 use App\Http\Controllers\Backend\PostController;
@@ -137,6 +138,11 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/', [DeveloperController::class, 'index'])->middleware(['can:view_developer'])->name('developer.index');
             Route::post('/cache/routes', [DeveloperController::class, 'cacheRoutes'])->middleware(['can:view_developer'])->name('cache.routes');
             Route::post('/migrate/fresh/seed', [DeveloperController::class, 'databaseMigrateFreshAndSeed'])->middleware(['can:view_developer'])->name('database.migrate.fresh.seed');
+            Route::post('/factory/code/run', [DeveloperController::class, 'factoryCodeRunner'])->middleware(['can:view_developer'])->name('factory.code.runner');
+        });
+
+        Route::prefix('details')->group(function () {
+            Route::get('/information', [InformationController::class, 'index'])->middleware(['can:view_information'])->name('information.index');
         });
     });
 });

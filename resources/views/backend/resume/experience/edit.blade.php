@@ -4,7 +4,12 @@
     <div id="main-content">
         <div class="page-heading">
             <div class="page-title">
-                <h3>Edit Category</h3>
+                <div class="row">
+                    <div class="col-12 col-md-6 order-md-1 order-last">
+                        <h3>Edit Experience</h3>
+                        <p class="text-subtitle text-muted">Update and modify your existing professional experience details.</p>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -110,8 +115,8 @@
                             
                                 <div class="row">
                                     <div class="col-12 d-flex justify-content-end">
-                                        <button type="submit" class="btn btn-primary me-1 mb-1">Submit</button>
-                                        <a href="{{ route('experience.index') }}" class="btn btn-light-secondary me-1 mb-1">Cancel</a>
+                                        <button type="submit" class="btn btn-sm btn-primary me-1 mb-1">Submit</button>
+                                        <a href="{{ route('experience.index') }}" class="btn btn-sm btn-light-secondary me-1 mb-1">Cancel</a>
                                     </div>
                                 </div>
                             </form>                            

@@ -82,31 +82,37 @@
                        </div>
                    </div>
                </a>
-               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton"
-                   style="min-width: 11rem;">
-                   <li>
-                       <h6 class="dropdown-header">Hello, {{ explode(' ', Auth::user()->name)[0] }}</h6>
-                   </li>
-                   <li>
-                       <a class="dropdown-item" href="{{ route('profile.index') }}"><i class="icon-mid bi bi-person me-2"></i> My
-                           Profile
-                       </a>
-                   </li>
-                   <li>
-                       <hr class="dropdown-divider">
-                   </li>
-                   <li>
-                       <a class="dropdown-item" href="{{ route('logout') }}"
-                           onclick="event.preventDefault();
-                           document.getElementById('logout-form').submit();">
-                           <i class="icon-mid bi bi-box-arrow-left me-2"></i>
-                           Logout
-                       </a>
-                       <form id="logout-form" action="{{ route('logout') }}" method="POST">
-                           @csrf
-                       </form>
-                   </li>
-               </ul>
+               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton" style="min-width: 11rem;">
+                    <li>
+                        <h6 class="dropdown-header">Hello, {{ explode(' ', Auth::user()->name)[0] }}</h6>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ route('home.index') }}" target="_blank">
+                            <i class="icon-mid bx bx-world me-2"></i>
+                            View Website
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ route('profile.index') }}">
+                            <i class="icon-mid bx bx-user me-2"></i>
+                            My Profile
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ route('logout') }}"
+                            onclick="event.preventDefault();
+                            document.getElementById('logout-form').submit();">
+                            <i class="icon-mid bx bx-log-out me-2"></i>
+                            Logout
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                            @csrf
+                        </form>
+                    </li>
+                </ul>
            </div>
        </div>
    </div>

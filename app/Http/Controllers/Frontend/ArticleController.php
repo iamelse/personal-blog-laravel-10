@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Enums\PostStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\PostCategory;
@@ -29,7 +30,7 @@ class ArticleController extends Controller
             }
         }
 
-        $posts = $postsQuery->paginate(10);
+        $posts = $postsQuery->where('status', PostStatus::PUBLISHED)->paginate(10);
         $postCategories = PostCategory::all();
         $title = $query ? 'Looking for "' . $query . '" in articles' : 'All Articles';
 
@@ -42,7 +43,7 @@ class ArticleController extends Controller
 
     public function index(): View
     {
-        $posts = Post::orderBy('created_at', 'DESC')->paginate(10);
+        $posts = Post::orderBy('created_at', 'DESC')->where('status', PostStatus::PUBLISHED)->paginate(10);
         $postCategories = PostCategory::all();
 
         return view('frontend.article.index', [
@@ -54,9 +55,10 @@ class ArticleController extends Controller
 
     public function show($slug): View
     {
-        $post = Post::with('author', 'category')->where('slug', $slug)->firstOrFail();
+        $post = Post::with('author', 'category')->where('status', PostStatus::PUBLISHED)->where('slug', $slug)->firstOrFail();
         $relatedPosts = Post::where('post_category_id', $post->post_category_id)
                             ->where('slug', '!=', $post->slug)
+                            ->where('status', PostStatus::PUBLISHED)
                             ->inRandomOrder()
                             ->limit(4)
                             ->get();

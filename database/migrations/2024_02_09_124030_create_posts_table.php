@@ -19,6 +19,8 @@ return new class extends Migration
             $table->longText('body')->nullable();
             $table->unsignedBigInteger('post_category_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
+            $table->timestamp('published_at')->nullable();
+            $table->string('status')->default('draft');
             $table->timestamps();
 
             $table->foreign('post_category_id')->references('id')->on('post_categories')->onDelete('set null');

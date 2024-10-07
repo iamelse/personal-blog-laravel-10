@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Enums\PostStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\PostCategory;
@@ -59,7 +60,8 @@ class PostController extends Controller
             'slug' => 'required|string|max:255|unique:posts',
             'post_category_id' => 'required',
             'cover' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'content' => 'required'
+            'content' => 'required',
+            'published_at' => 'nullable|date|after:now'
         ]);
 
         if ($request->hasFile('cover')) {
@@ -69,13 +71,19 @@ class PostController extends Controller
             $postDirectory = 'uploads/posts';
             $file->move(public_path($postDirectory), $fileName);
 
+            $status = $request->published_at <= now()
+            ? PostStatus::PUBLISHED
+            : PostStatus::SCHEDULED;
+
             $post = Post::create([
                 'post_category_id' => $request->post_category_id,
                 'user_id' => auth()->user()->id,
                 'title' => $request->title,
                 'slug' => $request->slug,
                 'cover' => $postDirectory . '/' . $fileName,
-                'body' => $request->content
+                'body' => $request->content,
+                'published_at' => $request->published_at,
+                'status' => $status
             ]);
 
             return redirect()->route('post.index')->with('success', 'Post created successfully');

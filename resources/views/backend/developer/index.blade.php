@@ -3,67 +3,137 @@
 @section('content')
 <div id="main-content">
     <div class="page-heading">
-        
-        <div class="page-title">
+        <div class="page-code">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h3>Dashboard</h3>
-                    <p class="text-subtitle text-muted">Navbar will appear on the top of the page.</p>
+                    <h3>Developers</h3>
+                    <p class="text-subcode text-muted">View and manage all developer options.</p>
                 </div>
-                <div class="col-12 col-md-6 order-md-2 order-first">
-                    <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Layout Vertical Navbar</li>
-                    </ol>
-                    </nav>
+            </div>
+        </div>
+        
+    </div>
+
+    <section class="section">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-code">Cache the Application Routes</h4>
+            </div>
+            <div class="card-body">
+                <p>After adding a new feature that includes routes, remember to run <code>php artisan route:cache</code>, as the app may not automatically detect new routes.</p>
+                
+                <div class="row">
+                    <div class="text-end">
+                        <form action="{{ route('cache.routes') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-sm btn-primary">
+                                Cache now
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <section class="section">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title">Cache the Application Routes</h4>
-                </div>
-                <div class="card-body">
-                    <p>After adding a new feature that includes routes, remember to run <code>php artisan route:cache</code>, as the app may not automatically detect new routes.</p>
-                    
-                    <div class="row">
-                        <div class="text-end">
-                            <form action="{{ route('cache.routes') }}" method="POST">
-                                @csrf
-                                <button type="submit" class="btn btn-primary">
-                                    Cache now
-                                </button>
-                            </form>
-                        </div>
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-code">Reset and Seed Database with Dummy Data</h4>
+            </div>
+            <div class="card-body">
+                <p>This will execute the command <code>php artisan migrate:fresh --seed</code>, which will delete the entire database and create dummy data.</p>
+                
+                <div class="row">
+                    <div class="text-end">
+                        <form action="{{ route('database.migrate.fresh.seed') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-sm btn-primary">
+                                Execute now
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
+        </div>            
+    </section>
 
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title">Reset and Seed Database with Dummy Data</h4>
-                </div>
-                <div class="card-body">
-                    <p>This will execute the command <code>php artisan migrate:fresh --seed</code>, which will delete the entire database and create dummy data.</p>
-                    
-                    <div class="row">
-                        <div class="text-end">
-                            <form action="{{ route('database.migrate.fresh.seed') }}" method="POST">
-                                @csrf
-                                <button type="submit" class="btn btn-primary">
-                                    Execute now
-                                </button>
-                            </form>
-                        </div>
+    <section class="section">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-code">Laravel Log Viewer</h4>
+            </div>
+            <div class="card-body">
+                <p>A functionality that provides you with the ability to view and monitor the logs generated by your Laravel application, allowing for easier debugging and tracking of system activities.</p>
+                
+                <div class="row">
+                    <div class="text-end">
+                        <a href="{{ url('/backend/log-viewer') }}" class="btn btn-sm btn-primary" target="_blank">Go Now</a>
                     </div>
                 </div>
-            </div>            
-        </section>
+            </div>
+        </div> 
+    </section>
 
-    </div>
+    <section class="section">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-code">
+                    Laravel Seed Or Factory Runner [<small class="text-danger">Beta</small>]
+                </h4>
+            </div>
+            <div class="card-body">
+                <p>This form allows you to execute Laravel seed or factory commands directly. Since this feature is currently in beta, please ensure you understand the commands you are running to avoid any unintended consequences.</p>
+    
+                <div class="row">
+                    <form method="POST" action="{{ route('factory.code.runner') }}" enctype="multipart/form-data">
+                        @csrf
+    
+                        <div class="form-group mandatory mb-3">
+                            <label class="form-label">Command / Code</label>
+                            <input type="text" class="form-control @error('code') is-invalid @enderror" placeholder="Code" name="code" id="code" value="{{ old('code') }}"/>
+                            <small class="form-text text-muted">* This feature is still in beta, so be sure you know what you're doing!</small>
+                            @error('code')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+
+                            <div class="my-2">
+                                <h6>Current Supported Commands</h6>
+                                
+                                @foreach ($commands as $command)
+                                    <div class="code">
+                                        <code>{{ $command }}</code>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            <div class="my-2">
+                                <h6>Available Seeder Files</h6>
+                            
+                                @if(count($seeders) > 0)
+                                    @foreach ($seeders as $seeder)
+                                        <div class="code">
+                                            <code>{{ $seeder }}</code>
+                                        </div>
+                                    @endforeach
+                                @else
+                                    <p>No seeder files found.</p>
+                                @endif
+                            </div>                            
+
+                        </div>
+    
+                        <div class="row">
+                            <div class="col-12 d-flex justify-content-end">
+                                <button type="submit" class="btn btn-sm btn-primary me-1 mb-1">Run</button>
+                                <a href="{{ route('dashboard') }}" class="btn btn-sm btn-light-secondary me-1 mb-1">Cancel</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div> 
+    </section>    
 </div>
 @endsection
 
@@ -75,7 +145,7 @@
                 toast: true,
                 position: 'top-end',
                 icon: 'error',
-                title: 'Oops, something went wrong.',
+                code: 'Oops, something went wrong.',
                 showConfirmButton: false,
                 timer: 3000
             });
@@ -86,7 +156,7 @@
                 toast: true,
                 position: 'top-end',
                 icon: 'success',
-                title: '{{ session('success') }}',
+                code: '{{ session('success') }}',
                 showConfirmButton: false,
                 timer: 3000
             });

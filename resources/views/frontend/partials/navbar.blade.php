@@ -38,7 +38,61 @@
                     <span class="fa fa-search form-control-feedback"></span>
                     <input type="text" class="form-control" name="query" value="{{ request()->query('query') }}" placeholder="Looking for a specific article?">
                 </div>
-            </form>          
+            </form>    
+            
+            @auth
+                <div class="dropdown">
+                    <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="user-menu d-flex">
+                            <div class="user-img d-flex align-items-center">
+                                <div class="avatar avatar-md">
+                                    @php
+                                        $imagePath = optional(Auth::user())->image_profile;
+                                    @endphp
+    
+                                    @switch(true)
+                                        @case($imagePath && File::exists(public_path($imagePath)))
+                                            <img class="img rounded-circle w-25" src="{{ asset($imagePath) }}" alt="User Avatar">
+                                            @break
+    
+                                        @case(!$imagePath)
+                                            <img class="img rounded-circle w-25" src="https://via.placeholder.com/150" alt="User Avatar">
+                                            @break
+    
+                                        @default
+                                            <img class="img rounded-circle w-25" src="https://via.placeholder.com/150" alt="User Avatar">
+                                    @endswitch
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton" style="min-width: 11rem;">
+                        <li>
+                            <h6 class="dropdown-header">Hello, {{ explode(' ', Auth::user()->name)[0] }}</h6>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('dashboard') }}" target="_blank">
+                                <i class="icon-mid bx bx-world me-2"></i>
+                                Go To Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                                onclick="event.preventDefault();
+                                document.getElementById('logout-form').submit();">
+                                <i class="icon-mid bx bx-log-out me-2"></i>
+                                Logout
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                                @csrf
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            @endauth
 
             <!--
             <a class="btn-switch-mode me-3" href="">

@@ -30,7 +30,7 @@
                             <form action="{{ route('article.search') }}" method="GET" class="d-inline">
                                 <input type="hidden" name="category" value="{{ $postCategory->slug }}">
                                 <input type="hidden" name="query" value="{{ request()->query('query') }}">
-                                <button type="submit" class="btn btn-sm {{ $isActive ? 'btn-primary' : 'btn-outline-primary' }} fw-bold">
+                                <button type="submit" class="btn btn-sm my-1 {{ $isActive ? 'btn-primary' : 'btn-outline-primary' }} fw-bold">
                                     {{ $postCategory->name }}
                                 </button>
                             </form>

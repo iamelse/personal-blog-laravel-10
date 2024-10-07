@@ -3,25 +3,17 @@
 @section('content')
 <div id="main-content">
     <div class="page-heading">
-        
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h3>Dashboard</h3>
-                    <p class="text-subtitle text-muted">Navbar will appear on the top of the page.</p>
-                </div>
-                <div class="col-12 col-md-6 order-md-2 order-first">
-                    <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Layout Vertical Navbar</li>
-                    </ol>
-                    </nav>
+                    <h3>Role Details</h3>
+                    <p class="text-subtitle text-muted">View the details of this user role.</p>
                 </div>
             </div>
-        </div>
+        </div>        
+    </div>
 
-        <!-- Basic Tables start -->
+    <!-- Basic Tables start -->
     <section class="section">
         <div class="row">
             <div class="col-12">
@@ -44,7 +36,11 @@
                                     <div class="col-12 mt-3">
                                         @php
                                             $groupedPermissions = [];
-                                
+                                    
+                                            function humanReadablePermission($permissionName) {
+                                                return ucwords(str_replace('_', ' ', $permissionName));
+                                            }
+                                    
                                             foreach ($permissions as $permission) {
                                                 $parts = explode('_', $permission->name);
                                                 $groupName = end($parts);
@@ -54,28 +50,27 @@
                                                 $groupedPermissions[$groupName][] = $permission;
                                             }
                                         @endphp
-                                
+                                    
                                         @foreach ($groupedPermissions as $groupName => $groupPermissions)
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-check">
                                                         <input class="form-check-input group-check" type="checkbox" id="checkGroup{{ $loop->iteration }}" data-group="{{ $groupName }}">
-                                                        <label class="form-check-label" for="checkGroup{{ $loop->iteration }}">{{ Str::ucfirst($groupName) }}</label>
+                                                        <label class="form-check-label" for="checkGroup{{ $loop->iteration }}">{{ humanReadablePermission($groupName) }}</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     @foreach ($groupPermissions as $permission)
                                                         <div class="form-check">
                                                             <input class="form-check-input permission-check" name="permissions[]" value="{{ $permission->id }}" data-group="{{ $groupName }}" {{ $role->hasPermissionTo($permission->name) ? 'checked' : '' }} type="checkbox" id="checkPermission{{ $loop->parent->iteration }}_{{ $loop->iteration }}">
-                                                            <label class="form-check-label" for="checkPermission{{ $loop->parent->iteration }}_{{ $loop->iteration }}">{{ $permission->name }}</label>
+                                                            <label class="form-check-label" for="checkPermission{{ $loop->parent->iteration }}_{{ $loop->iteration }}">{{ humanReadablePermission($permission->name) }}</label>
                                                         </div>
                                                     @endforeach
                                                 </div>
                                             </div>
                                             <div class="my-4"></div>
                                         @endforeach
-                                
-                                    </div>
+                                    </div>                                    
                                 </div>                                                                                         
                         
                                 <div class="mt-3 text-end">
@@ -89,8 +84,6 @@
         </div>
     </section>
     <!-- Basic Tables end -->
-
-    </div>
 </div>
 @endsection
 
