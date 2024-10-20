@@ -35,7 +35,11 @@ class ProfileController extends Controller
 
     public function index(): View
     {
-        return view('backend.profile',[
+        activity('profile_management')
+            ->causedBy(Auth::user())
+            ->log('Accessed the profile page.');
+
+        return view('backend.profile', [
             'title' => 'My Profile',
             'user' => auth()->user()
         ]);
@@ -67,6 +71,10 @@ class ProfileController extends Controller
         $user->email = $request->email;
         $user->save();
 
+        activity('profile_management')
+            ->causedBy(Auth::user())
+            ->log('Updated profile information.');
+
         return redirect()->route('profile.index')->with('success', 'Profile updated successfully');
     }
 
@@ -86,6 +94,10 @@ class ProfileController extends Controller
         $user->update([
             'password' => Hash::make($request->new_password),
         ]);
+
+        activity('profile_management')
+            ->causedBy(Auth::user())
+            ->log('Updated profile password.');
 
         return redirect()->route('profile.index')->with('success', 'Password updated successfully');
     }

@@ -8,6 +8,7 @@ use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class ProjectController extends Controller
@@ -36,6 +37,10 @@ class ProjectController extends Controller
 
         $projects = $query->paginate($perPage);
 
+        activity('project_management')
+            ->causedBy(Auth::user())
+            ->log('Accessed project index.');
+
         return view('backend.project.index', [
             'title' => 'Project',
             'projects' => $projects,
@@ -46,6 +51,10 @@ class ProjectController extends Controller
 
     public function create(): View 
     {
+        activity('project_management')
+            ->causedBy(Auth::user())
+            ->log('Accessed create project page.');
+
         return view('backend.project.create', [
             'title' => 'New Project',
         ]);
@@ -59,17 +68,25 @@ class ProjectController extends Controller
             'content' => 'required'
         ]);
 
-        Project::create([
+        $project = Project::create([
             'title' => $request->title,
             'slug' => $request->slug,
             'desc' => $request->content
         ]);
+
+        activity('project_management')
+            ->causedBy(Auth::user())
+            ->log("Created project: {$project->title}");
 
         return redirect()->route('backend.project.index')->with('success', 'Project created successfully');
     }
 
     public function edit(Project $project): View 
     {
+        activity('project_management')
+            ->causedBy(Auth::user())
+            ->log("Accessed edit page for project: {$project->title}");
+
         return view('backend.project.edit', [
             'title' => 'Edit Project',
             'project' => $project
@@ -90,12 +107,21 @@ class ProjectController extends Controller
             'desc' => $request->content
         ]);
 
+        activity('project_management')
+            ->causedBy(Auth::user())
+            ->log("Updated project: {$project->title}");
+
         return redirect()->route('backend.project.index')->with('success', 'Project updated successfully');
     }
 
     public function destroy(Project $project): RedirectResponse
     {
+        $projectTitle = $project->title;
         $project->delete();
+
+        activity('project_management')
+            ->causedBy(Auth::user())
+            ->log("Deleted project: {$projectTitle}");
 
         return redirect()->route('backend.project.index')->with('success', 'Project deleted successfully');
     }

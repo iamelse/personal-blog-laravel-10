@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class EducationController extends Controller
@@ -28,6 +29,10 @@ class EducationController extends Controller
         ->orderByRaw('end_date IS NULL DESC, end_date DESC')
         ->paginate($perPage);
 
+        activity('education_management')
+            ->causedBy(Auth::user())
+            ->log('Accessed education index.');
+
         return view('backend.resume.education.index', [
             'title' => 'Education',
             'educations' => $educations,
@@ -38,6 +43,10 @@ class EducationController extends Controller
 
     public function create(): View
     {
+        activity('education_management')
+            ->causedBy(Auth::user())
+            ->log('Accessed create education page.');
+
         return view('backend.resume.education.create', [
             'title' => 'New Education'
         ]);
@@ -60,10 +69,10 @@ class EducationController extends Controller
             $file = $request->file('school_logo');
             $fileName = time() . '.' . $file->getClientOriginalExtension();
 
-            $educationDirectory = 'uploads/Educations/school_logos';
+            $educationDirectory = 'uploads/educations/school_logos';
             $file->move(public_path($educationDirectory), $fileName);
 
-            Education::create([
+            $education = Education::create([
                 'school_logo_size' => $request->school_logo_size ?? 2.5,
                 'school_logo' => $educationDirectory . '/' . $fileName,
                 'major' => $request->major,
@@ -72,17 +81,24 @@ class EducationController extends Controller
                 'desc' => $request->desc,
                 'start_date' => Carbon::parse($request->start_date)->format('Y-m-d H:i:s'),
                 'end_date' => $request->is_still_work_here ? null : ($request->end_date ? Carbon::parse($request->end_date)->format('Y-m-d H:i:s') : null),
-            ]);            
+            ]);
+
+            activity('education_management')
+                ->causedBy(Auth::user())
+                ->log("Created education: {$request->degree} in {$request->major} at {$request->school_name}");
 
             return redirect()->route('education.index')->with('success', 'Education created successfully');
         }
 
         return redirect()->route('education.index')->with('error', 'Education create failed');
-        
     }
 
     public function edit(Education $education): View
     {
+        activity('education_management')
+            ->causedBy(Auth::user())
+            ->log("Accessed edit page for education: {$education->degree} in {$education->major}");
+
         return view('backend.resume.education.edit', [
             'title' => 'Edit Education',
             'education' => $education
@@ -129,6 +145,10 @@ class EducationController extends Controller
 
         $education->update($data);
 
+        activity('education_management')
+            ->causedBy(Auth::user())
+            ->log("Updated education: {$education->degree} in {$education->major}");
+
         return redirect()->route('education.index')->with('success', 'Education updated successfully');
     }
 
@@ -141,7 +161,12 @@ class EducationController extends Controller
             }
         }
 
+        $educationTitle = "{$education->degree} in {$education->major}"; // Store title for logging
         $education->delete();
+
+        activity('education_management')
+            ->causedBy(Auth::user())
+            ->log("Deleted education: {$educationTitle}");
 
         return redirect()->route('education.index')->with('success', 'Education deleted successfully');
     }

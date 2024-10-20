@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\File;
@@ -29,6 +30,10 @@ class DeveloperController extends Controller
             return pathinfo($file, PATHINFO_FILENAME);
         }, $files);
 
+        activity('developer_panel')
+            ->causedBy(Auth::user())
+            ->log('Accessed developer panel.');
+
         return view('backend.developer.index', [
             'title' => 'Developer',
             'commands' => $commands,
@@ -39,12 +44,20 @@ class DeveloperController extends Controller
     public function cacheRoutes(): RedirectResponse
     {
         Artisan::call('route:cache');
+        activity('developer_panel')
+            ->causedBy(Auth::user())
+            ->log('Cached routes.');
+
         return redirect()->back()->with('success', 'Routes have been cached!');
     }
 
     public function databaseMigrateFreshAndSeed(): RedirectResponse
     {
         Artisan::call('migrate:fresh', ['--seed' => true]);
+        activity('developer_panel')
+            ->causedBy(Auth::user())
+            ->log('Reset and seeded the database.');
+
         return redirect()->back()->with('success', 'Database has been reset and seeded with dummy data!');
     }
 
@@ -62,25 +75,33 @@ class DeveloperController extends Controller
             case 'php artisan migrate':
                 Log::info('Executing command: migrate');
                 Artisan::call('migrate');
-                Log::info('Command executed successfully: migrate');
+                activity('developer_panel')
+                    ->causedBy(Auth::user())
+                    ->log('Executed command: migrate');
                 break;
 
             case 'php artisan migrate:fresh':
                 Log::info('Executing command: migrate:fresh');
                 Artisan::call('migrate:fresh');
-                Log::info('Command executed successfully: migrate:fresh');
+                activity('developer_panel')
+                    ->causedBy(Auth::user())
+                    ->log('Executed command: migrate:fresh');
                 break;
 
             case 'php artisan migrate:fresh --seed':
                 Log::info('Executing command: migrate:fresh --seed');
                 Artisan::call('migrate:fresh', ['--seed' => true]);
-                Log::info('Command executed successfully: migrate:fresh --seed');
+                activity('developer_panel')
+                    ->causedBy(Auth::user())
+                    ->log('Executed command: migrate:fresh --seed');
                 break;
 
             case 'php artisan db:seed':
                 Log::info('Executing command: db:seed');
                 Artisan::call('db:seed');
-                Log::info('Command executed successfully: db:seed');
+                activity('developer_panel')
+                    ->causedBy(Auth::user())
+                    ->log('Executed command: db:seed');
                 break;
 
             default:
@@ -88,7 +109,9 @@ class DeveloperController extends Controller
                     $class = $matches[1];
                     Log::info('Executing command: db:seed --class', ['class' => $class]);
                     Artisan::call('db:seed', ['--class' => $class]);
-                    Log::info('Command executed successfully: db:seed --class', ['class' => $class]);
+                    activity('developer_panel')
+                        ->causedBy(Auth::user())
+                        ->log("Executed command: db:seed --class {$class}");
                 } else {
                     Log::error('Invalid command received', ['code' => $code]);
                     return redirect()->back()->withErrors(['Invalid command']);

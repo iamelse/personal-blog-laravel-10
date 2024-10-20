@@ -8,6 +8,7 @@ use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -34,6 +35,10 @@ class PostCategoryController extends Controller
             });
         })->paginate($perPage);
 
+        activity('post_category_management')
+            ->causedBy(Auth::user())
+            ->log('Accessed post categories index.');
+
         return view('backend.post_category.index', [
             'title' => 'Post Category',
             'postCategories' => $postCategories,
@@ -45,6 +50,10 @@ class PostCategoryController extends Controller
     public function create(): View 
     {
         $categoryId = uniqid();
+
+        activity('post_category_management')
+            ->causedBy(Auth::user())
+            ->log('Accessed create post category page.');
 
         return view('backend.post_category.create', [
             'title' => 'New Category',
@@ -59,16 +68,24 @@ class PostCategoryController extends Controller
             'slug' => 'required|string|max:255|unique:post_categories',
         ]);
 
-        PostCategory::create([
+        $postCategory = PostCategory::create([
             'name' => $request->category_name,
             'slug' => $request->slug
         ]);
+
+        activity('post_category_management')
+            ->causedBy(Auth::user())
+            ->log("Created post category: {$postCategory->name}");
 
         return redirect()->route('post.category.index')->with('success', 'Post category created successfully');
     }
 
     public function edit(PostCategory $postCategory): View 
     {
+        activity('post_category_management')
+            ->causedBy(Auth::user())
+            ->log("Accessed edit page for post category: {$postCategory->name}");
+
         return view('backend.post_category.edit', [
             'title' => 'Edit Category',
             'postCategory' => $postCategory
@@ -87,11 +104,19 @@ class PostCategoryController extends Controller
             'slug' => $request->slug
         ]);
 
+        activity('post_category_management')
+            ->causedBy(Auth::user())
+            ->log("Updated post category: {$postCategory->name}");
+
         return redirect()->route('post.category.index')->with('success', 'Post category updated successfully');
     }
 
     public function destroy(PostCategory $postCategory): RedirectResponse
     {
+        activity('post_category_management')
+            ->causedBy(Auth::user())
+            ->log("Deleted post category: {$postCategory->name}");
+
         $postCategory->delete();
 
         return redirect()->route('post.category.index')->with('success', 'Post category deleted successfully');
@@ -108,10 +133,14 @@ class PostCategoryController extends Controller
             $category->update([
                 'show_in_homepage' => $isChecked
             ]);
+
+            activity('post_category_management')
+                ->causedBy(Auth::user())
+                ->log("Updated visibility for post category: {$category->name} to " . ($isChecked ? 'visible' : 'hidden'));
+
             return response()->json(['success' => true]);
         }
 
         return response()->json(['success' => false], 404);
     }
-
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Backend\AboutController;
+use App\Http\Controllers\Backend\LogActivityController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\DeveloperController;
 use App\Http\Controllers\Backend\HomeController;
@@ -139,6 +140,10 @@ Route::group(['middleware' => ['auth']], function () {
             Route::post('/cache/routes', [DeveloperController::class, 'cacheRoutes'])->middleware(['can:view_developer'])->name('cache.routes');
             Route::post('/migrate/fresh/seed', [DeveloperController::class, 'databaseMigrateFreshAndSeed'])->middleware(['can:view_developer'])->name('database.migrate.fresh.seed');
             Route::post('/factory/code/run', [DeveloperController::class, 'factoryCodeRunner'])->middleware(['can:view_developer'])->name('factory.code.runner');
+        });
+
+        Route::prefix('log-activity')->group(function () {
+            Route::get('/', [LogActivityController::class, 'index'])->middleware(['can:view_log_activity'])->name('log.activity.index');
         });
 
         Route::prefix('details')->group(function () {

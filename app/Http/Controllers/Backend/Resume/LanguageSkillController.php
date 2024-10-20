@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\LanguageSkill;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class LanguageSkillController extends Controller
@@ -25,6 +26,10 @@ class LanguageSkillController extends Controller
         })
         ->paginate($perPage);
 
+        activity('language_skill_management')
+            ->causedBy(Auth::user())
+            ->log('Accessed language skill index.');
+
         return view('backend.resume.skills.language.index', [
             'title' => 'Language Skill',
             'languageSkills' => $languageSkills,
@@ -33,8 +38,12 @@ class LanguageSkillController extends Controller
         ]);
     }
 
-    public function create(): View 
+    public function create(): View
     {
+        activity('language_skill_management')
+            ->causedBy(Auth::user())
+            ->log('Accessed create language skill page.');
+
         return view('backend.resume.skills.language.create', [
             'title' => 'New Language Skill',
         ]);
@@ -47,16 +56,24 @@ class LanguageSkillController extends Controller
             'level' => 'required|string|in:Beginner,Intermediate,Advanced|max:255',
         ]);
 
-        LanguageSkill::create([
+        $languageSkill = LanguageSkill::create([
             'name' => $request->language_skill_name,
-            'level' => $request->level
+            'level' => $request->level,
         ]);
+
+        activity('language_skill_management')
+            ->causedBy(Auth::user())
+            ->log("Created language skill: {$languageSkill->name} ({$languageSkill->level})");
 
         return redirect()->route('skill.language.index')->with('success', 'Language skill created successfully');
     }
 
-    public function edit(LanguageSkill $languageSkill): View 
+    public function edit(LanguageSkill $languageSkill): View
     {
+        activity('language_skill_management')
+            ->causedBy(Auth::user())
+            ->log("Accessed edit page for language skill: {$languageSkill->name}");
+
         return view('backend.resume.skills.language.edit', [
             'title' => 'Edit Language Skill',
             'languageSkill' => $languageSkill,
@@ -72,14 +89,22 @@ class LanguageSkillController extends Controller
 
         $languageSkill->update([
             'name' => $request->language_skill_name,
-            'level' => $request->level
+            'level' => $request->level,
         ]);
+
+        activity('language_skill_management')
+            ->causedBy(Auth::user())
+            ->log("Updated language skill: {$languageSkill->name} to level {$languageSkill->level}");
 
         return redirect()->route('skill.language.index')->with('success', 'Language skill updated successfully');
     }
 
     public function destroy(LanguageSkill $languageSkill): RedirectResponse
     {
+        activity('language_skill_management')
+            ->causedBy(Auth::user())
+            ->log("Deleted language skill: {$languageSkill->name}");
+
         $languageSkill->delete();
 
         return redirect()->route('skill.language.index')->with('success', 'Language skill deleted successfully');

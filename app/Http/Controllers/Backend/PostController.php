@@ -35,6 +35,10 @@ class PostController extends Controller
         $posts = $this->_getFilteredPosts($filters);
         $categories = PostCategory::all();
 
+        activity('post_management')
+            ->causedBy(Auth::user())
+            ->log('Accessed posts index.');
+
         return view('backend.article.index', [
             'title' => 'Post',
             'posts' => $posts,
@@ -47,6 +51,10 @@ class PostController extends Controller
 
     public function create(): View 
     {
+        activity('post_management')
+            ->causedBy(Auth::user())
+            ->log('Accessed create post page.');
+
         return view('backend.article.create', [
             'title' => 'New Post',
             'categories' => PostCategory::all()
@@ -86,6 +94,10 @@ class PostController extends Controller
                 'status' => $status
             ]);
 
+            activity('post_management')
+                ->causedBy(Auth::user())
+                ->log("Created post: {$post->title}");
+
             return redirect()->route('post.index')->with('success', 'Post created successfully');
         }
 
@@ -95,7 +107,11 @@ class PostController extends Controller
     public function edit(Post $post): View 
     {
         $this->_authorizePost($post);
-    
+
+        activity('post_management')
+            ->causedBy(Auth::user())
+            ->log("Accessed edit page for post: {$post->title}");
+
         return view('backend.article.edit', [
             'title' => 'Edit Post',
             'post' => $post,
@@ -146,6 +162,10 @@ class PostController extends Controller
             ]);
         }
 
+        activity('post_management')
+            ->causedBy(Auth::user())
+            ->log("Updated post: {$post->title}");
+
         return redirect()->route('post.index')->with('success', 'Post updated successfully');
     }
 
@@ -159,6 +179,10 @@ class PostController extends Controller
                 File::delete($coverPath);
             }
         }
+
+        activity('post_management')
+            ->causedBy(Auth::user())
+            ->log("Deleted post: {$post->title}");
 
         $post->delete();
 
@@ -182,5 +206,4 @@ class PostController extends Controller
             abort(404, 'Not found.');
         }
     }
-
 }

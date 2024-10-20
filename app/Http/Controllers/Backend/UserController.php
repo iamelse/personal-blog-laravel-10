@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use Spatie\Permission\Models\Role;
@@ -26,6 +27,10 @@ class UserController extends Controller
             });
         })->paginate($perPage);
 
+        activity('user_management')
+            ->causedBy(Auth::user())
+            ->log('Accessed user index.');
+
         return view('backend.user.index', [
             'title' => 'User',
             'users' => $users,
@@ -37,6 +42,10 @@ class UserController extends Controller
     public function create(): View
     {
         $roles = Role::all();
+
+        activity('user_management')
+            ->causedBy(Auth::user())
+            ->log('Accessed create user page.');
 
         return view('backend.user.create', [
             'title' => 'New User',
@@ -58,9 +67,12 @@ class UserController extends Controller
         $userData['password'] = Hash::make($request->input('password'));
 
         $user = User::create($userData);
-
         $role = Role::findById($request->input('role_id'));
         $user->assignRole($role->name);
+
+        activity('user_management')
+            ->causedBy(Auth::user())
+            ->log("Created new user: {$user->name}");
 
         return redirect()->route('user.index')->with('success', 'User created successfully.');
     }
@@ -68,6 +80,10 @@ class UserController extends Controller
     public function edit(User $user): View
     {
         $roles = Role::all();
+
+        activity('user_management')
+            ->causedBy(Auth::user())
+            ->log("Accessed edit page for user: {$user->name}");
 
         return view('backend.user.edit', [
             'title' => 'Edit User',
@@ -95,19 +111,25 @@ class UserController extends Controller
         }
 
         $user->update($userData);
-
-        
         $role = Role::find($request->input('role_id'));
 
         if ($role) {
             $user->syncRoles([$role->name]);
         }
 
+        activity('user_management')
+            ->causedBy(Auth::user())
+            ->log("Updated user: {$user->name}");
+
         return redirect()->route('user.index')->with('success', 'User updated successfully.');
     }
 
     public function destroy(User $user): RedirectResponse
     {
+        activity('user_management')
+            ->causedBy(Auth::user())
+            ->log("Deleted user: {$user->name}");
+
         $user->delete();
 
         return redirect()->route('user.index')->with('success', 'User deleted successfully.');

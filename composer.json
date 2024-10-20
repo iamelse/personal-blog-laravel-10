@@ -16,6 +16,7 @@
         "laravel/ui": "^4.4",
         "matomo/device-detector": "^6.3",
         "opcodesio/log-viewer": "^3.10",
+        "spatie/laravel-activitylog": "^4.8",
         "spatie/laravel-permission": "^6.3",
         "unisharp/laravel-filemanager": "^2.7"
     },

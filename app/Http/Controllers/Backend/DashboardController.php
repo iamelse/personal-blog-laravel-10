@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Services\PostViewAnalyticsServices;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -37,6 +38,12 @@ class DashboardController extends Controller
         $historycalPostViews = [
             'week' => $this->postAnalyticsServices->getViewsHistoriesForWeek($params)
         ];
+
+        $user = Auth::user();
+
+        activity('dashboard')
+            ->causedBy($user)
+            ->log("Accessed the dashboard.");
 
         return view('backend.dashboard.index', [
             'title' => 'Dashboard',

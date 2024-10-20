@@ -7,6 +7,7 @@ use App\Models\Experience;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\View\View;
 
@@ -28,6 +29,10 @@ class ExperienceController extends Controller
         ->orderByRaw('end_date IS NULL DESC, end_date DESC')
         ->paginate($perPage);
 
+        activity('experience_management')
+            ->causedBy(Auth::user())
+            ->log('Accessed experience index.');
+
         return view('backend.resume.experience.index', [
             'title' => 'Experience',
             'experiences' => $experiences,
@@ -38,6 +43,10 @@ class ExperienceController extends Controller
 
     public function create(): View
     {
+        activity('experience_management')
+            ->causedBy(Auth::user())
+            ->log('Accessed create experience page.');
+
         return view('backend.resume.experience.create', [
             'title' => 'New Experience'
         ]);
@@ -70,17 +79,24 @@ class ExperienceController extends Controller
                 'desc' => $request->desc,
                 'start_date' => Carbon::parse($request->start_date)->format('Y-m-d H:i:s'),
                 'end_date' => $request->is_still_work_here ? null : ($request->end_date ? Carbon::parse($request->end_date)->format('Y-m-d H:i:s') : null),
-            ]);            
+            ]);
+
+            activity('experience_management')
+                ->causedBy(Auth::user())
+                ->log("Created experience: {$request->position_name} at {$request->company_name}");
 
             return redirect()->route('experience.index')->with('success', 'Experience created successfully');
         }
 
         return redirect()->route('experience.index')->with('error', 'Experience create failed');
-        
     }
 
     public function edit(Experience $experience): View
     {
+        activity('experience_management')
+            ->causedBy(Auth::user())
+            ->log("Accessed edit page for experience: {$experience->position_name}");
+
         return view('backend.resume.experience.edit', [
             'title' => 'Edit Experience',
             'experience' => $experience
@@ -125,6 +141,10 @@ class ExperienceController extends Controller
 
         $experience->update($data);
 
+        activity('experience_management')
+            ->causedBy(Auth::user())
+            ->log("Updated experience: {$experience->position_name}");
+
         return redirect()->route('experience.index')->with('success', 'Experience updated successfully');
     }
 
@@ -137,7 +157,12 @@ class ExperienceController extends Controller
             }
         }
 
+        $experienceTitle = $experience->position_name;
         $experience->delete();
+
+        activity('experience_management')
+            ->causedBy(Auth::user())
+            ->log("Deleted experience: {$experienceTitle}");
 
         return redirect()->route('experience.index')->with('success', 'Experience deleted successfully');
     }

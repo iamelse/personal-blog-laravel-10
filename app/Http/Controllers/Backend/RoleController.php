@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -25,6 +26,10 @@ class RoleController extends Controller
             });
         })->paginate($perPage);
 
+        activity('role_management')
+            ->causedBy(Auth::user())
+            ->log('Accessed roles index.');
+
         return view('backend.role.index', [
             'title' => 'Role',
             'roles' => $roles,
@@ -35,6 +40,10 @@ class RoleController extends Controller
 
     public function show(Role $role): View
     {
+        activity('role_management')
+            ->causedBy(Auth::user())
+            ->log("Viewed role details: {$role->name}");
+
         return view('backend.role.show', [
             'title' => 'Role Detail',
             'role' => $role,
@@ -52,6 +61,10 @@ class RoleController extends Controller
         $permissionsToGive = Permission::whereIn('id', $selectedPermissions)->get();
         
         $role->syncPermissions($permissionsToGive);
+
+        activity('role_management')
+            ->causedBy(Auth::user())
+            ->log("Updated permissions for role: {$role->name}");
 
         return redirect()->back()->with('success', 'Permissions saved successfully');
     }
