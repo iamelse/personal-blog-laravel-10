@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use App\Enums\EnumUserRole;
 use App\Enums\PostStatus;
 use App\Models\Post;
 use App\Models\PostView;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class PostViewAnalyticsServices
@@ -93,40 +95,78 @@ class PostViewAnalyticsServices
             $dates[] = $d;
         }
 
-        $data = PostView::select(DB::raw('view_date, SUM(view_count) as total_views'))
+
+        $user = Auth::user();
+        $postUserId = $params['post_user_id'] ?? null;
+
+        $query = PostView::select(DB::raw('view_date, post_id, SUM(view_count) as total_views'))
+                    ->with('post')
+                    ->join('posts as p', 'post_views.post_id', '=', 'p.id')
                     ->whereBetween('view_date', [$startDate, $endDate])
-                    ->groupBy('view_date')
-                    ->orderBy('view_date', 'asc')
-                    ->get()
-                    ->keyBy('view_date');
+                    ->groupBy('view_date', 'post_id')
+                    ->orderBy('view_date', 'asc');
+
+        if ($user->roles->first()->name == EnumUserRole::MASTER->value) {
+            if ($postUserId && $postUserId !== null) {
+                $query->where('p.user_id', $postUserId);
+            }
+        } else {
+            $query->where('p.user_id', $user->id);
+        }
+
+        $data = $query->get()->groupBy('view_date');
 
         $result = [];
         foreach ($dates as $d) {
+            $dailyData = $data->get($d, collect());
+            $totalViews = $dailyData->sum('total_views');
+
+            $postDetails = $dailyData->map(function ($item) {
+                return [
+                    'post_id' => $item->post_id,
+                    'user_id' => Auth::user()->id,
+                    'post_user_id' => $item->post->user_id,
+                    'total_views' => $item->total_views,
+                ];
+            })->toArray();
+
             $result[$d] = [
                 'view_date' => $d,
                 'label' => $this->_formatDateLabel($d),
-                'total_views' => $data->has($d) ? $data[$d]->total_views : 0,
+                'total_views' => $totalViews,
+                'post_details' => $postDetails,
                 'colors' => '#435EBE'
             ];
         }
 
+        // Return the result sorted by view_date
         return collect($result)->sortBy('view_date');
     }
 
-    public function mostViewedPost($params = [])
+    public function mostViewedPost($user, $params = [])
     {
-        $mostViewedPosts = Post::with(['views' => function($query) use ($params) {
-                                $query->whereBetween('view_date', [$params['start_date'], $params['end_date']]);
-                            }])
-                            ->select('posts.*', DB::raw('SUM(post_views.view_count) as total_views'))
-                            ->join('post_views', 'posts.id', '=', 'post_views.post_id')
-                            ->whereBetween('post_views.view_date', [$params['start_date'], $params['end_date']])
-                            ->where('status', PostStatus::PUBLISHED)
-                            ->groupBy('posts.id')
-                            ->orderBy('total_views', 'desc')
-                            ->limit(10)
-                            ->get();
-    
+        $postUserId = $params['post_user_id'] ?? null;
+
+        $query = Post::with(['views' => function($query) use ($params) {
+                                    $query->whereBetween('view_date', [$params['start_date'], $params['end_date']]);
+                                }])
+                                ->select('posts.*', DB::raw('SUM(post_views.view_count) as total_views'))
+                                ->join('post_views', 'posts.id', '=', 'post_views.post_id')
+                                ->whereBetween('post_views.view_date', [$params['start_date'], $params['end_date']])
+                                ->where('status', PostStatus::PUBLISHED)
+                                ->groupBy('posts.id')
+                                ->orderBy('total_views', 'desc');
+
+        if ($user->roles->first()->name == EnumUserRole::MASTER->value) {
+            if ($postUserId && $postUserId !== null) {
+                $query->where('posts.user_id', $postUserId);
+            }
+        } else {
+            $query->where('posts.user_id', $user->id);
+        }
+
+        $mostViewedPosts = $query->limit(10)->get();
+
         return $mostViewedPosts;
     }
 

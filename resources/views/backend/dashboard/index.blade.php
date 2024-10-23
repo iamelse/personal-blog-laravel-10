@@ -1,3 +1,7 @@
+@php
+    use App\Enums\EnumUserRole;
+@endphp
+
 @extends('template.main')
 
 @section('content')
@@ -145,6 +149,24 @@
                                         @endfor
                                     </select>
                                 </div>
+
+                                @if (Auth::user()->roles->first()->name == EnumUserRole::MASTER->value)
+                                    <div class="col-auto">
+                                        <!-- User label and select input -->
+                                        <label for="post_user_id" class="form-label text-sm">Assign to User</label>
+                                        <select name="post_user_id" id="post_user_id" class="form-select form-select-sm">
+                                            <!-- Option for 'All Users' (default) -->
+                                            <option value="" {{ request('post_user_id', '') == '' ? 'selected' : '' }}>All Users</option>
+                                            
+                                            <!-- Loop through users -->
+                                            @foreach ($users as $user)
+                                                <option value="{{ $user->id }}" {{ request('post_user_id') == $user->id ? 'selected' : '' }}>
+                                                    {{ $user->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                @endif                   
                         
                                 <div class="col-auto">
                                     <!-- Submit button -->
@@ -213,56 +235,58 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-lg-6">
-                <section class="section">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Countries</h4>
+        @if (Auth::user()->roles->first()->name == EnumUserRole::MASTER->value)
+            <div class="row">
+                <div class="col-lg-6">
+                    <section class="section">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Countries</h4>
+                            </div>
+                            <div class="card-body">
+                                <div id="chart-visitor-countries"></div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <div id="chart-visitor-countries"></div>
+                    </section>
+                </div>
+                <div class="col-lg-6">
+                    <section class="section">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Browsers</h4>
+                            </div>
+                            <div class="card-body">
+                                <div id="chart-visitor-browsers"></div>
+                            </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
+                </div>
+                <div class="col-lg-6">
+                    <section class="section">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Devices</h4>
+                            </div>
+                            <div class="card-body">
+                                <div id="chart-visitor-devices"></div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="col-lg-6">
+                    <section class="section">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Operating Systems</h4>
+                            </div>
+                            <div class="card-body">
+                                <div id="chart-visitor-os"></div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
             </div>
-            <div class="col-lg-6">
-                <section class="section">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Browsers</h4>
-                        </div>
-                        <div class="card-body">
-                            <div id="chart-visitor-browsers"></div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-            <div class="col-lg-6">
-                <section class="section">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Devices</h4>
-                        </div>
-                        <div class="card-body">
-                            <div id="chart-visitor-devices"></div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-            <div class="col-lg-6">
-                <section class="section">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Operating Systems</h4>
-                        </div>
-                        <div class="card-body">
-                            <div id="chart-visitor-os"></div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-        </div>
+        @endif
     </div>
 @endsection
 
