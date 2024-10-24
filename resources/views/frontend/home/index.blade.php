@@ -63,7 +63,7 @@
                                         <div class="card-list">
                                             @forelse ($category->posts->take(5) as $post)
                                                 <div class="card flex-row border-0">
-                                                    <img class="card-img-left l-card-img align-self-center" src="{{ asset('/' . $post->cover) }}" alt="{{ $post->title }}" />
+                                                    <img class="card-img-left l-card-img align-self-center" src="{{ getPostCoverImage($post) }}" alt="{{ $post->title }}" />
                                                     <div class="card-body">
                                                         <div class="d-flex justify-content-between align-items-start">
                                                             <div>

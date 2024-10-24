@@ -47,7 +47,7 @@
                         <div class="card-list mt-3">
                             @forelse ($posts as $post)
                             <div class="card flex-row border-0">
-                                <img class="card-img-left l-card-img align-self-center" src="{{ asset($post?->cover) }}"/>
+                                <img class="card-img-left l-card-img align-self-center" src="{{ getPostCoverImage($post) }}"/>
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-start">
                                         <div>
