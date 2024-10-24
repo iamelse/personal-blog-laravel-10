@@ -59,10 +59,16 @@ class DashboardController extends Controller
     }
 
     private function _getPostsByUser($user, $status = null) {
-        if ($user->roles[0]->name === EnumUserRole::MASTER->value) {
-            $query = Post::query();
-        } else {
-            $query = Post::where('user_id', $user->id);
+        
+        $query = Post::query();
+    
+        if ($user->roles->first()->name !== EnumUserRole::MASTER->value) {
+            $query->where('user_id', $user->id);
+        }
+    
+        if (request()->has('post_user_id') && !empty(request()->input('post_user_id'))) {
+            $postUserId = request()->input('post_user_id');
+            $query->where('user_id', $postUserId);
         }
     
         if ($status) {
