@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Enums\EnumUserRole;
 use App\Enums\PostStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\PostCategory;
+use App\Services\ImageManagementService;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -16,6 +18,13 @@ use Illuminate\View\View;
 
 class PostController extends Controller
 {
+    protected $imageManagementService;
+
+    public function __construct(ImageManagementService $imageManagementService)
+    {
+        $this->imageManagementService = $imageManagementService;
+    }
+    
     public function checkSlug(Request $request): JsonResponse
     {
         $slug = SlugService::createSlug(Post::class, 'slug', $request->title);
@@ -66,42 +75,43 @@ class PostController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:posts',
-            'post_category_id' => 'required',
+            'post_category_id' => 'required|exists:post_categories,id',
             'cover' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'content' => 'required',
             'published_at' => 'nullable|date|after:now'
         ]);
 
+        $imagePath = null;
+
         if ($request->hasFile('cover')) {
             $file = $request->file('cover');
-            $fileName = time() . '.' . $file->getClientOriginalExtension();
 
-            $postDirectory = 'uploads/posts';
-            $file->move(public_path($postDirectory), $fileName);
-
-            $status = $request->published_at <= now()
-            ? PostStatus::PUBLISHED
-            : PostStatus::SCHEDULED;
-
-            $post = Post::create([
-                'post_category_id' => $request->post_category_id,
-                'user_id' => auth()->user()->id,
-                'title' => $request->title,
-                'slug' => $request->slug,
-                'cover' => $postDirectory . '/' . $fileName,
-                'body' => $request->content,
-                'published_at' => $request->published_at,
-                'status' => $status
+            $imagePath = $this->imageManagementService->uploadImage($file, [
+                'disk' => env('FILESYSTEM_DISK'),
+                'folder' => 'uploads/posts/covers',
             ]);
-
-            activity('post_management')
-                ->causedBy(Auth::user())
-                ->log("Created post: {$post->title}");
-
-            return redirect()->route('post.index')->with('success', 'Post created successfully');
         }
 
-        return redirect()->route('post.index')->with('error', 'Post create failed');
+        $status = $request->published_at && $request->published_at > now()
+            ? PostStatus::SCHEDULED
+            : PostStatus::PUBLISHED;
+
+        $post = Post::create([
+            'post_category_id' => $request->post_category_id,
+            'user_id' => auth()->user()->id,
+            'title' => $request->title,
+            'slug' => $request->slug,
+            'cover' => $imagePath,
+            'body' => $request->content,
+            'published_at' => $request->published_at,
+            'status' => $status,
+        ]);
+
+        activity('post_management')
+            ->causedBy(Auth::user())
+            ->log("Created post: {$post->title}");
+
+        return redirect()->route('post.index')->with('success', 'Post created successfully');
     }
 
     public function edit(Post $post): View 
@@ -125,42 +135,31 @@ class PostController extends Controller
 
         $request->validate([
             'title' => 'required|string|max:255',
-            'post_category_id' => 'required',
+            'post_category_id' => 'required|exists:post_categories,id',
             'slug' => 'required|string|max:255|unique:posts,slug,' . $post->id,
-            'cover' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'content' => 'required'
         ]);
 
+        $data = [
+            'post_category_id' => $request->post_category_id,
+            'title' => $request->title,
+            'slug' => $request->slug,
+            'body' => $request->content,
+        ];
+
         if ($request->hasFile('cover')) {
             $file = $request->file('cover');
-            $fileName = time() . '.' . $file->getClientOriginalExtension();
-
-            $postDirectory = 'uploads/posts';
-            $file->move(public_path($postDirectory), $fileName);
-
-            if (!empty($post->cover)) {
-                $oldCoverPath = public_path($post->cover);
-                if (File::exists($oldCoverPath)) {
-                    File::delete($oldCoverPath);
-                }
-            }
-
-            $post->update([
-                'post_category_id' => $request->post_category_id,
-                'user_id' => auth()->user()->id,
-                'title' => $request->title,
-                'slug' => $request->slug,
-                'cover' => $postDirectory . '/' . $fileName,
-                'body' => $request->content
+            $imagePath = $this->imageManagementService->uploadImage($file, [
+                'currentImagePath' => $post->cover ?? null,
+                'disk' => env('FILESYSTEM_DISK'),
+                'folder' => 'uploads/posts/covers',
             ]);
-        } else {
-            $post->update([
-                'post_category_id' => $request->post_category_id,
-                'title' => $request->title,
-                'slug' => $request->slug,
-                'body' => $request->content
-            ]);
+            
+            $data['cover'] = $imagePath;
         }
+
+        $post->update($data);
 
         activity('post_management')
             ->causedBy(Auth::user())
@@ -173,12 +172,7 @@ class PostController extends Controller
     {
         $this->_authorizePost($post);
 
-        if (!empty($post->cover)) {
-            $coverPath = public_path($post->cover);
-            if (File::exists($coverPath)) {
-                File::delete($coverPath);
-            }
-        }
+        $this->imageManagementService->destroyImage($post->cover);
 
         activity('post_management')
             ->causedBy(Auth::user())
@@ -202,7 +196,7 @@ class PostController extends Controller
 
     private function _authorizePost(Post $post): void
     {
-        if (!Auth::user()->roles[0]->name === "Master" && $post->user_id !== Auth::id()) {
+        if (!Auth::user()->roles[0]->name === EnumUserRole::MASTER->value && $post->user_id !== Auth::id()) {
             abort(404, 'Not found.');
         }
     }

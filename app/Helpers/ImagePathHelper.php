@@ -102,3 +102,28 @@ if (!function_exists('getImageSchoolLogo')) {
         return $placeholderUrl;
     }
 }
+
+if (!function_exists('getPostCoverImage')) {
+    function getPostCoverImage($post)
+    {
+        $disk = env('FILESYSTEM_DISK');
+        $placeholderUrl = 'https://via.placeholder.com/150';
+
+        // Check for the PUBLIC disk
+        if ($disk === EnumFileSystemDisk::PUBLIC->value) {
+            if ($post->cover && Storage::disk('public')->exists($post->cover)) {
+                return asset('storage/' . $post->cover);
+            }
+        } 
+        // Check for the PUBLIC_UPLOADS disk
+        elseif ($disk === EnumFileSystemDisk::PUBLIC_UPLOADS->value) {
+            // Directly using the uploads path
+            $filePath = $post->cover;
+            if ($post->cover && file_exists(public_path($filePath))) {
+                return asset($filePath);
+            }
+        }
+
+        return $placeholderUrl;
+    }
+}
