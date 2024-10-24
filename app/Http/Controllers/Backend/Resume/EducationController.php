@@ -4,15 +4,22 @@ namespace App\Http\Controllers\Backend\Resume;
 
 use App\Http\Controllers\Controller;
 use App\Models\Education;
+use App\Services\ImageManagementService;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class EducationController extends Controller
 {
+    protected $imageManagementService;
+
+    public function __construct(ImageManagementService $imageManagementService)
+    {
+        $this->imageManagementService = $imageManagementService;
+    }
+    
     public function index(Request $request): View
     {
         $perPage = $request->input('limit', 10);
@@ -64,33 +71,34 @@ class EducationController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'nullable|date|after:start_date',
         ]);
+        
+        $imagePath = null;
 
         if ($request->hasFile('school_logo')) {
             $file = $request->file('school_logo');
-            $fileName = time() . '.' . $file->getClientOriginalExtension();
 
-            $educationDirectory = 'uploads/educations/school_logos';
-            $file->move(public_path($educationDirectory), $fileName);
-
-            $education = Education::create([
-                'school_logo_size' => $request->school_logo_size ?? 2.5,
-                'school_logo' => $educationDirectory . '/' . $fileName,
-                'major' => $request->major,
-                'degree' => $request->degree,
-                'school_name' => $request->school_name,
-                'desc' => $request->desc,
-                'start_date' => Carbon::parse($request->start_date)->format('Y-m-d H:i:s'),
-                'end_date' => $request->is_still_work_here ? null : ($request->end_date ? Carbon::parse($request->end_date)->format('Y-m-d H:i:s') : null),
+            $imagePath = $this->imageManagementService->uploadImage($file, [
+                'disk' => env('FILESYSTEM_DISK'),
+                'folder' => 'uploads/educations/school_logos',
             ]);
-
-            activity('education_management')
-                ->causedBy(Auth::user())
-                ->log("Created education: {$request->degree} in {$request->major} at {$request->school_name}");
-
-            return redirect()->route('education.index')->with('success', 'Education created successfully');
         }
 
-        return redirect()->route('education.index')->with('error', 'Education create failed');
+        $education = Education::create([
+            'school_logo_size' => $request->school_logo_size ?? 2.5,
+            'school_logo' => $imagePath,
+            'major' => $request->major,
+            'degree' => $request->degree,
+            'school_name' => $request->school_name,
+            'desc' => $request->desc,
+            'start_date' => Carbon::parse($request->start_date)->format('Y-m-d H:i:s'),
+            'end_date' => $request->is_still_work_here ? null : ($request->end_date ? Carbon::parse($request->end_date)->format('Y-m-d H:i:s') : null),
+        ]);
+
+        activity('education_management')
+            ->causedBy(Auth::user())
+            ->log("Created education: {$request->degree} in {$request->major} at {$request->school_name}");
+
+        return redirect()->route('education.index')->with('success', 'Education created successfully');
     }
 
     public function edit(Education $education): View
@@ -130,17 +138,14 @@ class EducationController extends Controller
 
         if ($request->hasFile('school_logo')) {
             $file = $request->file('school_logo');
-            $fileName = time() . '.' . $file->getClientOriginalExtension();
 
-            $educationDirectory = 'uploads/educations/school_logos';
-            $file->move(public_path($educationDirectory), $fileName);
+            $imagePath = $this->imageManagementService->uploadImage($file, [
+                'currentImagePath' => $education->school_logo ?? null,
+                'disk' => env('FILESYSTEM_DISK'),
+                'folder' => 'uploads/educations/school_logos',
+            ]);
 
-            if (!empty($education->school_logo)) {
-                $oldSchoolLogoPath = public_path($education->school_logo);
-                File::delete($oldSchoolLogoPath);
-            }
-
-            $data['school_logo'] = $educationDirectory . '/' . $fileName;
+            $data['school_logo'] = $imagePath;
         }
 
         $education->update($data);
@@ -154,12 +159,7 @@ class EducationController extends Controller
 
     public function destroy(Education $education): RedirectResponse
     {
-        if (!empty($education->school_logo)) {
-            $schoolLogo = public_path($education->school_logo);
-            if (File::exists($schoolLogo)) {
-                File::delete($schoolLogo);
-            }
-        }
+        $this->imageManagementService->destroyImage($education->school_logo);
 
         $educationTitle = "{$education->degree} in {$education->major}"; // Store title for logging
         $education->delete();
