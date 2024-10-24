@@ -28,7 +28,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-3 d-flex justify-content-center">
-                        <img src="{{ empty($user->image_profile) ? 'https://via.placeholder.com/150' : (Storage::disk('public_uploads')->exists($user->image_profile) ? asset('uploads/' . $user->image_profile) : 'https://via.placeholder.com/150') }}" class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover;">
+                        <img src="{{ getUserImageProfilePath(Auth::user()) }}" class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover;">
                     </div>                        
                     <div class="col-9">
                         <form action="{{ route('profile.update') }}" method="post" enctype="multipart/form-data">
