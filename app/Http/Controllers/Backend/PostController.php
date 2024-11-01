@@ -3,29 +3,26 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Enums\EnumUserRole;
-use App\Enums\PostStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostStoreRequest;
 use App\Http\Requests\PostUpdateRequest;
 use App\Models\Post;
 use App\Models\PostCategory;
+use App\Repositories\PostRepository;
 use App\Services\ImageManagementService;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
 use Illuminate\View\View;
 
 class PostController extends Controller
 {
-    protected $imageManagementService;
-
-    public function __construct(ImageManagementService $imageManagementService)
-    {
-        $this->imageManagementService = $imageManagementService;
-    }
+    public function __construct(
+        protected ImageManagementService $imageManagementService,
+        protected PostRepository $postRepository
+    ) {}
     
     public function checkSlug(Request $request): JsonResponse
     {
@@ -43,7 +40,7 @@ class PostController extends Controller
             'columns' => ['title', 'slug']
         ];
         
-        $posts = $this->_getFilteredPosts($filters);
+        $posts = $this->postRepository->getFilteredPosts($filters);
         $categories = PostCategory::all();
 
         activity('post_management')
@@ -54,9 +51,6 @@ class PostController extends Controller
             'title' => 'Post',
             'posts' => $posts,
             'categories' => $categories,
-            'perPage' => $filters['perPage'],
-            'q' => $filters['q'],
-            'category_id' => $filters['category_id'],
         ]);
     }
 
@@ -74,37 +68,17 @@ class PostController extends Controller
 
     public function store(PostStoreRequest $request): RedirectResponse
     {
-        $imagePath = null;
+        try {
+            $post = $this->postRepository->store($request);
 
-        if ($request->hasFile('cover')) {
-            $file = $request->file('cover');
+            activity('post_management')
+                ->causedBy(Auth::user())
+                ->log("Created post: {$post->title}");
 
-            $imagePath = $this->imageManagementService->uploadImage($file, [
-                'disk' => env('FILESYSTEM_DISK'),
-                'folder' => 'uploads/posts/covers',
-            ]);
+            return redirect()->route('post.index')->with('success', 'Post created successfully');
+        } catch (\Exception $e) {
+            return redirect()->route('post.index')->with('error', 'Failed to create post: ' . $e->getMessage());
         }
-
-        $status = $request->published_at && $request->published_at > now()
-            ? PostStatus::SCHEDULED
-            : PostStatus::PUBLISHED;
-
-        $post = Post::create([
-            'post_category_id' => $request->post_category_id,
-            'user_id' => auth()->user()->id,
-            'title' => $request->title,
-            'slug' => $request->slug,
-            'cover' => $imagePath,
-            'body' => $request->content,
-            'published_at' => $request->published_at,
-            'status' => $status,
-        ]);
-
-        activity('post_management')
-            ->causedBy(Auth::user())
-            ->log("Created post: {$post->title}");
-
-        return redirect()->route('post.index')->with('success', 'Post created successfully');
     }
 
     public function edit(Post $post): View 
@@ -124,58 +98,37 @@ class PostController extends Controller
 
     public function update(PostUpdateRequest $request, Post $post): RedirectResponse
     {
-        $this->_authorizePost($post);
+        try {
+            $this->_authorizePost($post);
 
-        $data = [
-            'post_category_id' => $request->post_category_id,
-            'title' => $request->title,
-            'slug' => $request->slug,
-            'body' => $request->content,
-        ];
-
-        if ($request->hasFile('cover')) {
-            $file = $request->file('cover');
-            $imagePath = $this->imageManagementService->uploadImage($file, [
-                'currentImagePath' => $post->cover ?? null,
-                'disk' => env('FILESYSTEM_DISK'),
-                'folder' => 'uploads/posts/covers',
-            ]);
+            $post = $this->postRepository->update($request, $post->id);
             
-            $data['cover'] = $imagePath;
+            activity('post_management')
+                ->causedBy(Auth::user())
+                ->log("Updated post: {$post->title}");
+    
+            return redirect()->route('post.index')->with('success', 'Post updated successfully');
+        } catch (\Exception $e) {
+            return redirect()->route('post.index')->with('error', 'Failed to update post: ' . $e->getMessage());
         }
-
-        $post->update($data);
-
-        activity('post_management')
-            ->causedBy(Auth::user())
-            ->log("Updated post: {$post->title}");
-
-        return redirect()->route('post.index')->with('success', 'Post updated successfully');
     }
 
     public function destroy(Post $post): RedirectResponse
     {
-        $this->_authorizePost($post);
+        try {
+            $this->_authorizePost($post);
 
-        $this->imageManagementService->destroyImage($post->cover);
+            $this->imageManagementService->destroyImage($post->cover);
 
-        activity('post_management')
-            ->causedBy(Auth::user())
-            ->log("Deleted post: {$post->title}");
+            activity('post_management')
+                ->causedBy(Auth::user())
+                ->log("Deleted post: {$post->title}");
 
-        $post->delete();
+            $this->postRepository->destroy($post->id);
 
-        return redirect()->route('post.index')->with('success', 'Post deleted successfully');
-    }
-
-    private function _getFilteredPosts($filters)
-    {
-        $user = Auth::user();
-
-        if ($user->roles[0]->name === "Master") {
-            return Post::filter($filters);
-        } else {
-            return Post::where('user_id', $user->id)->filter($filters);
+            return redirect()->route('post.index')->with('success', 'Post deleted successfully');
+        } catch (\Exception $e) {
+            return redirect()->route('post.index')->with('error', 'Failed to delete post: ' . $e->getMessage());
         }
     }
 

@@ -165,9 +165,9 @@
                             <!-- Pagination links -->
                             <div class="row">
                                 <div class="col-12 d-flex justify-content-end">
-                                    {{ $posts->appends(['limit' => $perPage, 'q' => $q, 'category_id' => $category_id])->links() }}
+                                    {{ $posts->appends(['category_id' => request('category_id'), 'limit' => request('limit'), 'q' => request('q')])->links() }}
                                 </div>
-                            </div>                
+                            </div>                                          
                         </div>
                     </div>
                 </div>

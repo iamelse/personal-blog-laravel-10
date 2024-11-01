@@ -23,6 +23,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
         Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
         Route::put('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update.password');
+        Route::delete('/profile/destroy/profile-picture', [ProfileController::class, 'destroyProfilePicture'])->name('profile.destroy.profile.picture');
 
         Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['can:view_dashboard'])->name('dashboard');
 

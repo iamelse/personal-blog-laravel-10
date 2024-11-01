@@ -123,7 +123,7 @@
                             <!-- Pagination links -->
                             <div class="row">
                                 <div class="col-12 d-flex justify-content-end">
-                                    {{ $postCategories->appends(['limit' => $perPage, 'q' => $q])->links() }}
+                                    {{ $postCategories->appends(['limit' => request('limit'), 'q' => request('q')])->links() }}
                                 </div>
                             </div>                
                         </div>

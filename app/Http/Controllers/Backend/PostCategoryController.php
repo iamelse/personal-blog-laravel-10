@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PostCategoryStoreRequest;
 use App\Http\Requests\PostCategoryUpdateRequest;
 use App\Models\PostCategory;
+use App\Repositories\PostCategoryRepository;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -15,6 +16,10 @@ use Illuminate\View\View;
 
 class PostCategoryController extends Controller
 {
+    public function __construct(
+        protected PostCategoryRepository $postCategoryRepository
+    ) {}
+
     public function checkSlug(Request $request): JsonResponse
     {
         $slug = SlugService::createSlug(PostCategory::class, 'slug', $request->name);
@@ -24,17 +29,13 @@ class PostCategoryController extends Controller
     
     public function index(Request $request): View
     {
-        $perPage = $request->input('limit', 10);
-        $q = $request->input('q', '');
-        $columns = ['name', 'slug'];
+        $filters = [
+            'perPage' => $request->input('limit', 10),
+            'q' => $request->input('q', ''),
+            'columns' => ['name', 'slug']
+        ];
 
-        $postCategories = PostCategory::when($q, function ($query) use ($q, $columns) {
-            $query->where(function ($subquery) use ($q, $columns) {
-                foreach ($columns as $column) {
-                    $subquery->orWhere($column, 'LIKE', "%$q%");
-                }
-            });
-        })->paginate($perPage);
+        $postCategories = $this->postCategoryRepository->getFilteredPostCategories($filters);
 
         activity('post_category_management')
             ->causedBy(Auth::user())
@@ -42,9 +43,7 @@ class PostCategoryController extends Controller
 
         return view('backend.post_category.index', [
             'title' => 'Post Category',
-            'postCategories' => $postCategories,
-            'perPage' => $perPage,
-            'q' => $q,
+            'postCategories' => $postCategories
         ]);
     }
 
@@ -64,16 +63,17 @@ class PostCategoryController extends Controller
 
     public function store(PostCategoryStoreRequest $request): RedirectResponse
     {
-        $postCategory = PostCategory::create([
-            'name' => $request->category_name,
-            'slug' => $request->slug
-        ]);
+        try {
+            $postCategory = $this->postCategoryRepository->store($request);
 
-        activity('post_category_management')
-            ->causedBy(Auth::user())
-            ->log("Created post category: {$postCategory->name}");
+            activity('post_category_management')
+                ->causedBy(Auth::user())
+                ->log("Created post category: {$postCategory->name}");
 
-        return redirect()->route('post.category.index')->with('success', 'Post category created successfully');
+            return redirect()->route('post.category.index')->with('success', 'Post category created successfully');
+        } catch (\Exception $e) {
+            return redirect()->route('post.category.index')->with('error', 'Failed to create post category: ' . $e->getMessage());
+        }
     }
 
     public function edit(PostCategory $postCategory): View 
@@ -90,27 +90,33 @@ class PostCategoryController extends Controller
 
     public function update(PostCategoryUpdateRequest $request, PostCategory $postCategory): RedirectResponse
     {
-        $postCategory->update([
-            'name' => $request->category_name,
-            'slug' => $request->slug
-        ]);
+        try {
+            $postCategory = $this->postCategoryRepository->update($request, $postCategory->id);
 
-        activity('post_category_management')
-            ->causedBy(Auth::user())
-            ->log("Updated post category: {$postCategory->name}");
+            activity('post_category_management')
+                ->causedBy(Auth::user())
+                ->log("Updated post category: {$postCategory->name}");
 
-        return redirect()->route('post.category.index')->with('success', 'Post category updated successfully');
+            return redirect()->route('post.category.index')->with('success', 'Post category updated successfully');
+        } catch (\Exception $e) {
+
+            return redirect()->route('post.category.index')->with('error', 'Failed to update post category: ' . $e->getMessage());
+        }
     }
 
     public function destroy(PostCategory $postCategory): RedirectResponse
     {
-        activity('post_category_management')
-            ->causedBy(Auth::user())
-            ->log("Deleted post category: {$postCategory->name}");
+        try {
+            activity('post_category_management')
+                ->causedBy(Auth::user())
+                ->log("Deleted post category: {$postCategory->name}");
 
-        $postCategory->delete();
+            $this->postCategoryRepository->destroy($postCategory->id);
 
-        return redirect()->route('post.category.index')->with('success', 'Post category deleted successfully');
+            return redirect()->route('post.category.index')->with('success', 'Post category deleted successfully');
+        } catch (\Exception $e) {
+            return redirect()->route('post.index')->with('error', 'Failed to delete post category: ' . $e->getMessage());
+        }
     }
 
     public function updateVisibility(Request $request)

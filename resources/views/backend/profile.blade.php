@@ -27,9 +27,17 @@
         <div class="card">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-3 d-flex justify-content-center">
+                    <div class="col-3 d-flex flex-column align-items-center">
                         <img src="{{ getUserImageProfilePath(Auth::user()) }}" class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover;">
-                    </div>                        
+                        
+                        @if (Auth::user()->image_profile)
+                            <form action="{{ route('profile.destroy.profile.picture') }}" method="POST" class="mt-3">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger">Delete Profile Picture</button>
+                            </form>
+                        @endif
+                    </div>                                            
                     <div class="col-9">
                         <form action="{{ route('profile.update') }}" method="post" enctype="multipart/form-data">
                             @csrf
