@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PostCategoryStoreRequest;
+use App\Http\Requests\PostCategoryUpdateRequest;
 use App\Models\PostCategory;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class PostCategoryController extends Controller
@@ -61,13 +62,8 @@ class PostCategoryController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(PostCategoryStoreRequest $request): RedirectResponse
     {
-        $request->validate([
-            'category_name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:post_categories',
-        ]);
-
         $postCategory = PostCategory::create([
             'name' => $request->category_name,
             'slug' => $request->slug
@@ -92,13 +88,8 @@ class PostCategoryController extends Controller
         ]);
     }
 
-    public function update(Request $request, PostCategory $postCategory): RedirectResponse
+    public function update(PostCategoryUpdateRequest $request, PostCategory $postCategory): RedirectResponse
     {
-        $request->validate([
-            'category_name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:post_categories,slug,' . $postCategory->id,
-        ]);
-
         $postCategory->update([
             'name' => $request->category_name,
             'slug' => $request->slug

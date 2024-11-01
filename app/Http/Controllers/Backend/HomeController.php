@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\HomeUpdateRequest;
 use App\Models\Home;
 use App\Services\ImageManagementService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\File;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -28,12 +27,8 @@ class HomeController extends Controller
         ]);
     }
 
-    public function update(Request $request): RedirectResponse
+    public function update(HomeUpdateRequest $request): RedirectResponse
     {
-        $request->validate([
-            'content' => 'required',
-        ]);
-
         Home::updateOrCreate([], [
             'body' => $request->content
         ]);
@@ -48,13 +43,8 @@ class HomeController extends Controller
         return redirect()->route('backend.home.index')->with('success', 'Home updated successfully');
     }
 
-    public function updateImage(Request $request, ImageManagementService $imageManagementService): RedirectResponse
+    public function updateImage(HomeUpdateRequest $request, ImageManagementService $imageManagementService): RedirectResponse
     {
-        $request->validate([
-            'url' => 'nullable|url',
-            'imageInput' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-        ]);
-
         $home = Home::first();
         $data = [];
         $user = Auth::user();

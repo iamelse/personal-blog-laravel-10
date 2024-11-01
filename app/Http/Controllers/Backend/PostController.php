@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Backend;
 use App\Enums\EnumUserRole;
 use App\Enums\PostStatus;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PostStoreRequest;
+use App\Http\Requests\PostUpdateRequest;
 use App\Models\Post;
 use App\Models\PostCategory;
 use App\Services\ImageManagementService;
@@ -70,17 +72,8 @@ class PostController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(PostStoreRequest $request): RedirectResponse
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:posts',
-            'post_category_id' => 'required|exists:post_categories,id',
-            'cover' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'content' => 'required',
-            'published_at' => 'nullable|date|after:now'
-        ]);
-
         $imagePath = null;
 
         if ($request->hasFile('cover')) {
@@ -129,17 +122,9 @@ class PostController extends Controller
         ]);
     }
 
-    public function update(Request $request, Post $post): RedirectResponse
+    public function update(PostUpdateRequest $request, Post $post): RedirectResponse
     {
         $this->_authorizePost($post);
-
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'post_category_id' => 'required|exists:post_categories,id',
-            'slug' => 'required|string|max:255|unique:posts,slug,' . $post->id,
-            'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'content' => 'required'
-        ]);
 
         $data = [
             'post_category_id' => $request->post_category_id,
@@ -196,7 +181,9 @@ class PostController extends Controller
 
     private function _authorizePost(Post $post): void
     {
+        /** Checks whether the authenticated user is either a MASTER role or the owner of the specified post. */
         if (!Auth::user()->roles[0]->name === EnumUserRole::MASTER->value && $post->user_id !== Auth::id()) {
+            /** If not, it prevents access by aborting the request with a 404 status. */
             abort(404, 'Not found.');
         }
     }

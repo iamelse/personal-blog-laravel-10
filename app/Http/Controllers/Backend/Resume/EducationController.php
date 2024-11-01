@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Backend\Resume;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\EducationStoreRequest;
+use App\Http\Requests\EducationUpdateRequest;
 use App\Models\Education;
 use App\Services\ImageManagementService;
 use Carbon\Carbon;
@@ -59,19 +61,8 @@ class EducationController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'school_logo_size' => 'nullable|string',
-            'school_logo' => 'required|image|mimes:jpeg,png,jpg,gif',
-            'major' => 'required|string',
-            'degree' => 'required|string',
-            'school_name' => 'required|string',
-            'desc' => 'required|string',
-            'start_date' => 'required|date',
-            'end_date' => 'nullable|date|after:start_date',
-        ]);
-        
+    public function store(EducationStoreRequest $request): RedirectResponse
+    {   
         $imagePath = null;
 
         if ($request->hasFile('school_logo')) {
@@ -113,19 +104,8 @@ class EducationController extends Controller
         ]);
     }
 
-    public function update(Request $request, Education $education): RedirectResponse
+    public function update(EducationUpdateRequest $request, Education $education): RedirectResponse
     {
-        $request->validate([
-            'school_logo_size' => 'nullable|string',
-            'school_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-            'major' => 'required|string',
-            'degree' => 'required|string',
-            'school_name' => 'required|string',
-            'desc' => 'required|string',
-            'start_date' => 'required|date',
-            'end_date' => 'nullable|date|after:start_date',
-        ]);
-
         $data = [
             'school_logo_size' => $request->school_logo_size ?? 2.5,
             'major' => $request->major,

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Backend\Resume;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LanguageSkillStoreRequest;
+use App\Http\Requests\LanguageSkillUpdateRequest;
 use App\Models\LanguageSkill;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -49,13 +51,8 @@ class LanguageSkillController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(LanguageSkillStoreRequest $request): RedirectResponse
     {
-        $request->validate([
-            'language_skill_name' => 'required|string|max:255',
-            'level' => 'required|string|in:Beginner,Intermediate,Advanced|max:255',
-        ]);
-
         $languageSkill = LanguageSkill::create([
             'name' => $request->language_skill_name,
             'level' => $request->level,
@@ -80,13 +77,8 @@ class LanguageSkillController extends Controller
         ]);
     }
 
-    public function update(Request $request, LanguageSkill $languageSkill): RedirectResponse
+    public function update(LanguageSkillUpdateRequest $request, LanguageSkill $languageSkill): RedirectResponse
     {
-        $request->validate([
-            'language_skill_name' => 'required|string|max:255',
-            'level' => 'required|string|in:Beginner,Intermediate,Advanced|max:255',
-        ]);
-
         $languageSkill->update([
             'name' => $request->language_skill_name,
             'level' => $request->level,

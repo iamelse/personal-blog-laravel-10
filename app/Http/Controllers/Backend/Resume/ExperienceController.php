@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Backend\Resume;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ExperienceStoreRequest;
+use App\Http\Requests\ExperienceUpdateRequest;
 use App\Models\Experience;
 use App\Services\ImageManagementService;
 use Carbon\Carbon;
@@ -59,18 +61,8 @@ class ExperienceController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(ExperienceStoreRequest $request): RedirectResponse
     {
-        $request->validate([
-            'company_logo_size' => 'nullable|string',
-            'company_logo' => 'required|image|mimes:jpeg,png,jpg,gif',
-            'position_name' => 'required|string',
-            'company_name' => 'required|string',
-            'desc' => 'required|string',
-            'start_date' => 'required|date',
-            'end_date' => 'nullable|date|after:start_date',
-        ]);
-
         $imagePath = null;
 
         if ($request->hasFile('company_logo')) {
@@ -111,18 +103,8 @@ class ExperienceController extends Controller
         ]);
     }
 
-    public function update(Request $request, Experience $experience): RedirectResponse
+    public function update(ExperienceUpdateRequest $request, Experience $experience): RedirectResponse
     {
-        $request->validate([
-            'company_logo_size' => 'nullable|string',
-            'company_logo' => 'image|mimes:jpeg,png,jpg,gif',
-            'position_name' => 'required|string',
-            'company_name' => 'required|string',
-            'desc' => 'required|string',
-            'start_date' => 'required|date',
-            'end_date' => 'nullable|date|after:start_date',
-        ]);
-
         $data = [
             'company_logo_size' => $request->company_logo_size ?? 2.5,
             'position_name' => $request->position_name,
