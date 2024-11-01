@@ -22,6 +22,24 @@ class PostCategory extends Model
         ];
     }
 
+    public function scopeFilter($query, $filters = [])
+    {
+        $q = $filters['q'] ?? null;
+        $perPage = $filters['perPage'] ?? 10;
+        $columns = $filters['columns'] ?? [];
+
+        return $query
+            ->when($q, function ($query) use ($q, $columns) {
+                $query->where(function ($subquery) use ($q, $columns) {
+                    foreach ($columns as $column) {
+                        $subquery->orWhere($column, 'LIKE', "%$q%");
+                    }
+                });
+            })
+            ->orderBy('name', 'asc')
+            ->paginate($perPage);
+    }
+
     public function posts(): HasMany
     {
         return $this->hasMany(Post::class, 'post_category_id', 'id');

@@ -71,7 +71,7 @@
                             @forelse ($relatedPosts as $relatedPost)
                             <div class="col-lg-6">
                                 <div class="card flex-row border-0">
-                                    <img class="card-img-left l-card-img align-self-center" src="{{ asset('/' . $relatedPost->cover) }}"/>
+                                    <img class="card-img-left l-card-img align-self-center" src="{{ getPostCoverImage($relatedPost) }}"/>
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between align-items-start">
                                             <div>

@@ -34,7 +34,7 @@ This project is a personal **Portfolio and Blog** application built using the **
 - **Database:** MySQL
 - **Other**:
   - Spatie Laravel Permissions (for user roles and permissions)
-  - Laravel Task Scheduling (for post scheduling, if implemented)
+  - Laravel Task Scheduling (for post scheduling)
   - **Laravel File Manager** for managing uploaded files.
 
 ## Installation
@@ -77,6 +77,40 @@ This project is a personal **Portfolio and Blog** application built using the **
    php artisan serve
 
 10. Open your browser and navigate to http://127.0.0.1:8000.
+
+## Package Information & Environment Variables
+
+### Enabling Post Scheduler
+
+To enable the post scheduler, run the following command:
+   ```bash
+   php artisan schedule:work
+   ```
+For more documentation, see the [Laravel Scheduling Documentation](https://laravel.com/docs/10.x/scheduling).
+
+### Filesystem Disk Configuration
+
+You can set the FILESYSTEM_DISK environment variable to either public or public_uploads.
+
+- public: This is the default option.
+- public_uploads: If you use public_uploads, all files will be uploaded directly to the public folder without needing to run php artisan storage:link. Note that this approach is not recommended.
+
+### Visitor Tracking
+
+To track visitors, obtain a token and enable it in your .env file by registering at [IPInfo](https://ipinfo.io/):
+
+   ```bash
+   IPINFO_TOKEN=your_token_here
+   RUN_IPINFO=true # or false
+   ```
+
+### Activity Logger
+
+You can enable or disable the activity logger using the following environment variable:
+
+   ```bash
+   ACTIVITY_LOGGER_ENABLED=true # or false
+   ```
 
 ## Contribution
 

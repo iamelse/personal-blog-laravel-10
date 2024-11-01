@@ -15,7 +15,8 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
-        $permissions = [
+        // Master permissions
+        $masterPermissions = [
             'view_dashboard',
             'view_home',
             'update_home',
@@ -52,8 +53,8 @@ class PermissionSeeder extends Seeder
             'destroy_language_skills',
             'view_roles',
             'view_detail_roles',
-            //'view_permissions',
-            //'create_permissions',
+            // 'view_permissions',
+            // 'create_permissions',
             'view_users',
             'create_users',
             'edit_users',
@@ -64,20 +65,47 @@ class PermissionSeeder extends Seeder
             'view_log_activity'
         ];
 
-        foreach ($permissions as $permission) {
+        // Author permissions
+        $authorPermissions = [
+            'view_dashboard',
+            'view_post_categories',
+            'create_post_categories',
+            'view_posts',
+            'create_posts',
+            'edit_posts',
+            'destroy_posts',
+        ];
+
+        // Ensure Master permissions are created or updated
+        foreach ($masterPermissions as $permission) {
             Permission::updateOrCreate(['name' => $permission]);
         }
 
+        // Create or update the Master role and assign all permissions
         $masterRole = Role::updateOrCreate(['name' => 'Master']);
-
         $allPermissions = Permission::pluck('id')->toArray();
-
         $masterRole->syncPermissions($allPermissions);
-        
-        $master = User::find(1);
 
+        // Assign Master role to the user with ID 1
+        $master = User::find(1);
         if ($master) {
             $master->assignRole($masterRole);
+        }
+
+        // Ensure Author permissions are created or updated
+        foreach ($authorPermissions as $permission) {
+            Permission::updateOrCreate(['name' => $permission]);
+        }
+
+        // Create or update the Author role and assign specific permissions
+        $authorRole = Role::updateOrCreate(['name' => 'Author']);
+        $authorRolePermissions = Permission::whereIn('name', $authorPermissions)->pluck('id')->toArray();
+        $authorRole->syncPermissions($authorRolePermissions);
+
+        // Assign Author role to the user with ID 2 (or any other ID)
+        $author = User::find(2); // Assuming User 2 is the author
+        if ($author) {
+            $author->assignRole($authorRole);
         }
     }
 }

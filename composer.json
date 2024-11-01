@@ -38,7 +38,8 @@
     },
     "autoload-dev": {
         "files": [
-            "app/Helpers/GreetingHelper.php"
+            "app/Helpers/GreetingHelper.php",
+            "app/Helpers/ImagePathHelper.php"
         ],
         "psr-4": {
             "Tests\\": "tests/"

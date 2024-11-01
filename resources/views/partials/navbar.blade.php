@@ -62,22 +62,7 @@
                        </div>
                        <div class="user-img d-flex align-items-center">
                             <div class="avatar avatar-md">
-                                @php
-                                    $imagePath = optional(Auth::user())->image_profile;
-                                @endphp
-
-                                @switch(true)
-                                    @case($imagePath && File::exists(public_path($imagePath)))
-                                        <img src="{{ asset($imagePath) }}" alt="User Avatar">
-                                        @break
-
-                                    @case(!$imagePath)
-                                        <img src="https://via.placeholder.com/150" alt="User Avatar">
-                                        @break
-
-                                    @default
-                                        <img src="https://via.placeholder.com/150" alt="User Avatar">
-                                @endswitch
+                                <img src="{{ getUserImageProfilePath(Auth::user()) }}" alt="">
                             </div>
                        </div>
                    </div>

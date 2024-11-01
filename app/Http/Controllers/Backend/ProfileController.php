@@ -3,35 +3,18 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Services\ImageManagementService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-    private function uploadImage($params)
-    {
-        $file = $params['file'];
-        $directory = $params['directory'];
-        $oldImagePath = $params['oldImagePath'];
-        $diskName = $params['diskName'];
-        
-        $imageProfileName = time() . '.' . $file->getClientOriginalExtension();
-        $imageProfileDirectory = $directory;
-
-        $file->storeAs($imageProfileDirectory, $imageProfileName, $diskName);
-
-        if (!empty($oldImagePath)) {
-            if (Storage::disk($diskName)->exists($oldImagePath)) {
-                Storage::disk($diskName)->delete($oldImagePath);
-            }
-        }
-
-        return $imageProfileDirectory . '/' . $imageProfileName;
-    }
+    public function __construct(
+        protected ImageManagementService $imageManagementService
+    ) {}
 
     public function index(): View
     {
@@ -45,7 +28,7 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function update(Request $request): RedirectResponse
+    public function update(Request $request, ImageManagementService $imageManagementService): RedirectResponse
     {
         $request->validate([
             'image_profile' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -55,15 +38,18 @@ class ProfileController extends Controller
         ]);
 
         $user = Auth::user();
-        $diskName = config('filesystems.default');
+        $currentImagePath = $user->image_profile;
 
         if ($request->hasFile('image_profile')) {
-            $user->image_profile = $this->uploadImage([
-                'file' => $request->file('image_profile'),
-                'directory' => 'user_profiles',
-                'oldImagePath' => $user->image_profile,
-                'diskName' => $diskName,
+            $file = $request->file('image_profile');
+
+            $imagePath = $imageManagementService->uploadImage($file, [
+                'currentImagePath' => $currentImagePath,
+                'disk' => env('FILESYSTEM_DISK'),
+                'folder' => 'uploads/user_profiles'
             ]);
+            
+            $user->image_profile = $imagePath;
         }
 
         $user->name = $request->name;
@@ -100,5 +86,28 @@ class ProfileController extends Controller
             ->log('Updated profile password.');
 
         return redirect()->route('profile.index')->with('success', 'Password updated successfully');
+    }
+
+    public function destroyProfilePicture() : RedirectResponse
+    {
+        $user = Auth::user();
+
+        try {
+            if ($user->image_profile) {
+                $this->imageManagementService->destroyImage($user->image_profile);
+
+                activity('profile_management')
+                    ->causedBy($user)
+                    ->log("Deleted profile picture for user: {$user->name}");
+            }
+
+            $user->image_profile = null;
+            $user->save();
+
+            return redirect()->route('profile.index')->with('success', 'Profile picture deleted successfully.');
+
+        } catch (\Exception $e) {
+            return redirect()->route('profile.index')->with('error', 'Failed to delete profile picture. Please try again.');
+        }
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend\Resume;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TechnicalSkillStoreRequest;
 use App\Models\TechnicalSkill;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -49,13 +50,8 @@ class TechnicalSkillController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(TechnicalSkillStoreRequest $request): RedirectResponse
     {
-        $request->validate([
-            'technical_skill_name' => 'required|string|max:255',
-            'level' => 'required|string|in:Beginner,Intermediate,Advanced|max:255',
-        ]);
-
         $technicalSkill = TechnicalSkill::create([
             'name' => $request->technical_skill_name,
             'level' => $request->level,
@@ -82,11 +78,6 @@ class TechnicalSkillController extends Controller
 
     public function update(Request $request, TechnicalSkill $technicalSkill): RedirectResponse
     {
-        $request->validate([
-            'technical_skill_name' => 'required|string|max:255',
-            'level' => 'required|string|in:Beginner,Intermediate,Advanced|max:255',
-        ]);
-
         $technicalSkill->update([
             'name' => $request->technical_skill_name,
             'level' => $request->level,

@@ -2,20 +2,28 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Enums\PostStatus;
+use App\Enums\EnumUserRole;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PostStoreRequest;
+use App\Http\Requests\PostUpdateRequest;
 use App\Models\Post;
 use App\Models\PostCategory;
+use App\Repositories\PostRepository;
+use App\Services\ImageManagementService;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
 use Illuminate\View\View;
 
 class PostController extends Controller
 {
+    public function __construct(
+        protected ImageManagementService $imageManagementService,
+        protected PostRepository $postRepository
+    ) {}
+    
     public function checkSlug(Request $request): JsonResponse
     {
         $slug = SlugService::createSlug(Post::class, 'slug', $request->title);
@@ -32,7 +40,7 @@ class PostController extends Controller
             'columns' => ['title', 'slug']
         ];
         
-        $posts = $this->_getFilteredPosts($filters);
+        $posts = $this->postRepository->getFilteredPosts($filters);
         $categories = PostCategory::all();
 
         activity('post_management')
@@ -43,9 +51,6 @@ class PostController extends Controller
             'title' => 'Post',
             'posts' => $posts,
             'categories' => $categories,
-            'perPage' => $filters['perPage'],
-            'q' => $filters['q'],
-            'category_id' => $filters['category_id'],
         ]);
     }
 
@@ -61,47 +66,19 @@ class PostController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(PostStoreRequest $request): RedirectResponse
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:posts',
-            'post_category_id' => 'required',
-            'cover' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'content' => 'required',
-            'published_at' => 'nullable|date|after:now'
-        ]);
-
-        if ($request->hasFile('cover')) {
-            $file = $request->file('cover');
-            $fileName = time() . '.' . $file->getClientOriginalExtension();
-
-            $postDirectory = 'uploads/posts';
-            $file->move(public_path($postDirectory), $fileName);
-
-            $status = $request->published_at <= now()
-            ? PostStatus::PUBLISHED
-            : PostStatus::SCHEDULED;
-
-            $post = Post::create([
-                'post_category_id' => $request->post_category_id,
-                'user_id' => auth()->user()->id,
-                'title' => $request->title,
-                'slug' => $request->slug,
-                'cover' => $postDirectory . '/' . $fileName,
-                'body' => $request->content,
-                'published_at' => $request->published_at,
-                'status' => $status
-            ]);
+        try {
+            $post = $this->postRepository->store($request);
 
             activity('post_management')
                 ->causedBy(Auth::user())
                 ->log("Created post: {$post->title}");
 
             return redirect()->route('post.index')->with('success', 'Post created successfully');
+        } catch (\Exception $e) {
+            return redirect()->route('post.index')->with('error', 'Failed to create post: ' . $e->getMessage());
         }
-
-        return redirect()->route('post.index')->with('error', 'Post create failed');
     }
 
     public function edit(Post $post): View 
@@ -119,90 +96,47 @@ class PostController extends Controller
         ]);
     }
 
-    public function update(Request $request, Post $post): RedirectResponse
+    public function update(PostUpdateRequest $request, Post $post): RedirectResponse
     {
-        $this->_authorizePost($post);
+        try {
+            $this->_authorizePost($post);
 
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'post_category_id' => 'required',
-            'slug' => 'required|string|max:255|unique:posts,slug,' . $post->id,
-            'cover' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'content' => 'required'
-        ]);
-
-        if ($request->hasFile('cover')) {
-            $file = $request->file('cover');
-            $fileName = time() . '.' . $file->getClientOriginalExtension();
-
-            $postDirectory = 'uploads/posts';
-            $file->move(public_path($postDirectory), $fileName);
-
-            if (!empty($post->cover)) {
-                $oldCoverPath = public_path($post->cover);
-                if (File::exists($oldCoverPath)) {
-                    File::delete($oldCoverPath);
-                }
-            }
-
-            $post->update([
-                'post_category_id' => $request->post_category_id,
-                'user_id' => auth()->user()->id,
-                'title' => $request->title,
-                'slug' => $request->slug,
-                'cover' => $postDirectory . '/' . $fileName,
-                'body' => $request->content
-            ]);
-        } else {
-            $post->update([
-                'post_category_id' => $request->post_category_id,
-                'title' => $request->title,
-                'slug' => $request->slug,
-                'body' => $request->content
-            ]);
+            $post = $this->postRepository->update($request, $post->id);
+            
+            activity('post_management')
+                ->causedBy(Auth::user())
+                ->log("Updated post: {$post->title}");
+    
+            return redirect()->route('post.index')->with('success', 'Post updated successfully');
+        } catch (\Exception $e) {
+            return redirect()->route('post.index')->with('error', 'Failed to update post: ' . $e->getMessage());
         }
-
-        activity('post_management')
-            ->causedBy(Auth::user())
-            ->log("Updated post: {$post->title}");
-
-        return redirect()->route('post.index')->with('success', 'Post updated successfully');
     }
 
     public function destroy(Post $post): RedirectResponse
     {
-        $this->_authorizePost($post);
+        try {
+            $this->_authorizePost($post);
 
-        if (!empty($post->cover)) {
-            $coverPath = public_path($post->cover);
-            if (File::exists($coverPath)) {
-                File::delete($coverPath);
-            }
-        }
+            $this->imageManagementService->destroyImage($post->cover);
 
-        activity('post_management')
-            ->causedBy(Auth::user())
-            ->log("Deleted post: {$post->title}");
+            activity('post_management')
+                ->causedBy(Auth::user())
+                ->log("Deleted post: {$post->title}");
 
-        $post->delete();
+            $this->postRepository->destroy($post->id);
 
-        return redirect()->route('post.index')->with('success', 'Post deleted successfully');
-    }
-
-    private function _getFilteredPosts($filters)
-    {
-        $user = Auth::user();
-
-        if ($user->roles[0]->name === "Master") {
-            return Post::filter($filters);
-        } else {
-            return Post::where('user_id', $user->id)->filter($filters);
+            return redirect()->route('post.index')->with('success', 'Post deleted successfully');
+        } catch (\Exception $e) {
+            return redirect()->route('post.index')->with('error', 'Failed to delete post: ' . $e->getMessage());
         }
     }
 
     private function _authorizePost(Post $post): void
     {
-        if (!Auth::user()->roles[0]->name === "Master" && $post->user_id !== Auth::id()) {
+        /** Checks whether the authenticated user is either a MASTER role or the owner of the specified post. */
+        if (!Auth::user()->roles[0]->name === EnumUserRole::MASTER->value && $post->user_id !== Auth::id()) {
+            /** If not, it prevents access by aborting the request with a 404 status. */
             abort(404, 'Not found.');
         }
     }

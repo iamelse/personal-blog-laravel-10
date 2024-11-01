@@ -11,9 +11,9 @@
                     <section class="col-lg-12 pb-2">
                     
                         @if ($home)
-                            @if ($home->image && file_exists(public_path($home->image)))
+                            @if ($home->image)
                                 <div class="container mb-3">
-                                    <img src="{{ $home->image }}" class="rounded-circle img-fluid" style="width: 75px; height: 75px; object-fit: cover;">
+                                    <img src="{{ getHomeImageProfile($home) }}" class="rounded-circle img-fluid" style="width: 75px; height: 75px; object-fit: cover;">
                                 </div>
                             @elseif ($home->url)
                                 <div class="container mb-3">
@@ -63,7 +63,7 @@
                                         <div class="card-list">
                                             @forelse ($category->posts->take(5) as $post)
                                                 <div class="card flex-row border-0">
-                                                    <img class="card-img-left l-card-img align-self-center" src="{{ asset('/' . $post->cover) }}" alt="{{ $post->title }}" />
+                                                    <img class="card-img-left l-card-img align-self-center" src="{{ getPostCoverImage($post) }}" alt="{{ $post->title }}" />
                                                     <div class="card-body">
                                                         <div class="d-flex justify-content-between align-items-start">
                                                             <div>

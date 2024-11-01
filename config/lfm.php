@@ -94,7 +94,7 @@ return [
     |--------------------------------------------------------------------------
      */
 
-    'disk'                     => 'public_uploads',
+    'disk'                     => env('FILESYSTEM_DISK'), //'public_uploads',
 
     'rename_file'              => false,
 

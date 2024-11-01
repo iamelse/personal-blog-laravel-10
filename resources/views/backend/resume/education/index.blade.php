@@ -85,7 +85,7 @@
                                         <tr>
                                             <td class="text-bold-500">{{ $loop->iteration }}</td>
                                             <td>
-                                                <img src="{{ asset('/' . $education->school_logo) }}" class="rounded-3" style="width: 100px; height: 100px; object-fit: cover;">
+                                                <img src="{{ getImageSchoolLogo($education) }}" class="rounded-3" style="width: 100px; height: 100px; object-fit: cover;">
                                             </td>
                                             <td class="text-bold-500">{{ $education->degree }}</td>
                                             <td class="text-bold-500">{{ $education->major }}</td>

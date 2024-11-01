@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\HomeUpdateRequest;
 use App\Models\Home;
+use App\Services\ImageManagementService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\File;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -27,12 +27,8 @@ class HomeController extends Controller
         ]);
     }
 
-    public function update(Request $request): RedirectResponse
+    public function update(HomeUpdateRequest $request): RedirectResponse
     {
-        $request->validate([
-            'content' => 'required',
-        ]);
-
         Home::updateOrCreate([], [
             'body' => $request->content
         ]);
@@ -47,13 +43,8 @@ class HomeController extends Controller
         return redirect()->route('backend.home.index')->with('success', 'Home updated successfully');
     }
 
-    public function updateImage(Request $request): RedirectResponse
+    public function updateImage(HomeUpdateRequest $request, ImageManagementService $imageManagementService): RedirectResponse
     {
-        $request->validate([
-            'url' => 'nullable|url',
-            'imageInput' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-        ]);
-
         $home = Home::first();
         $data = [];
         $user = Auth::user();
@@ -64,32 +55,27 @@ class HomeController extends Controller
             case 'image':
                 if ($request->hasFile('imageInput')) {
                     $file = $request->file('imageInput');
-                    $fileName = time() . '.' . $file->getClientOriginalExtension();
-                    $directory = 'uploads/home';
-                    $file->move(public_path($directory), $fileName);
-
-                    if (!empty($home->image)) {
-                        File::delete(public_path($home->image));
-                    }
-
-                    $data['image_path'] = $directory . '/' . $fileName;
                     
+                    $imagePath = $imageManagementService->uploadImage($file, [
+                        'currentImagePath' => $home->image ?? null,
+                        'disk' => env('FILESYSTEM_DISK'),
+                        'folder' => 'uploads/home'
+                    ]);
+            
                     Home::updateOrCreate([], [
-                        'image' => $data['image_path'],
+                        'image' => $imagePath,
                         'url' => null,
                     ]);
-
+            
                     activity('home_image_update')
                         ->causedBy($user)
-                        ->withProperties(['image_path' => $data['image_path']])
+                        ->withProperties(['image_path' => $imagePath])
                         ->log("Updated the home image.");
                 }
-                break;
+                break;            
 
             case 'url':
-                if (!empty($home->image)) {
-                    File::delete(public_path($home->image));
-                }
+                $imageManagementService->destroyImage($home->image);
 
                 $data['url'] = $request->input('urlLink');
 
@@ -106,9 +92,7 @@ class HomeController extends Controller
                 break;
 
             case 'removeImage':
-                if (!empty($home->image)) {
-                    File::delete(public_path($home->image));
-                }
+                $imageManagementService->destroyImage($home->image);
 
                 Home::updateOrCreate([], [
                     'image' => null,
