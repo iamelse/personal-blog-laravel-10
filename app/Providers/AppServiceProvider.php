@@ -28,12 +28,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        DB::enableQueryLog();
-
         DB::whenQueryingForLongerThan(1000, function($connection) {
             Log::warning(
                 "Long running queries detected.",
-                $connection::getQueryLog()
+                $connection->getQueryLog()
             );
         });
         
