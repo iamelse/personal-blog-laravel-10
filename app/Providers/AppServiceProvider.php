@@ -28,12 +28,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (env('CUSTOM_PUBLIC_PATH', false)) {
-            App::bind('path.public', function() {
-                return '../public_html';
-            });
-        }
-
         DB::enableQueryLog();
 
         DB::whenQueryingForLongerThan(1000, function($connection) {

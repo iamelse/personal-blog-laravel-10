@@ -41,8 +41,9 @@ class ImageManagementService
                 File::delete($this->publicUploadsPath($currentImagePath));
             }
 
+            // Directly move the file to the public directory
             $file->move($directory, $fileName);
-            return $folder . '/' . $fileName;
+            return $folder . '/' . $fileName; // Path relative to public folder
         }
 
         return null;

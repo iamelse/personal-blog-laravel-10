@@ -9,11 +9,6 @@ use Illuminate\Support\Facades\File;
 
 class ImageManagementService
 {
-    protected function publicUploadsPath($folder = '')
-    {
-        return '../public_html/' . $folder;
-    }
-
     public function uploadImage(UploadedFile $file, array $options = [])
     {
         $currentImagePath = $options['currentImagePath'] ?? null;
@@ -29,7 +24,7 @@ class ImageManagementService
             return $imagePath;
 
         } elseif ($disk === EnumFileSystemDisk::PUBLIC_UPLOADS->value) {
-            $directory = $this->publicUploadsPath($folder);
+            $directory = public_path($folder);
 
             if (!File::exists($directory)) {
                 File::makeDirectory($directory, 0755, true);
@@ -37,8 +32,8 @@ class ImageManagementService
 
             $fileName = time() . '.' . $file->extension();
 
-            if ($currentImagePath && File::exists($this->publicUploadsPath($currentImagePath))) {
-                File::delete($this->publicUploadsPath($currentImagePath));
+            if ($currentImagePath && File::exists(public_path($currentImagePath))) {
+                File::delete(public_path($currentImagePath));
             }
 
             $file->move($directory, $fileName);
@@ -56,8 +51,8 @@ class ImageManagementService
                 return true;
             }
         } elseif ($disk === EnumFileSystemDisk::PUBLIC_UPLOADS->value) {
-            if ($currentImagePath && File::exists($this->publicUploadsPath($currentImagePath))) {
-                File::delete($this->publicUploadsPath($currentImagePath));
+            if ($currentImagePath && File::exists(public_path($currentImagePath))) {
+                File::delete(public_path($currentImagePath));
                 return true;
             }
         }

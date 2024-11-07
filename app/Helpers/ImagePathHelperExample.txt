@@ -8,22 +8,19 @@ if (!function_exists('getUserImageProfilePath')) {
     {
         $disk = env('FILESYSTEM_DISK');
         $placeholderUrl = 'https://via.placeholder.com/150';
-        $appUrl = rtrim(env('APP_URL'), '/'); // Ensure there's no trailing slash in APP_URL
-        $publicHtmlPath = base_path('../public_html'); // Define the relative path to public_html
 
         // Check for the PUBLIC disk
         if ($disk === EnumFileSystemDisk::PUBLIC->value) {
             if ($user->image_profile && Storage::disk('public')->exists($user->image_profile)) {
-                return asset('storage/' . $user->image_profile);  // Use the existing logic for PUBLIC
+                return asset('storage/' . $user->image_profile);
             }
         } 
         // Check for the PUBLIC_UPLOADS disk
         elseif ($disk === EnumFileSystemDisk::PUBLIC_UPLOADS->value) {
-            // Directly using the uploads path with APP_URL
+            // Directly using the uploads path
             $filePath = $user->image_profile;
-            $fullPath = $publicHtmlPath . '/' . $filePath; // Combine with the actual public_html path
-            if ($user->image_profile && file_exists($fullPath)) {
-                return $appUrl . '/' . $filePath;  // Use APP_URL to generate the full URL for PUBLIC_UPLOADS
+            if ($user->image_profile && file_exists(public_path($filePath))) {
+                return asset($filePath);
             }
         }
 
@@ -36,22 +33,19 @@ if (!function_exists('getHomeImageProfile')) {
     {
         $disk = env('FILESYSTEM_DISK');
         $placeholderUrl = 'https://via.placeholder.com/150';
-        $appUrl = rtrim(env('APP_URL'), '/'); // Ensure there's no trailing slash in APP_URL
-        $publicHtmlPath = base_path('../public_html'); // Define the relative path to public_html
 
         // Check for the PUBLIC disk
         if ($disk === EnumFileSystemDisk::PUBLIC->value) {
             if ($home->image && Storage::disk('public')->exists($home->image)) {
-                return asset('storage/' . $home->image);  // Use the existing logic for PUBLIC
+                return asset('storage/' . $home->image);
             }
         } 
         // Check for the PUBLIC_UPLOADS disk
         elseif ($disk === EnumFileSystemDisk::PUBLIC_UPLOADS->value) {
-            // Directly using the uploads path with APP_URL
+            // Directly using the uploads path
             $filePath = $home->image;
-            $fullPath = $publicHtmlPath . '/' . $filePath; // Combine with the actual public_html path
-            if ($home->image && file_exists($fullPath)) {
-                return $appUrl . '/' . $filePath;  // Use APP_URL to generate the full URL for PUBLIC_UPLOADS
+            if ($home->image && file_exists(public_path($filePath))) {
+                return asset($filePath);
             }
         }
 
@@ -64,22 +58,19 @@ if (!function_exists('getImageCompanyLogo')) {
     {
         $disk = env('FILESYSTEM_DISK');
         $placeholderUrl = 'https://via.placeholder.com/150';
-        $appUrl = rtrim(env('APP_URL'), '/'); // Ensure there's no trailing slash in APP_URL
-        $publicHtmlPath = base_path('../public_html'); // Define the relative path to public_html
 
         // Check for the PUBLIC disk
         if ($disk === EnumFileSystemDisk::PUBLIC->value) {
             if ($experience->company_logo && Storage::disk('public')->exists($experience->company_logo)) {
-                return asset('storage/' . $experience->company_logo);  // Use the existing logic for PUBLIC
+                return asset('storage/' . $experience->company_logo);
             }
         } 
         // Check for the PUBLIC_UPLOADS disk
         elseif ($disk === EnumFileSystemDisk::PUBLIC_UPLOADS->value) {
-            // Directly using the uploads path with APP_URL
+            // Directly using the uploads path
             $filePath = $experience->company_logo;
-            $fullPath = $publicHtmlPath . '/' . $filePath; // Combine with the actual public_html path
-            if ($experience->company_logo && file_exists($fullPath)) {
-                return $appUrl . '/' . $filePath;  // Use APP_URL to generate the full URL for PUBLIC_UPLOADS
+            if ($experience->company_logo && file_exists(public_path($filePath))) {
+                return asset($filePath);
             }
         }
 
@@ -92,22 +83,19 @@ if (!function_exists('getImageSchoolLogo')) {
     {
         $disk = env('FILESYSTEM_DISK');
         $placeholderUrl = 'https://via.placeholder.com/150';
-        $appUrl = rtrim(env('APP_URL'), '/'); // Ensure there's no trailing slash in APP_URL
-        $publicHtmlPath = base_path('../public_html'); // Define the relative path to public_html
 
         // Check for the PUBLIC disk
         if ($disk === EnumFileSystemDisk::PUBLIC->value) {
             if ($education->school_logo && Storage::disk('public')->exists($education->school_logo)) {
-                return asset('storage/' . $education->school_logo);  // Use the existing logic for PUBLIC
+                return asset('storage/' . $education->school_logo);
             }
         } 
         // Check for the PUBLIC_UPLOADS disk
         elseif ($disk === EnumFileSystemDisk::PUBLIC_UPLOADS->value) {
-            // Directly using the uploads path with APP_URL
+            // Directly using the uploads path
             $filePath = $education->school_logo;
-            $fullPath = $publicHtmlPath . '/' . $filePath; // Combine with the actual public_html path
-            if ($education->school_logo && file_exists($fullPath)) {
-                return $appUrl . '/' . $filePath;  // Use APP_URL to generate the full URL for PUBLIC_UPLOADS
+            if ($education->school_logo && file_exists(public_path($filePath))) {
+                return asset($filePath);
             }
         }
 
@@ -120,22 +108,19 @@ if (!function_exists('getPostCoverImage')) {
     {
         $disk = env('FILESYSTEM_DISK');
         $placeholderUrl = 'https://via.placeholder.com/150';
-        $appUrl = rtrim(env('APP_URL'), '/'); // Ensure there's no trailing slash in APP_URL
-        $publicHtmlPath = base_path('../public_html'); // Define the relative path to public_html
 
         // Check for the PUBLIC disk
         if ($disk === EnumFileSystemDisk::PUBLIC->value) {
             if ($post->cover && Storage::disk('public')->exists($post->cover)) {
-                return asset('storage/' . $post->cover);  // Use the existing logic for PUBLIC
+                return asset('storage/' . $post->cover);
             }
         } 
         // Check for the PUBLIC_UPLOADS disk
         elseif ($disk === EnumFileSystemDisk::PUBLIC_UPLOADS->value) {
-            // Directly using the uploads path with APP_URL
+            // Directly using the uploads path
             $filePath = $post->cover;
-            $fullPath = $publicHtmlPath . '/' . $filePath; // Combine with the actual public_html path
-            if ($post->cover && file_exists($fullPath)) {
-                return $appUrl . '/' . $filePath;  // Use APP_URL to generate the full URL for PUBLIC_UPLOADS
+            if ($post->cover && file_exists(public_path($filePath))) {
+                return asset($filePath);
             }
         }
 
