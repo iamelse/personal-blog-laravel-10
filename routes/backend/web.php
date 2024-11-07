@@ -40,7 +40,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::prefix('project')->group(function () { 
             Route::get('/', [ProjectController::class, 'index'])->middleware(['can:view_projects'])->name('backend.project.index');
-            Route::get('/search', [ProjectController::class, 'index'])->middleware(['can:search_projects'])->name('backend.project.search');
+            Route::get('/search', [ProjectController::class, 'index'])->middleware(['can:view_projects'])->name('backend.project.search');
             Route::get('/create', [ProjectController::class, 'create'])->middleware(['can:create_projects'])->name('backend.project.create');
             Route::post('/store', [ProjectController::class, 'store'])->middleware(['can:create_projects'])->name('backend.project.store');
             Route::get('/edit/{project}', [ProjectController::class, 'edit'])->middleware(['can:edit_projects'])->name('backend.project.edit');

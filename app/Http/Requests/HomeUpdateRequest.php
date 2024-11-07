@@ -21,10 +21,16 @@ class HomeUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'content' => 'required|string',
+        $rules = [
             'url' => 'nullable|url',
-            'imageInput' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'imageInput' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
+
+        // Only require 'content' if the action is to update content
+        if ($this->route()->getActionMethod() === 'update') {
+            $rules['content'] = 'required|string';
+        }
+
+        return $rules;
     }
 }

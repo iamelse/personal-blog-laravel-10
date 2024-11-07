@@ -7,6 +7,8 @@ use App\Repositories\EloquentPostRepository;
 use App\Repositories\PostCategoryRepository;
 use App\Repositories\PostRepository;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -25,6 +27,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        DB::enableQueryLog();
+
+        DB::whenQueryingForLongerThan(1000, function($connection) {
+            Log::warning(
+                "Long running queries detected.",
+                $connection::getQueryLog()
+            );
+        });
+        
         Paginator::useBootstrapFive();
         Paginator::useBootstrapFour();
     }

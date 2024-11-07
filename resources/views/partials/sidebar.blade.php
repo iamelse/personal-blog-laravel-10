@@ -36,39 +36,12 @@
         ],
     ];
 
-    function hasPermission($items) {
-        foreach ($items as $item) {
-            if (isset($item['submenu'])) {
-                if (hasPermission($item['submenu'])) {
-                    return true;
-                }
-            } elseif (isset($item['permission']) && auth()->user()->can($item['permission'])) {
-                return true;
-            }
+    if (!function_exists('isActive')) {
+        function isActive($url) {
+            return request()->is(trim($url, '/').'*');
         }
-        return false;
     }
-
-    function isActive($url) {
-        $currentUrl = request()->path();
-        
-        if (Str::startsWith($currentUrl, trim($url, '/'))) {
-            return !(
-                ($url === 'backend/post-category' && Str::startsWith($currentUrl, 'backend/post') && !Str::startsWith($currentUrl, 'backend/post-category')) ||
-                ($url === 'backend/post' && Str::startsWith($currentUrl, 'backend/post-category'))
-            );
-        }
-        return false;
-    }
-
-    function isSubMenuActive($submenu) {
-        foreach ($submenu as $item) {
-            if (isActive($item['url'])) {
-                return true;
-            }
-        }
-        return false;
-    }
+    
 @endphp
 
 <div id="sidebar">
@@ -77,20 +50,11 @@
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo">
                     <a href="{{ route('dashboard') }}">
-                        <img src="{{ asset('assets/compiled/svg/logo.svg') }}" alt="Logo" srcset="">
+                        <img src="{{ asset('assets/compiled/svg/logo.svg') }}" alt="Logo">
                     </a>
                 </div>
                 <div class="theme-toggle d-flex gap-2 align-items-center mt-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" class="iconify iconify--system-uicons" width="20" height="20" viewBox="0 0 21 21">
-                        <!-- SVG Path Content -->
-                    </svg>
-                    <div class="form-check form-switch fs-6">
-                        <input class="form-check-input me-0" type="checkbox" id="toggle-dark" style="cursor: pointer">
-                        <label class="form-check-label"></label>
-                    </div>
-                    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" class="iconify iconify--mdi" width="20" height="20" viewBox="0 0 24 24">
-                        <!-- SVG Path Content -->
-                    </svg>
+                    <!-- Theme Toggle Buttons -->
                 </div>
                 <div class="sidebar-toggler x">
                     <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
@@ -101,30 +65,28 @@
             <ul class="menu">
                 @foreach($sidebarMenuLists as $key => $items)
                     @if(is_int($key))
-                        @isset($items['url'])
-                            @can($items['permission'] ?? '')
-                                <li class="sidebar-item{{ isActive($items['url']) ? ' active' : '' }}">
-                                    <a href="{{ url($items['url']) }}" class='sidebar-link' target="{{ $items['new_tab'] ? '_blank' : '_self' }}">
-                                        <i class="{{ $items['icon'] }}"></i>
-                                        <span>{{ $items['label'] }}</span>
-                                    </a>
-                                </li>
-                            @endcan
-                        @endisset
+                        @can($items['permission'] ?? '')
+                            <li class="sidebar-item{{ isActive($items['url']) ? ' active' : '' }}">
+                                <a href="{{ url($items['url']) }}" class='sidebar-link' target="{{ $items['new_tab'] ? '_blank' : '_self' }}">
+                                    <i class="{{ $items['icon'] }}"></i>
+                                    <span>{{ $items['label'] }}</span>
+                                </a>
+                            </li>
+                        @endcan
                     @else
-                        @if(hasPermission($items))
+                        @if(collect($items)->contains(fn($item) => auth()->user()->can($item['permission'] ?? '')))
                             <li class="sidebar-title">{{ $key }}</li>
                             @foreach($items as $item)
                                 @if(isset($item['submenu']))
-                                    @if(hasPermission($item['submenu']))
-                                        <li class="sidebar-item has-sub {{ isSubMenuActive($item['submenu']) ? ' active' : '' }}">
+                                    @if(collect($item['submenu'])->contains(fn($submenuItem) => auth()->user()->can($submenuItem['permission'] ?? '')))
+                                        <li class="sidebar-item has-sub {{ collect($item['submenu'])->contains(fn($submenuItem) => isActive($submenuItem['url'])) ? ' active' : '' }}">
                                             <a href="#" class='sidebar-link'>
                                                 <i class="{{ $item['icon'] }}"></i>
                                                 <span>{{ $item['label'] }}</span>
                                             </a>
-                                            <ul class="submenu {{ isSubMenuActive($item['submenu']) ? 'active' : '' }}">
+                                            <ul class="submenu {{ collect($item['submenu'])->contains(fn($submenuItem) => isActive($submenuItem['url'])) ? 'active' : '' }}">
                                                 @foreach($item['submenu'] as $submenuItem)
-                                                    @can($submenuItem['permission'])
+                                                    @can($submenuItem['permission'] ?? '')
                                                         <li class="submenu-item {{ isActive($submenuItem['url']) ? 'active' : '' }}">
                                                             <a href="{{ url($submenuItem['url']) }}" class="submenu-link" target="{{ $submenuItem['new_tab'] ? '_blank' : '_self' }}">{{ $submenuItem['label'] }}</a>
                                                         </li>
@@ -134,16 +96,14 @@
                                         </li>
                                     @endif
                                 @else
-                                    @isset($item['url'])
-                                        @can($item['permission'])
-                                            <li class="sidebar-item{{ isActive($item['url']) ? ' active' : '' }}">
-                                                <a href="{{ url($item['url']) }}" class='sidebar-link' target="{{ $item['new_tab'] ? '_blank' : '_self' }}">
-                                                    <i class="{{ $item['icon'] }}"></i>
-                                                    <span>{{ $item['label'] }}</span>
-                                                </a>
-                                            </li>
-                                        @endcan
-                                    @endisset
+                                    @can($item['permission'] ?? '')
+                                        <li class="sidebar-item{{ isActive($item['url']) ? ' active' : '' }}">
+                                            <a href="{{ url($item['url']) }}" class='sidebar-link' target="{{ $item['new_tab'] ? '_blank' : '_self' }}">
+                                                <i class="{{ $item['icon'] }}"></i>
+                                                <span>{{ $item['label'] }}</span>
+                                            </a>
+                                        </li>
+                                    @endcan
                                 @endif
                             @endforeach
                         @endif
