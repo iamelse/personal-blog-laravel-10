@@ -59,6 +59,7 @@ class EloquentPostRepository implements PostRepository
             'title' => $request->title,
             'slug' => $request->slug,
             'body' => $request->content,
+            'user_id' => Auth::user()->id,
             'published_at' => $request->published_at,
             'status' => $this->determineStatus($request),
         ];
