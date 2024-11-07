@@ -7,6 +7,7 @@ use App\Repositories\EloquentPostRepository;
 use App\Repositories\PostCategoryRepository;
 use App\Repositories\PostRepository;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
@@ -27,6 +28,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if (env('CUSTOM_PUBLIC_PATH', false)) {
+            App::bind('path.public', function() {
+                return '../public_html';
+            });
+        }
+
         DB::enableQueryLog();
 
         DB::whenQueryingForLongerThan(1000, function($connection) {
