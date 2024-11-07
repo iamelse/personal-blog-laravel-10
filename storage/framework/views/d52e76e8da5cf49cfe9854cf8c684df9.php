@@ -8,7 +8,8 @@
     <!-- Font Awesome CSS -->
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
 
-    <?php echo app('Illuminate\Foundation\Vite')(['resources/sass/app.scss', 'resources/js/app.js']); ?>
+    <link rel="stylesheet" href="<?php echo e(asset('assets/export-vite/css/app.css')); ?>">
+    <script src="<?php echo e(asset('assets/export-vite/js/app2.js')); ?>"></script>
 
     <title><?php echo e($title ?? env('APP_NAME')); ?></title>
 </head><?php /**PATH C:\Users\lanas\Documents\Codelabs\Laravel\personal-blog-laravel-10\resources\views/frontend/partials/head.blade.php ENDPATH**/ ?>

@@ -8,7 +8,8 @@
     <!-- Font Awesome CSS -->
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
 
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <link rel="stylesheet" href="{{ asset('assets/export-vite/css/app.css') }}">
+    <script src="{{ asset('assets/export-vite/js/app2.js') }}"></script>
 
     <title>{{ $title ?? env('APP_NAME') }}</title>
 </head>

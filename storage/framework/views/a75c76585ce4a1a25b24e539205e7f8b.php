@@ -11,15 +11,15 @@
     <!-- Font Awesome CSS -->
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
 
-    <link rel="stylesheet" href="{{ asset('assets/export-vite/css/app.css') }}">
-    <script src="{{ asset('assets/export-vite/js/app2.js') }}"></script>
+    <link rel="stylesheet" href="<?php echo e(asset('assets/export-vite/css/app.css')); ?>">
+    <script src="<?php echo e(asset('assets/export-vite/js/app2.js')); ?>"></script>
 
-    <title>{{ $title ?? env('APP_NAME') }}</title>
+    <title><?php echo e($title ?? env('APP_NAME')); ?></title>
 </head>
 
 <body>
     <!-- Navbar -->
-    @include('frontend.partials.navbar')
+    <?php echo $__env->make('frontend.partials.navbar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <!-- End Navbar -->
 
     <!-- Main content -->
@@ -33,30 +33,32 @@
                     <article class="col-lg-12 pb-2">
                         <header>
                             <h1 class="text l-text-dark display-5 fw-bold">
-                                {{ $post->title }}
+                                <?php echo e($post->title); ?>
+
                             </h1>
                             <div class="d-flex align-items-center my-4">
-                                <img src="{{ empty($post->author->image_profile) ? 'https://via.placeholder.com/150' : (Storage::disk('public_uploads')->exists($post->author->image_profile) ? asset('uploads/' . $post->author->image_profile) : 'https://via.placeholder.com/150') }}" alt="Profile Image" class="me-2 rounded-circle" style="width: 45px; height: 45px; object-fit: cover;">
+                                <img src="<?php echo e(empty($post->author->image_profile) ? 'https://via.placeholder.com/150' : (Storage::disk('public_uploads')->exists($post->author->image_profile) ? asset('uploads/' . $post->author->image_profile) : 'https://via.placeholder.com/150')); ?>" alt="Profile Image" class="me-2 rounded-circle" style="width: 45px; height: 45px; object-fit: cover;">
                                 <div class="post-metadata">
-                                    <span class="author l-text-dark">{{ $post->author->name }}</span>
-                                    <span class="category l-text-dark">in {{ $post->category->name }}</span>
+                                    <span class="author l-text-dark"><?php echo e($post->author->name); ?></span>
+                                    <span class="category l-text-dark">in <?php echo e($post->category->name); ?></span>
                                     <div class="time">
-                                        @php
+                                        <?php
                                             $totalWords = str_word_count(strip_tags($post->body));
                                             $readingSpeed = 200;
 
                                             $estimatedTime = ceil($totalWords / $readingSpeed);
-                                        @endphp
-                                        <small class="date l-text-p">{{ $estimatedTime }} mins read</small>
+                                        ?>
+                                        <small class="date l-text-p"><?php echo e($estimatedTime); ?> mins read</small>
                                         <small class="date l-text-p">.</small>
-                                        <small class="date l-text-p">{{ \Carbon\Carbon::parse($post->created_at)->format('M d, Y') }}</small>
+                                        <small class="date l-text-p"><?php echo e(\Carbon\Carbon::parse($post->created_at)->format('M d, Y')); ?></small>
                                     </div>
                                 </div>
                                                                 
                             </div>                                                      
                         </header>
                         <div class="content">
-                            {!! $post->body !!}
+                            <?php echo $post->body; ?>
+
                         </div>
                     </article>                    
                 </div>
@@ -69,21 +71,21 @@
                     <h5 class="text l-text-dark fw-bold my-3">Recommendations</h5>
                     <section class="col-lg-12 my-3">
                         <div class="row card-list">
-                            @forelse ($relatedPosts as $relatedPost)
+                            <?php $__empty_1 = true; $__currentLoopData = $relatedPosts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $relatedPost): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                             <div class="col-lg-6">
                                 <div class="card flex-row border-0">
-                                    <img class="card-img-left l-card-img align-self-center" src="{{ getPostCoverImage($relatedPost) }}"/>
+                                    <img class="card-img-left l-card-img align-self-center" src="<?php echo e(getPostCoverImage($relatedPost)); ?>"/>
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between align-items-start">
                                             <div>
                                                 <span class="dash-date-list-card">—</span>
-                                                <span class="date-list-card text-uppercase">{{ \Carbon\Carbon::parse($relatedPost->created_at)->format('M d, Y') }}</span>
-                                                <a href="{{ route('article.show', $relatedPost->slug) }}">
-                                                    <h5 class="l-card-title h5 h4-sm mt-1 l-text-dark">{{ $relatedPost->title }}</h5>
+                                                <span class="date-list-card text-uppercase"><?php echo e(\Carbon\Carbon::parse($relatedPost->created_at)->format('M d, Y')); ?></span>
+                                                <a href="<?php echo e(route('article.show', $relatedPost->slug)); ?>">
+                                                    <h5 class="l-card-title h5 h4-sm mt-1 l-text-dark"><?php echo e($relatedPost->title); ?></h5>
                                                 </a>
-                                                <p class="l-card-text">{{ \Illuminate\Support\Str::limit(strip_tags($relatedPost->body), 100) }}</p>
+                                                <p class="l-card-text"><?php echo e(\Illuminate\Support\Str::limit(strip_tags($relatedPost->body), 100)); ?></p>
                                             </div>
-                                            <a class="arrow-card-link mt-5 ms-4" href="{{ route('article.show', $relatedPost->slug) }}">
+                                            <a class="arrow-card-link mt-5 ms-4" href="<?php echo e(route('article.show', $relatedPost->slug)); ?>">
                                                 <i class='bx bx-right-arrow-alt bx-sm align-self-center mt-2'></i>
                                             </a>
                                         </div>
@@ -91,11 +93,11 @@
                                 </div>
                                 <hr class="card-hr">
                             </div>
-                            @empty
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                             <div class="col-lg-12 text-center">
                                 <p class="l-card-text">No Data</p>
                             </div>
-                            @endforelse
+                            <?php endif; ?>
                         </div>        
                     </section>
                 </div>
@@ -136,4 +138,4 @@
 </body>
 
 
-</html>
+</html><?php /**PATH C:\Users\lanas\Documents\Codelabs\Laravel\personal-blog-laravel-10\resources\views/frontend/article/show.blade.php ENDPATH**/ ?>
