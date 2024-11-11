@@ -18,19 +18,16 @@
                 <div class="card">
                     <div class="card-content">
                         <div class="card-header">
-                            <div class="row">
-                                <div class="d-flex justify-content-end mb-4 gap-1">
-                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('create_post_categories', $postCategories)): ?>
+                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('create_post_categories', $postCategories)): ?>
+                            <div class="row mb-4">
+                                <div class="col-6"></div>
+                                <div class="col-6 text-end">
                                     <a href="<?php echo e(route('post.category.create')); ?>" class="btn btn-primary btn-sm">
                                         New Category
                                     </a>
-                                    <?php endif; ?>
-                            
-                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('mass_destroy_post_categories', $postCategories)): ?>
-                                        <button type="submit" class="btn btn-danger btn-sm" id="deleteSelectedBtn" onclick="submitMassDestroy()" disabled>Delete Selected</button>
-                                    <?php endif; ?>
                                 </div>
                             </div>
+                            <?php endif; ?>
                             <div class="row">
                                 <div class="col-10 text-start">
                                     <div class="col-1">
@@ -86,9 +83,6 @@ unset($__errorArgs, $__bag); ?>
                                 <table class="table table-lg">
                                     <thead>
                                         <tr>
-                                            <th scope="col">
-                                                <input type="checkbox" class="form-check-input" id="selectAll">
-                                            </th>
                                             <th>No.</th>
                                             <th>Post Category Name</th>
                                             <th>Slug</th>
@@ -101,9 +95,6 @@ unset($__errorArgs, $__bag); ?>
                                     <tbody>
                                         <?php $__empty_1 = true; $__currentLoopData = $postCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $postCategory): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                         <tr>
-                                            <td>
-                                                <input type="checkbox" class="form-check-input" id="massDeleteCheckbox" name="ids[]" value="<?php echo e($postCategory->id); ?>">
-                                            </td>
                                             <td class="text-bold-500"><?php echo e($loop->iteration); ?></td>
                                             <td class="text-bold-500"><?php echo e($postCategory->name); ?></td>
                                             <td class="text-bold-500"><?php echo e($postCategory->slug); ?></td>
@@ -158,54 +149,6 @@ unset($__errorArgs, $__bag); ?>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startPush('scripts'); ?>
-<script>
-    document.getElementById('selectAll').addEventListener('click', function() {
-        const checkboxes = document.querySelectorAll('input[name="ids[]"]');
-        checkboxes.forEach(checkbox => checkbox.checked = this.checked);
-    });
-
-    function submitMassDestroy() {
-        const checkboxes = document.querySelectorAll('input[name="ids[]"]:checked');
-        const selectedIds = Array.from(checkboxes).map(checkbox => checkbox.value);
-
-        console.log("Selected IDs:", selectedIds);
-
-        if (selectedIds.length === 0) {
-            alert("Please select at least one category to delete.");
-            return;
-        }
-
-        if (confirm("Are you sure you want to delete the selected categories?")) {
-            const form = document.getElementById('massDestroyForm');
-            form.querySelectorAll('input[name="ids[]"]').forEach(input => input.remove());
-
-            selectedIds.forEach(id => {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'ids[]';
-                input.value = id;
-                form.appendChild(input);
-            });
-
-            form.submit();
-        }
-    }
-
-    const checkboxes = document.querySelectorAll('input[name="ids[]"]');
-    const deleteButton = document.getElementById('deleteSelectedBtn');
-
-    function toggleDeleteButton() {
-        const anyChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
-
-        deleteButton.disabled = !anyChecked;
-    }
-
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', toggleDeleteButton);
-    });
-
-    toggleDeleteButton();
-</script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
         const deleteButtons = document.querySelectorAll('#delete-btn');
@@ -262,25 +205,18 @@ unset($__errorArgs, $__bag); ?>
 <script>
     $(document).ready(function(){
         function enforceConstraints() {
-            // Count how many checkboxes are checked (excluding the mass delete checkbox)
-            var checkedCount = $('input[type="checkbox"]:not(#massDeleteCheckbox):checked').length;
+            var checkedCount = $('.form-check-input:checked').length;
 
-            // Loop through all checkboxes (except the mass delete checkbox) and enable/disable based on constraints
-            $('input[type="checkbox"]:not(#massDeleteCheckbox)').each(function() {
+            $('.form-check-input').each(function() {
                 var isChecked = $(this).is(':checked');
-                // Disable checkboxes when:
-                // - More than 4 checkboxes are checked, unless the current checkbox is checked
-                // - Only 1 checkbox is checked, and it’s the current one
                 $(this).prop('disabled', checkedCount >= 4 && !isChecked || checkedCount === 1 && isChecked);
             });
         }
 
-        // Handle the change event for regular checkboxes
-        $('input[type="checkbox"]:not(#massDeleteCheckbox)').change(function(){
+        $('.form-check-input').change(function(){
             var categoryId = $(this).data('category-id');
             var isChecked = $(this).is(':checked') ? 1 : 0;
 
-            // Perform AJAX request to update the visibility
             $.ajax({
                 url: '<?php echo e(route("api.post.category.updateVisibility")); ?>',
                 type: 'PUT',
@@ -299,17 +235,6 @@ unset($__errorArgs, $__bag); ?>
             enforceConstraints();
         });
 
-        // Handle the mass delete checkbox click event
-        $('#massDeleteCheckbox').change(function() {
-            // Check or uncheck all the other checkboxes based on mass delete checkbox state
-            var isChecked = $(this).is(':checked');
-            $('input[type="checkbox"]:not(#massDeleteCheckbox)').prop('checked', isChecked);
-
-            // Enforce the constraints after selecting/deselecting all
-            enforceConstraints();
-        });
-
-        // Ensure the constraints are applied when the page loads
         enforceConstraints();
     });
 </script>
