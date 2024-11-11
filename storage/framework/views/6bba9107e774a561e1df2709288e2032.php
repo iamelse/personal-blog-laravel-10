@@ -1,7 +1,4 @@
-
-@extends('template.main')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div id="main-content">
     <div class="page-heading">
         <div class="page-title">
@@ -23,71 +20,86 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="d-flex justify-content-end mb-4">
-                                    @can('create_posts', $posts)
-                                        <a href="{{ route('post.create') }}" class="btn btn-primary btn-sm me-2">
+                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('create_posts', $posts)): ?>
+                                        <a href="<?php echo e(route('post.create')); ?>" class="btn btn-primary btn-sm me-2">
                                             New Post
                                         </a>
-                                    @endcan
+                                    <?php endif; ?>
                             
-                                    @can('mass_destroy_posts', $posts)
+                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('mass_destroy_posts', $posts)): ?>
                                         <button type="submit" class="btn btn-danger btn-sm" id="deleteSelectedBtn" onclick="submitMassDestroy()" disabled>Delete Selected</button>
-                                    @endcan
+                                    <?php endif; ?>
                                 </div>
                             </div>                            
                             <div class="row">
                                 <div class="col-10 text-start">
                                     <div class="row">
                                         <div class="col-1">
-                                            <form method="GET" action="{{ route('post.index') }}">
+                                            <form method="GET" action="<?php echo e(route('post.index')); ?>">
                                                 <label for="limit" class="fw-bold">Limit:</label>
                                                 <select name="limit" id="limit" class="form-select col-2" onchange="this.form.submit()">
-                                                    <option value="10" {{ request('limit') == 10 ? 'selected' : '' }}>10</option>
-                                                    <option value="25" {{ request('limit') == 25 ? 'selected' : '' }}>25</option>
-                                                    <option value="50" {{ request('limit') == 50 ? 'selected' : '' }}>50</option>
-                                                    <option value="100" {{ request('limit') == 100 ? 'selected' : '' }}>100</option>
+                                                    <option value="10" <?php echo e(request('limit') == 10 ? 'selected' : ''); ?>>10</option>
+                                                    <option value="25" <?php echo e(request('limit') == 25 ? 'selected' : ''); ?>>25</option>
+                                                    <option value="50" <?php echo e(request('limit') == 50 ? 'selected' : ''); ?>>50</option>
+                                                    <option value="100" <?php echo e(request('limit') == 100 ? 'selected' : ''); ?>>100</option>
                                                 </select>
-                                                <input type="hidden" name="category_id" value="{{ request('category_id') }}">
-                                                <input type="hidden" name="q" value="{{ request('q') }}">
-                                                <input type="hidden" name="page" value="{{ request('page') }}">
+                                                <input type="hidden" name="category_id" value="<?php echo e(request('category_id')); ?>">
+                                                <input type="hidden" name="q" value="<?php echo e(request('q')); ?>">
+                                                <input type="hidden" name="page" value="<?php echo e(request('page')); ?>">
                                             </form>
                                         </div>
                                         <div class="col-2">
-                                            <form method="GET" action="{{ route('post.index') }}">
+                                            <form method="GET" action="<?php echo e(route('post.index')); ?>">
                                                 <label for="category_id" class="fw-bold">Category:</label>
                                                 <select name="category_id" id="selectPostCategory" class="form-select col-2" onchange="this.form.submit()">
-                                                    <option value="" {{ request('category_id') === null ? 'selected' : '' }}>All Categories</option>
-                                                        @foreach($categories as $category)
-                                                            <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
-                                                                {{ $category->name }}
+                                                    <option value="" <?php echo e(request('category_id') === null ? 'selected' : ''); ?>>All Categories</option>
+                                                        <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                            <option value="<?php echo e($category->id); ?>" <?php echo e(request('category_id') == $category->id ? 'selected' : ''); ?>>
+                                                                <?php echo e($category->name); ?>
+
                                                             </option>
-                                                        @endforeach
+                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                 </select>
-                                                <input type="hidden" name="limit" value="{{ request('limit') }}">
-                                                <input type="hidden" name="q" value="{{ request('q') }}">
-                                                <input type="hidden" name="page" value="{{ request('page') }}">
+                                                <input type="hidden" name="limit" value="<?php echo e(request('limit')); ?>">
+                                                <input type="hidden" name="q" value="<?php echo e(request('q')); ?>">
+                                                <input type="hidden" name="page" value="<?php echo e(request('page')); ?>">
                                             </form>
                                         </div>
                                     </div>                                        
                                 </div>
                                 <div class="col-2">
-                                    <form method="GET" action="{{ route('post.index') }}">
+                                    <form method="GET" action="<?php echo e(route('post.index')); ?>">
                                         <div class="form-group mandatory">
                                             <label for="search" class="fw-bold">Search:</label>
                                             <input
                                                 type="text"
-                                                class="form-control @error('q') is-invalid @enderror"
+                                                class="form-control <?php $__errorArgs = ['q'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
                                                 placeholder="Search"
                                                 name="q"
-                                                value="{{ request('q') }}"
+                                                value="<?php echo e(request('q')); ?>"
                                             />
-                                            @error('q')
+                                            <?php $__errorArgs = ['q'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                                 <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
+                                                    <strong><?php echo e($message); ?></strong>
                                                 </span>
-                                            @enderror
-                                            <input type="hidden" name="limit" value="{{ request('limit') }}">
-                                            <input type="hidden" name="category_id" value="{{ request('category_id') }}">
-                                            <input type="hidden" name="page" value="{{ request('page') }}">
+                                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                            <input type="hidden" name="limit" value="<?php echo e(request('limit')); ?>">
+                                            <input type="hidden" name="category_id" value="<?php echo e(request('category_id')); ?>">
+                                            <input type="hidden" name="page" value="<?php echo e(request('page')); ?>">
                                         </div>
                                     </form>
                                 </div>
@@ -95,9 +107,9 @@
                         </div>                         
                         <div class="card-body">
                             <!-- Table with outer spacing -->
-                            <form id="massDestroyForm" method="POST" action="{{ route('post.mass.destroy') }}">
-                                @csrf
-                                @method('DELETE')
+                            <form id="massDestroyForm" method="POST" action="<?php echo e(route('post.mass.destroy')); ?>">
+                                <?php echo csrf_field(); ?>
+                                <?php echo method_field('DELETE'); ?>
                                 
                                 <div class="table-responsive">
                                     <table class="table table-lg">
@@ -117,61 +129,61 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @forelse ($posts as $post)
+                                            <?php $__empty_1 = true; $__currentLoopData = $posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                             <tr>
                                                 <td>
-                                                    <input type="checkbox" class="form-check-input" name="ids[]" value="{{ $post->id }}">
+                                                    <input type="checkbox" class="form-check-input" name="ids[]" value="<?php echo e($post->id); ?>">
                                                 </td>
-                                                <td class="text-bold-500">{{ $loop->iteration }}</td>
+                                                <td class="text-bold-500"><?php echo e($loop->iteration); ?></td>
                                                 <td>
-                                                    <img src="{{ getPostCoverImage($post) }}" class="rounded-3" style="width: 100px; height: 100px; object-fit: cover;">
+                                                    <img src="<?php echo e(getPostCoverImage($post)); ?>" class="rounded-3" style="width: 100px; height: 100px; object-fit: cover;">
                                                 </td>
-                                                <td class="text-bold-500">{{ $post->category->name ?? '' }}</td>
-                                                <td class="text-bold-500">{{ $post?->author?->name }}</td>
-                                                <td class="text-bold-500">{{ $post->title ?? '' }}</td>
-                                                <td class="text-bold-500">{{ $post->slug ?? '' }}</td>
-                                                @php
+                                                <td class="text-bold-500"><?php echo e($post->category->name ?? ''); ?></td>
+                                                <td class="text-bold-500"><?php echo e($post?->author?->name); ?></td>
+                                                <td class="text-bold-500"><?php echo e($post->title ?? ''); ?></td>
+                                                <td class="text-bold-500"><?php echo e($post->slug ?? ''); ?></td>
+                                                <?php
                                                     $status = $post->status;
-                                                @endphp
+                                                ?>
 
                                                 <td class="text-bold-500">
-                                                    @switch($status)
-                                                        @case(\App\Enums\PostStatus::DRAFT->value)
+                                                    <?php switch($status):
+                                                        case (\App\Enums\PostStatus::DRAFT->value): ?>
                                                             <span class="badge rounded-pill bg-secondary">Draft</span>
-                                                            @break
+                                                            <?php break; ?>
 
-                                                        @case(\App\Enums\PostStatus::SCHEDULED->value)
+                                                        <?php case (\App\Enums\PostStatus::SCHEDULED->value): ?>
                                                             <span class="badge rounded-pill bg-warning text-dark">Scheduled</span>
-                                                            @break
+                                                            <?php break; ?>
 
-                                                        @case(\App\Enums\PostStatus::PUBLISHED->value)
+                                                        <?php case (\App\Enums\PostStatus::PUBLISHED->value): ?>
                                                             <span class="badge rounded-pill bg-success">Published</span>
-                                                            @break
+                                                            <?php break; ?>
 
-                                                        @default
+                                                        <?php default: ?>
                                                             <span class="badge rounded-pill bg-light text-dark">Unknown</span>
-                                                    @endswitch
+                                                    <?php endswitch; ?>
                                                 </td>
                                                 <td>
                                                     <div style="display: flex; gap: 5px;">
-                                                        @can('edit_posts', $post)
-                                                        <a href="{{ route('post.edit', $post->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
-                                                        @endcan
-                                                        @can('destroy_posts', $post)
-                                                        <form method="POST" action="{{ route('post.destroy', $post->id) }}">
-                                                            @csrf
-                                                            @method('DELETE')
+                                                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('edit_posts', $post)): ?>
+                                                        <a href="<?php echo e(route('post.edit', $post->id)); ?>" class="btn btn-sm btn-outline-warning">Edit</a>
+                                                        <?php endif; ?>
+                                                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('destroy_posts', $post)): ?>
+                                                        <form method="POST" action="<?php echo e(route('post.destroy', $post->id)); ?>">
+                                                            <?php echo csrf_field(); ?>
+                                                            <?php echo method_field('DELETE'); ?>
                                                             <button type="submit" class="btn btn-sm btn-outline-danger" id="delete-btn">Delete</button>
                                                         </form>
-                                                        @endcan
+                                                        <?php endif; ?>
                                                     </div>
                                                 </td>                                                
                                             </tr>
-                                            @empty
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                             <tr>
                                                 <td class="text-center" colspan="10">No Data</td>
                                             </tr>
-                                            @endforelse
+                                            <?php endif; ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -179,7 +191,8 @@
                             <!-- Pagination links -->
                             <div class="row">
                                 <div class="col-12 d-flex justify-content-end">
-                                    {{ $posts->appends(['category_id' => request('category_id'), 'limit' => request('limit'), 'q' => request('q')])->links() }}
+                                    <?php echo e($posts->appends(['category_id' => request('category_id'), 'limit' => request('limit'), 'q' => request('q')])->links()); ?>
+
                                 </div>
                             </div>                                          
                         </div>
@@ -190,9 +203,9 @@
     </section>        
     <!-- Basic Tables end -->
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
     document.getElementById('selectAll').addEventListener('click', function() {
         const checkboxes = document.querySelectorAll('input[name="ids[]"]');
@@ -268,7 +281,7 @@
             });
         });
 
-        @if($errors->any())
+        <?php if($errors->any()): ?>
             Swal.fire({
                 toast: true,
                 position: 'top-end',
@@ -277,22 +290,22 @@
                 showConfirmButton: false,
                 timer: 3000
             });
-        @endif
+        <?php endif; ?>
 
-        @if(session('success'))
+        <?php if(session('success')): ?>
             Swal.fire({
                 toast: true,
                 position: 'top-end',
                 icon: 'success',
-                title: '{{ session('success') }}',
+                title: '<?php echo e(session('success')); ?>',
                 showConfirmButton: false,
                 timer: 3000
             });
-        @endif
+        <?php endif; ?>
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -301,4 +314,5 @@
         theme: 'bootstrap-5',
     } );
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('template.main', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\lanas\Documents\Codelabs\Laravel\personal-blog-laravel-10\resources\views/backend/article/index.blade.php ENDPATH**/ ?>

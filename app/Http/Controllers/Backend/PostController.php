@@ -15,6 +15,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class PostController extends Controller
@@ -129,6 +130,36 @@ class PostController extends Controller
             return redirect()->route('post.index')->with('success', 'Post deleted successfully');
         } catch (\Exception $e) {
             return redirect()->route('post.index')->with('error', 'Failed to delete post: ' . $e->getMessage());
+        }
+    }
+
+    public function massDestroy(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'integer',
+        ]);
+
+        try {
+            $posts = Post::whereIn('id', $request->ids)->get();
+
+            foreach ($posts as $post) {
+                $this->_authorizePost($post);
+
+                $this->imageManagementService->destroyImage($post->cover);
+
+                activity('post_management')
+                    ->causedBy(Auth::user())
+                    ->log("Deleted post: {$post->title}");
+            }
+
+            Post::whereIn('id', $request->ids)->delete();
+
+            return redirect()->back()->with('success', 'Selected posts deleted successfully.');
+        } catch (\Exception $e) {
+            Log::error("Mass delete failed: " . $e->getMessage());
+
+            return redirect()->back()->with('error', 'An error occurred while trying to delete selected posts.');
         }
     }
 

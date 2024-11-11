@@ -65,6 +65,7 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/edit/{post}', [PostController::class, 'edit'])->middleware(['can:edit_posts'])->name('post.edit');
             Route::put('/update/{post}', [PostController::class, 'update'])->middleware(['can:edit_posts'])->name('post.update');
             Route::delete('/destroy/{post}', [PostController::class, 'destroy'])->middleware(['can:destroy_posts'])->name('post.destroy');
+            Route::delete('/mass-destroy', [PostController::class, 'massDestroy'])->middleware(['can:mass_destroy_posts'])->name('post.mass.destroy');
         });
 
         Route::prefix('resume')->group(function () {
