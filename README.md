@@ -124,8 +124,17 @@ Feel free to fork this repository and make contributions. Pull requests are welc
 ![Resume](screenshots/resume.png)
 ![Article](screenshots/article.png)
 
+
+## Test Documentation
+
+Read this [documentation](https://respected-parcel-4a2.notion.site/Portofolio-Blog-App-Test-Scenario-Documentation-15e23b7a88f080089fe0d74c923b3f37)
+
+### Login 
+
+### Logout
+
 ## License
 
 This project is open-sourced software licensed under the MIT license.
 
-Built with ❤️ using Laravel 10
+Built with ❤️ using Laravel 10 by [iamelse](https://www.linkedin.com/in/iamelse/)
