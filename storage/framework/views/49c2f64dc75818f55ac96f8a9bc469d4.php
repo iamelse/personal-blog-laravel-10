@@ -46,22 +46,7 @@
                         <div class="user-menu d-flex">
                             <div class="user-img d-flex align-items-center">
                                 <div class="avatar avatar-md">
-                                    <?php
-                                        $imagePath = optional(Auth::user())->image_profile;
-                                    ?>
-    
-                                    <?php switch(true):
-                                        case ($imagePath && File::exists(public_path($imagePath))): ?>
-                                            <img class="img rounded-circle w-25" src="<?php echo e(asset($imagePath)); ?>" alt="User Avatar">
-                                            <?php break; ?>
-    
-                                        <?php case (!$imagePath): ?>
-                                            <img class="img rounded-circle w-25" src="https://via.placeholder.com/150" alt="User Avatar">
-                                            <?php break; ?>
-    
-                                        <?php default: ?>
-                                            <img class="img rounded-circle w-25" src="https://via.placeholder.com/150" alt="User Avatar">
-                                    <?php endswitch; ?>
+                                    <img class="img rounded-circle" src="<?php echo e(getUserImageProfilePath(Auth::user())); ?>" alt="User Avatar" style="width: 2.5rem; height: auto;">
                                 </div>
                             </div>
                         </div>
