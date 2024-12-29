@@ -3,7 +3,10 @@
 
 @include('frontend.partials.head')
 
-<body>
+<body class="loading">
+
+    <!-- Loader -->
+    <div class="loader" id="loader"></div>
 
     @include('frontend.partials.navbar')
 
@@ -11,7 +14,15 @@
 
     @include('frontend.partials.footer')
 
-</body>
+    <script>
+        window.addEventListener('load', function () {
+            setTimeout(function () {
+                document.body.classList.remove('loading');
+                document.body.classList.add('loaded');
+            }, 500);
+        });
+    </script>
 
+</body>
 
 </html>
