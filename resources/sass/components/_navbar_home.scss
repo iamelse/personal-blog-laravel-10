@@ -46,3 +46,7 @@ a.btn-switch-mode:hover {
     text-decoration: none;
     color: var(--navbar-link-text-color-hover);
 }
+
+.navbar {
+    transition: box-shadow 0.3s ease;
+}
