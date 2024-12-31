@@ -1,0 +1,64 @@
+/* Loader styles */
+.loader {
+    width: 50px;
+    height: 50px;
+    aspect-ratio: 1;
+    --_c: no-repeat radial-gradient(farthest-side, #0dcaf0 92%, transparent);
+    background: 
+        var(--_c) top,
+        var(--_c) left,
+        var(--_c) right,
+        var(--_c) bottom;
+    background-size: 12px 12px;
+    animation: spin-breathe 1.5s infinite ease-in-out; /* Unified animation for spinning and breathing */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center the loader */
+    z-index: 9999; /* Ensure loader is on top of everything */
+}
+
+/* Define combined spinning and breathing animation */
+@keyframes spin-breathe {
+    0% {
+        transform: translate(-50%, -50%) scale(0.8) rotate(0deg); /* Default size, start rotating */
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.2) rotate(180deg); /* Scaled up, halfway rotated */
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(0.8) rotate(360deg); /* Back to default size, fully rotated */
+    }
+}
+
+/* Full screen, white background during loading */
+body.loading {
+    background-color: white;
+    height: 100vh; /* Ensure body takes full height */
+    margin: 0;
+    position: relative;
+    transition: background-color 0.5s ease; /* Smooth transition for fade-out */
+}
+
+/* Hide the content while loading */
+body.loading #app {
+    visibility: hidden; /* Hide content */
+}
+
+/* Show the loader while page is loading */
+body.loading .loader {
+    display: block; /* Show loader */
+}
+
+/* Once page is loaded, show content and hide loader */
+body.loaded {
+    background-color: transparent; /* Fade out background to transparent */
+}
+
+body.loaded #app {
+    visibility: visible; /* Show content */
+}
+
+body.loaded .loader {
+    display: none; /* Hide loader */
+}

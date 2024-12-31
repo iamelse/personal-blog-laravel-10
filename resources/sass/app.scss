@@ -8,6 +8,7 @@
 @import 'components/tab';
 @import 'components/card_list';
 @import 'components/card';
+@import 'components/loader';
 
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';
@@ -30,4 +31,16 @@ footer {
     position: absolute;
     bottom: 0;
     width: 100%;
+}
+
+/* Fullscreen background with a semi-transparent overlay */
+body.loading::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #FFFFFF; /* White background */
+    z-index: 9998; /* Just below the loader */
 }
