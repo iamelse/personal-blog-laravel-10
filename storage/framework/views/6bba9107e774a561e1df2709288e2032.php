@@ -231,7 +231,7 @@ unset($__errorArgs, $__bag); ?>
     // Initial state of the delete button
     toggleDeleteButton();
 
-    // Mass delete logic
+    // Mass delete logic with SweetAlert confirmation
     function submitMassDestroy() {
         const selectedIds = Array.from(checkboxes)
             .filter(checkbox => checkbox.checked)
@@ -244,20 +244,37 @@ unset($__errorArgs, $__bag); ?>
             return;
         }
 
-        if (confirm("Are you sure you want to delete the selected posts?")) {
-            const form = document.getElementById('massDestroyForm');
-            form.querySelectorAll('input[name="ids[]"]').forEach(input => input.remove());
+        // Show SweetAlert confirmation
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            customClass: {
+                confirmButton: 'btn btn-primary mx-1',
+                cancelButton: 'btn btn-danger mx-1'
+            },
+            buttonsStyling: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = document.getElementById('massDestroyForm');
+                // Remove any existing hidden inputs for ids
+                form.querySelectorAll('input[name="ids[]"]').forEach(input => input.remove());
 
-            selectedIds.forEach(id => {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'ids[]';
-                input.value = id;
-                form.appendChild(input);
-            });
+                // Add selected IDs to the form as hidden inputs
+                selectedIds.forEach(id => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'ids[]';
+                    input.value = id;
+                    form.appendChild(input);
+                });
 
-            form.submit();
-        }
+                // Submit the form after confirmation
+                form.submit();
+            }
+        });
     }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

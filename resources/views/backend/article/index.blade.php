@@ -198,19 +198,16 @@
     const checkboxes = document.querySelectorAll('input[name="ids[]"]');
     const deleteButton = document.getElementById('deleteSelectedBtn');
 
-    // Toggle all checkboxes when "Select All" is clicked
     selectAllCheckbox.addEventListener('click', function() {
         checkboxes.forEach(checkbox => checkbox.checked = this.checked);
-        toggleDeleteButton(); // Manually call the function to update the button state
+        toggleDeleteButton();
     });
 
-    // Function to toggle the delete button
     function toggleDeleteButton() {
         const anyChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
         deleteButton.disabled = !anyChecked;
     }
 
-    // Listen for individual checkbox changes
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener('change', toggleDeleteButton);
     });
@@ -218,7 +215,6 @@
     // Initial state of the delete button
     toggleDeleteButton();
 
-    // Mass delete logic
     function submitMassDestroy() {
         const selectedIds = Array.from(checkboxes)
             .filter(checkbox => checkbox.checked)
@@ -231,20 +227,33 @@
             return;
         }
 
-        if (confirm("Are you sure you want to delete the selected posts?")) {
-            const form = document.getElementById('massDestroyForm');
-            form.querySelectorAll('input[name="ids[]"]').forEach(input => input.remove());
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            customClass: {
+                confirmButton: 'btn btn-primary mx-1',
+                cancelButton: 'btn btn-danger mx-1'
+            },
+            buttonsStyling: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = document.getElementById('massDestroyForm');
+                form.querySelectorAll('input[name="ids[]"]').forEach(input => input.remove());
 
-            selectedIds.forEach(id => {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'ids[]';
-                input.value = id;
-                form.appendChild(input);
-            });
+                selectedIds.forEach(id => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'ids[]';
+                    input.value = id;
+                    form.appendChild(input);
+                });
 
-            form.submit();
-        }
+                form.submit();
+            }
+        });
     }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
