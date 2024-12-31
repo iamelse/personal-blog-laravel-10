@@ -211,19 +211,16 @@ unset($__errorArgs, $__bag); ?>
     const checkboxes = document.querySelectorAll('input[name="ids[]"]');
     const deleteButton = document.getElementById('deleteSelectedBtn');
 
-    // Toggle all checkboxes when "Select All" is clicked
     selectAllCheckbox.addEventListener('click', function() {
         checkboxes.forEach(checkbox => checkbox.checked = this.checked);
-        toggleDeleteButton(); // Manually call the function to update the button state
+        toggleDeleteButton();
     });
 
-    // Function to toggle the delete button
     function toggleDeleteButton() {
         const anyChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
         deleteButton.disabled = !anyChecked;
     }
 
-    // Listen for individual checkbox changes
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener('change', toggleDeleteButton);
     });
@@ -231,7 +228,6 @@ unset($__errorArgs, $__bag); ?>
     // Initial state of the delete button
     toggleDeleteButton();
 
-    // Mass delete logic with SweetAlert confirmation
     function submitMassDestroy() {
         const selectedIds = Array.from(checkboxes)
             .filter(checkbox => checkbox.checked)
@@ -244,7 +240,6 @@ unset($__errorArgs, $__bag); ?>
             return;
         }
 
-        // Show SweetAlert confirmation
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -259,10 +254,8 @@ unset($__errorArgs, $__bag); ?>
         }).then((result) => {
             if (result.isConfirmed) {
                 const form = document.getElementById('massDestroyForm');
-                // Remove any existing hidden inputs for ids
                 form.querySelectorAll('input[name="ids[]"]').forEach(input => input.remove());
 
-                // Add selected IDs to the form as hidden inputs
                 selectedIds.forEach(id => {
                     const input = document.createElement('input');
                     input.type = 'hidden';
@@ -271,7 +264,6 @@ unset($__errorArgs, $__bag); ?>
                     form.appendChild(input);
                 });
 
-                // Submit the form after confirmation
                 form.submit();
             }
         });

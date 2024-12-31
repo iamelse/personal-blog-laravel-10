@@ -19,7 +19,7 @@
             setTimeout(function () {
                 document.body.classList.remove('loading');
                 document.body.classList.add('loaded');
-            }, 500);
+            }, 2000);
         });
     </script>
 

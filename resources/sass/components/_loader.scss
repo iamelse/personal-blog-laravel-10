@@ -24,7 +24,7 @@
         transform: translate(-50%, -50%) scale(0.8) rotate(0deg); /* Default size, start rotating */
     }
     50% {
-        transform: translate(-50%, -50%) scale(1.2) rotate(180deg); /* Scaled up, halfway rotated */
+        transform: translate(-50%, -50%) scale(1.5) rotate(180deg); /* Scaled up, halfway rotated */
     }
     100% {
         transform: translate(-50%, -50%) scale(0.8) rotate(360deg); /* Back to default size, fully rotated */
