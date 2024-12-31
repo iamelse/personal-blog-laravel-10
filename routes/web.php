@@ -35,9 +35,11 @@ Route::get('/subscribe', function () {
     return view('frontend.subscribe');
 });
 
-Route::get('/setup', [InitialSetupController::class, 'showInitialSetupPage'])->name('initial.setup');
-Route::post('/setup/migrate', [InitialSetupController::class, 'runInitialMigrations'])->name('initial.setup.migrate');
-Route::post('/setup/seed', [InitialSetupController::class, 'runInitialSeeder'])->name('initial.setup.seed');
+Route::middleware(['check.initial.setup'])->group(function () {
+    Route::get('/setup', [InitialSetupController::class, 'showInitialSetupPage'])->name('initial.setup');
+    Route::post('/setup/migrate', [InitialSetupController::class, 'runInitialMigrations'])->name('initial.setup.migrate');
+    Route::post('/setup/seed', [InitialSetupController::class, 'runInitialSeeder'])->name('initial.setup.seed');
+});
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->middleware(['check.initial.setup'])->name('login')->middleware('guest');
 Route::post('/authenticate', [LoginController::class, 'authenticate'])->name('authenticate')->middleware('guest');
