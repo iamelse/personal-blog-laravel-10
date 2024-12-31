@@ -129,6 +129,7 @@ class PostController extends Controller
 
             return redirect()->route('post.index')->with('success', 'Post deleted successfully');
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
             return redirect()->route('post.index')->with('error', 'Failed to delete post: ' . $e->getMessage());
         }
     }

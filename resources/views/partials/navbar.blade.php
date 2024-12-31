@@ -10,44 +10,47 @@
        </button>
        <div class="collapse navbar-collapse" id="navbarSupportedContent">
            <ul class="navbar-nav ms-auto mb-lg-0">
-               <li class="nav-item dropdown me-3">
-                   <a class="nav-link active dropdown-toggle text-gray-600" href="#" data-bs-toggle="dropdown"
-                       data-bs-display="static" aria-expanded="false">
-                       <i class='bi bi-bell bi-sub fs-4'></i>
-                       <span class="badge badge-notification bg-danger">7</span>
-                   </a>
-                   <ul class="dropdown-menu dropdown-menu-end notification-dropdown"
-                       aria-labelledby="dropdownMenuButton">
-                       <li class="dropdown-header">
-                           <h6>Notifications</h6>
-                       </li>
-                       <li class="dropdown-item notification-item">
-                           <a class="d-flex align-items-center" href="#">
-                               <div class="notification-icon bg-primary">
-                                   <i class="bi bi-cart-check"></i>
-                               </div>
-                               <div class="notification-text ms-4">
-                                   <p class="notification-title font-bold">Successfully check out</p>
-                                   <p class="notification-subtitle font-thin text-sm">Order ID #256</p>
-                               </div>
-                           </a>
-                       </li>
-                       <li class="dropdown-item notification-item">
-                           <a class="d-flex align-items-center" href="#">
-                               <div class="notification-icon bg-success">
-                                   <i class="bi bi-file-earmark-check"></i>
-                               </div>
-                               <div class="notification-text ms-4">
-                                   <p class="notification-title font-bold">Homework submitted</p>
-                                   <p class="notification-subtitle font-thin text-sm">Algebra math homework</p>
-                               </div>
-                           </a>
-                       </li>
-                       <li>
-                           <p class="text-center py-2 mb-0"><a href="#">See all notification</a></p>
-                       </li>
-                   </ul>
-               </li>
+            <li class="nav-item dropdown me-3">
+                <a class="nav-link active dropdown-toggle text-gray-600" href="#" data-bs-toggle="dropdown"
+                   data-bs-display="static" aria-expanded="false">
+                    <i class='bi bi-bell bi-sub fs-4'></i>
+                    <span id="notificationCounter" class="badge badge-notification bg-danger" 
+                        style="display: {{ $unreadCount > 0 ? 'inline' : 'none' }};">
+                        {{ $unreadCount }}
+                    </span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end notification-dropdown"
+                    aria-labelledby="dropdownMenuButton">
+                    <li class="dropdown-header">
+                        <h6>Notifications</h6>
+                    </li>
+                    @if($notifications->isEmpty() || $notifications->whereNull('read_at')->isEmpty())
+                        <li class="dropdown-item notification-item">
+                            <p class="text-center py-1 mb-0 notification-subtitle font-thin text-sm text-gray-500">You are all set! No new notifications.</p>
+                        </li>
+                    @else
+                        @foreach($notifications as $notification)
+                            @if(is_null($notification->read_at))
+                                <li class="dropdown-item notification-item" id="notification-{{ $notification->id }}" data-id="{{ $notification->id }}" data-url="{{ $notification->data['data']['url'] ?? '#' }}">
+                                    <a class="d-flex align-items-center">
+                                        <div class="notification-icon {{ $notification->data['data']['background'] ?? 'bg-secondary' }}">
+                                            {!! $notification->data['data']['icon'] ?? '<i class="bi bi-info-circle"></i>' !!}
+                                        </div>
+                                        <div class="notification-text ms-4">
+                                            <p class="notification-title font-bold">{{ $notification->data['data']['title'] ?? 'Notification' }}</p>
+                                            <p class="notification-subtitle font-thin text-sm">{!! $notification->data['data']['description'] ?? 'No details available.' !!}</p>
+                                        </div>
+                                    </a>
+                                </li>
+                            @endif
+                        @endforeach
+                    @endif
+                    <li>
+                        <p class="text-center py-2 mb-0"><a href="#">See all notifications</a></p>
+                    </li>
+                </ul>
+            </li>
+            
            </ul>
            <div class="dropdown">
                <a href="#" data-bs-toggle="dropdown" aria-expanded="false">

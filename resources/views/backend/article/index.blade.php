@@ -158,10 +158,10 @@
                                                         <a href="{{ route('post.edit', $post->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
                                                         @endcan
                                                         @can('destroy_posts', $post)
-                                                        <form method="POST" action="{{ route('post.destroy', $post->id) }}">
+                                                        <form class="delete-single-form" method="POST" action="{{ route('post.destroy', $post->id) }}">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="btn btn-sm btn-outline-danger" id="delete-btn">Delete</button>
+                                                            <button type="submit" class="btn btn-sm btn-outline-danger delete-btn">Delete</button>
                                                         </form>
                                                         @endcan
                                                     </div>
@@ -175,6 +175,7 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                
                             </form>
                             <!-- Pagination links -->
                             <div class="row">
@@ -193,6 +194,46 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                // Locate the form element closest to this button
+                const form = this.closest('form.delete-single-form');
+                
+                console.log(form);
+
+                // Debugging: Log if form is found or not
+                if (!form) {
+                    console.error("No form found for this delete button!");
+                    return; // Exit early if no form is found
+                }
+
+                // Confirm deletion using SweetAlert
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "This action cannot be undone!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'Cancel',
+                    customClass: {
+                        confirmButton: 'btn btn-primary mx-1',
+                        cancelButton: 'btn btn-danger mx-1'
+                    },
+                    buttonsStyling: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+</script>
+
 <script>
     const selectAllCheckbox = document.getElementById('selectAll');
     const checkboxes = document.querySelectorAll('input[name="ids[]"]');
@@ -256,33 +297,8 @@
         });
     }
 </script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
-        const deleteButtons = document.querySelectorAll('#delete-btn');
-
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', function (e) {
-                e.preventDefault();
-                const form = this.closest('form');
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, delete it!',
-                    customClass: {
-                        confirmButton: 'btn btn-primary mx-1',
-                        cancelButton: 'btn btn-danger mx-1'
-                    },
-                    buttonsStyling: false
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form.submit();
-                    }
-                });
-            });
-        });
-
         @if($errors->any())
             Swal.fire({
                 toast: true,

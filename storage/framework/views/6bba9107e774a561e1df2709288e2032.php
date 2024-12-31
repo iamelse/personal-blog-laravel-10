@@ -170,10 +170,10 @@ unset($__errorArgs, $__bag); ?>
                                                         <a href="<?php echo e(route('post.edit', $post->id)); ?>" class="btn btn-sm btn-outline-warning">Edit</a>
                                                         <?php endif; ?>
                                                         <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('destroy_posts', $post)): ?>
-                                                        <form method="POST" action="<?php echo e(route('post.destroy', $post->id)); ?>">
+                                                        <form class="delete-single-form" method="POST" action="<?php echo e(route('post.destroy', $post->id)); ?>">
                                                             <?php echo csrf_field(); ?>
                                                             <?php echo method_field('DELETE'); ?>
-                                                            <button type="submit" class="btn btn-sm btn-outline-danger" id="delete-btn">Delete</button>
+                                                            <button type="submit" class="btn btn-sm btn-outline-danger delete-btn">Delete</button>
                                                         </form>
                                                         <?php endif; ?>
                                                     </div>
@@ -187,6 +187,7 @@ unset($__errorArgs, $__bag); ?>
                                         </tbody>
                                     </table>
                                 </div>
+                                
                             </form>
                             <!-- Pagination links -->
                             <div class="row">
@@ -206,6 +207,46 @@ unset($__errorArgs, $__bag); ?>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startPush('scripts'); ?>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                // Locate the form element closest to this button
+                const form = this.closest('form.delete-single-form');
+                
+                console.log(form);
+
+                // Debugging: Log if form is found or not
+                if (!form) {
+                    console.error("No form found for this delete button!");
+                    return; // Exit early if no form is found
+                }
+
+                // Confirm deletion using SweetAlert
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "This action cannot be undone!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'Cancel',
+                    customClass: {
+                        confirmButton: 'btn btn-primary mx-1',
+                        cancelButton: 'btn btn-danger mx-1'
+                    },
+                    buttonsStyling: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+</script>
+
 <script>
     const selectAllCheckbox = document.getElementById('selectAll');
     const checkboxes = document.querySelectorAll('input[name="ids[]"]');
@@ -269,33 +310,8 @@ unset($__errorArgs, $__bag); ?>
         });
     }
 </script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
-        const deleteButtons = document.querySelectorAll('#delete-btn');
-
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', function (e) {
-                e.preventDefault();
-                const form = this.closest('form');
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, delete it!',
-                    customClass: {
-                        confirmButton: 'btn btn-primary mx-1',
-                        cancelButton: 'btn btn-danger mx-1'
-                    },
-                    buttonsStyling: false
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form.submit();
-                    }
-                });
-            });
-        });
-
         <?php if($errors->any()): ?>
             Swal.fire({
                 toast: true,

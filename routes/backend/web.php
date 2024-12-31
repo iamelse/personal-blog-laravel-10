@@ -18,7 +18,7 @@ use App\Http\Controllers\Backend\Resume\TechnicalSkillController;
 use App\Http\Controllers\Backend\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['auth', 'share.notifications']], function () {
     Route::prefix('backend')->group(function () {
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
         Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
@@ -151,5 +151,15 @@ Route::group(['middleware' => ['auth']], function () {
         Route::prefix('details')->group(function () {
             Route::get('/information', [InformationController::class, 'index'])->middleware(['can:view_information'])->name('information.index');
         });
+
+        Route::post('/notifications/{id}/mark-as-read', function ($id) {
+            $notification = auth()->user()->notifications()->findOrFail($id);
+            if ($notification->read_at === null) {
+                $notification->markAsRead();
+            }
+        
+            return response()->json(['success' => true]);
+        })->name('notifications.mark.as.read');                
+           
     });
 });
