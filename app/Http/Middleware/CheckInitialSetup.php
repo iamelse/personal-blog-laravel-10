@@ -11,10 +11,6 @@ class CheckInitialSetup
 {
     public function handle(Request $request, Closure $next)
     {
-        if (env('SETUP_ENABLED', false) === false) {
-            abort(404);
-        }
-
         try {
             $tableNames = DB::connection()->getDoctrineSchemaManager()->listTableNames();
             $usersTable = DB::table('users')->get();
