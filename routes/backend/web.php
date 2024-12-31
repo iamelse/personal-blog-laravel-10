@@ -161,15 +161,5 @@ Route::group(['middleware' => ['auth', 'share.notifications']], function () {
         
             return response()->json(['success' => true]);
         })->name('notifications.mark.as.read');
-        
-        Route::get('/refresh-database', function () {
-            try {
-                Artisan::call('migrate:fresh', ['--seed' => true, '--force' => true]);
-                return response()->json(['message' => 'Database refreshed and seeded successfully.'], 200);
-            } catch (\Exception $e) {
-                return response()->json(['error' => $e->getMessage()], 500);
-            }
-        });
-           
     });
 });
