@@ -207,14 +207,35 @@ unset($__errorArgs, $__bag); ?>
 
 <?php $__env->startPush('scripts'); ?>
 <script>
-    document.getElementById('selectAll').addEventListener('click', function() {
-        const checkboxes = document.querySelectorAll('input[name="ids[]"]');
+    const selectAllCheckbox = document.getElementById('selectAll');
+    const checkboxes = document.querySelectorAll('input[name="ids[]"]');
+    const deleteButton = document.getElementById('deleteSelectedBtn');
+
+    // Toggle all checkboxes when "Select All" is clicked
+    selectAllCheckbox.addEventListener('click', function() {
         checkboxes.forEach(checkbox => checkbox.checked = this.checked);
+        toggleDeleteButton(); // Manually call the function to update the button state
     });
 
+    // Function to toggle the delete button
+    function toggleDeleteButton() {
+        const anyChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+        deleteButton.disabled = !anyChecked;
+    }
+
+    // Listen for individual checkbox changes
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', toggleDeleteButton);
+    });
+
+    // Initial state of the delete button
+    toggleDeleteButton();
+
+    // Mass delete logic
     function submitMassDestroy() {
-        const checkboxes = document.querySelectorAll('input[name="ids[]"]:checked');
-        const selectedIds = Array.from(checkboxes).map(checkbox => checkbox.value);
+        const selectedIds = Array.from(checkboxes)
+            .filter(checkbox => checkbox.checked)
+            .map(checkbox => checkbox.value);
 
         console.log("Selected IDs:", selectedIds);
 
@@ -238,21 +259,6 @@ unset($__errorArgs, $__bag); ?>
             form.submit();
         }
     }
-
-    const checkboxes = document.querySelectorAll('input[name="ids[]"]');
-    const deleteButton = document.getElementById('deleteSelectedBtn');
-
-    function toggleDeleteButton() {
-        const anyChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
-
-        deleteButton.disabled = !anyChecked;
-    }
-
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', toggleDeleteButton);
-    });
-
-    toggleDeleteButton();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
