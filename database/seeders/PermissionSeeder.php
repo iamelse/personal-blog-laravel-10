@@ -35,7 +35,7 @@ class PermissionSeeder extends Seeder
             'create_posts',
             'edit_posts',
             'destroy_posts',
-            'mass_destroy_posts',
+            //'mass_destroy_posts',
             'view_education',
             'create_education',
             'edit_education',

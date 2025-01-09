@@ -25,10 +25,6 @@
                                             New Post
                                         </a>
                                     <?php endif; ?>
-                            
-                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('mass_destroy_posts', $posts)): ?>
-                                        <button type="submit" class="btn btn-danger btn-sm" id="deleteSelectedBtn" onclick="submitMassDestroy()" disabled>Delete Selected</button>
-                                    <?php endif; ?>
                                 </div>
                             </div>                            
                             <div class="row">
@@ -107,88 +103,76 @@ unset($__errorArgs, $__bag); ?>
                         </div>                         
                         <div class="card-body">
                             <!-- Table with outer spacing -->
-                            <form id="massDestroyForm" method="POST" action="<?php echo e(route('post.mass.destroy')); ?>">
-                                <?php echo csrf_field(); ?>
-                                <?php echo method_field('DELETE'); ?>
-                                
-                                <div class="table-responsive">
-                                    <table class="table table-lg">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">
-                                                    <input type="checkbox" class="form-check-input" id="selectAll">
-                                                </th>
-                                                <th>No.</th>
-                                                <th>Cover</th>
-                                                <th>Category</th>
-                                                <th>Author</th>
-                                                <th>Post Title</th>
-                                                <th>Slug</th>
-                                                <th>Status</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php $__empty_1 = true; $__currentLoopData = $posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                                            <tr>
-                                                <td>
-                                                    <input type="checkbox" class="form-check-input" name="ids[]" value="<?php echo e($post->id); ?>">
-                                                </td>
-                                                <td class="text-bold-500"><?php echo e($loop->iteration); ?></td>
-                                                <td>
-                                                    <img src="<?php echo e(getPostCoverImage($post)); ?>" class="rounded-3" style="width: 100px; height: 100px; object-fit: cover;">
-                                                </td>
-                                                <td class="text-bold-500"><?php echo e($post->category->name ?? ''); ?></td>
-                                                <td class="text-bold-500"><?php echo e($post?->author?->name); ?></td>
-                                                <td class="text-bold-500"><?php echo e($post->title ?? ''); ?></td>
-                                                <td class="text-bold-500"><?php echo e($post->slug ?? ''); ?></td>
-                                                <?php
-                                                    $status = $post->status;
-                                                ?>
+                            <div class="table-responsive">
+                                <table class="table table-lg">
+                                    <thead>
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>Cover</th>
+                                            <th>Category</th>
+                                            <th>Author</th>
+                                            <th>Post Title</th>
+                                            <th>Slug</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php $__empty_1 = true; $__currentLoopData = $posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                        <tr>
+                                            <td class="text-bold-500"><?php echo e($loop->iteration); ?></td>
+                                            <td>
+                                                <img src="<?php echo e(getPostCoverImage($post)); ?>" class="rounded-3" style="width: 100px; height: 100px; object-fit: cover;">
+                                            </td>
+                                            <td class="text-bold-500"><?php echo e($post->category->name ?? ''); ?></td>
+                                            <td class="text-bold-500"><?php echo e($post?->author?->name); ?></td>
+                                            <td class="text-bold-500"><?php echo e($post->title ?? ''); ?></td>
+                                            <td class="text-bold-500"><?php echo e($post->slug ?? ''); ?></td>
+                                            <?php
+                                                $status = $post->status;
+                                            ?>
 
-                                                <td class="text-bold-500">
-                                                    <?php switch($status):
-                                                        case (\App\Enums\PostStatus::DRAFT->value): ?>
-                                                            <span class="badge rounded-pill bg-secondary">Draft</span>
-                                                            <?php break; ?>
+                                            <td class="text-bold-500">
+                                                <?php switch($status):
+                                                    case (\App\Enums\PostStatus::DRAFT->value): ?>
+                                                        <span class="badge rounded-pill bg-secondary">Draft</span>
+                                                        <?php break; ?>
 
-                                                        <?php case (\App\Enums\PostStatus::SCHEDULED->value): ?>
-                                                            <span class="badge rounded-pill bg-warning text-dark">Scheduled</span>
-                                                            <?php break; ?>
+                                                    <?php case (\App\Enums\PostStatus::SCHEDULED->value): ?>
+                                                        <span class="badge rounded-pill bg-warning text-dark">Scheduled</span>
+                                                        <?php break; ?>
 
-                                                        <?php case (\App\Enums\PostStatus::PUBLISHED->value): ?>
-                                                            <span class="badge rounded-pill bg-success">Published</span>
-                                                            <?php break; ?>
+                                                    <?php case (\App\Enums\PostStatus::PUBLISHED->value): ?>
+                                                        <span class="badge rounded-pill bg-success">Published</span>
+                                                        <?php break; ?>
 
-                                                        <?php default: ?>
-                                                            <span class="badge rounded-pill bg-light text-dark">Unknown</span>
-                                                    <?php endswitch; ?>
-                                                </td>
-                                                <td>
-                                                    <div style="display: flex; gap: 5px;">
-                                                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('edit_posts', $post)): ?>
-                                                        <a href="<?php echo e(route('post.edit', $post->id)); ?>" class="btn btn-sm btn-outline-warning">Edit</a>
-                                                        <?php endif; ?>
-                                                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('destroy_posts', $post)): ?>
-                                                        <form class="delete-single-form" method="POST" action="<?php echo e(route('post.destroy', $post->id)); ?>">
-                                                            <?php echo csrf_field(); ?>
-                                                            <?php echo method_field('DELETE'); ?>
-                                                            <button type="submit" class="btn btn-sm btn-outline-danger delete-btn">Delete</button>
-                                                        </form>
-                                                        <?php endif; ?>
-                                                    </div>
-                                                </td>                                                
-                                            </tr>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                                            <tr>
-                                                <td class="text-center" colspan="10">No Data</td>
-                                            </tr>
-                                            <?php endif; ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                
-                            </form>
+                                                    <?php default: ?>
+                                                        <span class="badge rounded-pill bg-light text-dark">Unknown</span>
+                                                <?php endswitch; ?>
+                                            </td>
+                                            <td>
+                                                <div style="display: flex; gap: 5px;">
+                                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('edit_posts', $post)): ?>
+                                                    <a href="<?php echo e(route('post.edit', $post->id)); ?>" class="btn btn-sm btn-outline-warning">Edit</a>
+                                                    <?php endif; ?>
+                                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('destroy_posts', $post)): ?>
+                                                    <form class="delete-single-form" method="POST" action="<?php echo e(route('post.destroy', $post->id)); ?>">
+                                                        <?php echo csrf_field(); ?>
+                                                        <?php echo method_field('DELETE'); ?>
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger delete-btn">Delete</button>
+                                                    </form>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </td>                                                
+                                        </tr>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                        <tr>
+                                            <td class="text-center" colspan="10">No Data</td>
+                                        </tr>
+                                        <?php endif; ?>
+                                    </tbody>
+                                </table>
+                            </div>
                             <!-- Pagination links -->
                             <div class="row">
                                 <div class="col-12 d-flex justify-content-end">
@@ -245,70 +229,6 @@ unset($__errorArgs, $__bag); ?>
                 });
             });
         });
-</script>
-
-<script>
-    const selectAllCheckbox = document.getElementById('selectAll');
-    const checkboxes = document.querySelectorAll('input[name="ids[]"]');
-    const deleteButton = document.getElementById('deleteSelectedBtn');
-
-    selectAllCheckbox.addEventListener('click', function() {
-        checkboxes.forEach(checkbox => checkbox.checked = this.checked);
-        toggleDeleteButton();
-    });
-
-    function toggleDeleteButton() {
-        const anyChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
-        deleteButton.disabled = !anyChecked;
-    }
-
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', toggleDeleteButton);
-    });
-
-    // Initial state of the delete button
-    toggleDeleteButton();
-
-    function submitMassDestroy() {
-        const selectedIds = Array.from(checkboxes)
-            .filter(checkbox => checkbox.checked)
-            .map(checkbox => checkbox.value);
-
-        console.log("Selected IDs:", selectedIds);
-
-        if (selectedIds.length === 0) {
-            alert("Please select at least one post to delete.");
-            return;
-        }
-
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
-            customClass: {
-                confirmButton: 'btn btn-primary mx-1',
-                cancelButton: 'btn btn-danger mx-1'
-            },
-            buttonsStyling: false
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const form = document.getElementById('massDestroyForm');
-                form.querySelectorAll('input[name="ids[]"]').forEach(input => input.remove());
-
-                selectedIds.forEach(id => {
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = 'ids[]';
-                    input.value = id;
-                    form.appendChild(input);
-                });
-
-                form.submit();
-            }
-        });
-    }
 </script>
 
 <script>
