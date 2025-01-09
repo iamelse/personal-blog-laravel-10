@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Enums\EnumUserRole;
+use App\Enums\PostStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostStoreRequest;
 use App\Http\Requests\PostUpdateRequest;
 use App\Models\Post;
 use App\Models\PostCategory;
-use App\Repositories\PostRepository;
 use App\Services\ImageManagementService;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\JsonResponse;
@@ -22,7 +22,6 @@ class PostController extends Controller
 {
     public function __construct(
         protected ImageManagementService $imageManagementService,
-        protected PostRepository $postRepository
     ) {}
     
     public function checkSlug(Request $request): JsonResponse
@@ -41,7 +40,7 @@ class PostController extends Controller
             'columns' => ['title', 'slug']
         ];
         
-        $posts = $this->postRepository->getFilteredPosts($filters);
+        $posts = $this->getFilteredPosts($filters);
         $categories = PostCategory::all();
 
         activity('post_management')
@@ -70,14 +69,46 @@ class PostController extends Controller
     public function store(PostStoreRequest $request): RedirectResponse
     {
         try {
-            $post = $this->postRepository->store($request);
+            // Prepare the data for the post
+            $data = [
+                'post_category_id' => $request->post_category_id,
+                'title' => $request->title,
+                'slug' => $request->slug,
+                'body' => $request->content,
+                'user_id' => Auth::user()->id,
+                'published_at' => $request->published_at,
+                'status' => $this->determineStatus($request),
+            ];
 
+            // If a cover image is uploaded, handle it
+            if ($request->hasFile('cover')) {
+                $file = $request->file('cover');
+                $imagePath = $this->imageManagementService->uploadImage($file, [
+                    'disk' => env('FILESYSTEM_DISK'),
+                    'folder' => 'uploads/posts/covers',
+                ]);
+                $data['cover'] = $imagePath; // Assign the uploaded image path
+            }
+
+            // Assuming you are saving the post now:
+            Post::create($data);  // Save the post to the database
+
+            // Log the post creation activity
             activity('post_management')
                 ->causedBy(Auth::user())
-                ->log("Created post: {$post->title}");
+                ->log("Created post: {$request->title}");
 
+            // Redirect with success message
             return redirect()->route('post.index')->with('success', 'Post created successfully');
+            
         } catch (\Exception $e) {
+            // Log the exception for debugging purposes
+            Log::error('Error creating post: ' . $e->getMessage(), [
+                'exception' => $e,
+                'request' => $request->all(),
+            ]);
+
+            // Redirect with error message
             return redirect()->route('post.index')->with('error', 'Failed to create post: ' . $e->getMessage());
         }
     }
@@ -100,16 +131,56 @@ class PostController extends Controller
     public function update(PostUpdateRequest $request, Post $post): RedirectResponse
     {
         try {
+            // Authorize the user to update the post
             $this->_authorizePost($post);
 
-            $post = $this->postRepository->update($request, $post->id);
-            
+            // Prepare the data for the post update
+            $data = [
+                'post_category_id' => $request->post_category_id,
+                'title' => $request->title,
+                'slug' => $request->slug,
+                'body' => $request->content,
+                'published_at' => $request->published_at,
+                'status' => $this->determineStatus($request),
+            ];
+
+            // If a new cover image is uploaded, handle it
+            if ($request->hasFile('cover')) {
+                // Delete the old cover image if it exists
+                if ($post->cover) {
+                    $this->imageManagementService->destroyImage($post->cover);
+                }
+
+                // Upload the new cover image
+                $file = $request->file('cover');
+                $imagePath = $this->imageManagementService->uploadImage($file, [
+                    'disk' => env('FILESYSTEM_DISK'),
+                    'folder' => 'uploads/posts/covers',
+                ]);
+
+                // Assign the new image path to the post data
+                $data['cover'] = $imagePath;
+            }
+
+            // Update the post in the database
+            $post->update($data);
+
+            // Log the activity
             activity('post_management')
                 ->causedBy(Auth::user())
                 ->log("Updated post: {$post->title}");
-    
+
+            // Redirect with success message
             return redirect()->route('post.index')->with('success', 'Post updated successfully');
+            
         } catch (\Exception $e) {
+            // Log the exception for debugging purposes
+            Log::error('Error updating post: ' . $e->getMessage(), [
+                'exception' => $e,
+                'request' => $request->all(),
+            ]);
+
+            // Redirect with error message
             return redirect()->route('post.index')->with('error', 'Failed to update post: ' . $e->getMessage());
         }
     }
@@ -117,15 +188,17 @@ class PostController extends Controller
     public function destroy(Post $post): RedirectResponse
     {
         try {
+            $post = Post::findOrFail($post->id);
+
             $this->_authorizePost($post);
+            
+            $post->delete();
 
             $this->imageManagementService->destroyImage($post->cover);
 
             activity('post_management')
                 ->causedBy(Auth::user())
                 ->log("Deleted post: {$post->title}");
-
-            $this->postRepository->destroy($post->id);
 
             return redirect()->route('post.index')->with('success', 'Post deleted successfully');
         } catch (\Exception $e) {
@@ -171,5 +244,23 @@ class PostController extends Controller
             /** If not, it prevents access by aborting the request with a 404 status. */
             abort(404, 'Not found.');
         }
+    }
+
+    private function getFilteredPosts(array $filters)
+    {
+        $user = Auth::user();
+
+        if ($user->roles[0]->name === "Master") {
+            return Post::filter($filters);
+        } else {
+            return Post::where('user_id', $user->id)->filter($filters);
+        }
+    }
+
+    private function determineStatus($request): string
+    {
+        return $request->published_at && $request->published_at > now()
+            ? PostStatus::SCHEDULED->value
+            : PostStatus::PUBLISHED->value;
     }
 }
