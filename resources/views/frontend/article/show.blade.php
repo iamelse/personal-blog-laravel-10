@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
+    <link rel="icon" href="{{ asset('assets/favicon.png') }}" type="image/png">
+
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet' media="print" onload="this.media='all'">
 
     <!-- Font Awesome CSS loaded asynchronously -->
@@ -21,7 +23,11 @@
     <title>{{ $title ?? env('APP_NAME') }}</title>
 </head>
 
-<body>
+<body class="loading">
+
+    <!-- Loader -->
+    <div class="loader" id="loader"></div>
+
     <!-- Navbar -->
     @include('frontend.partials.navbar')
     <!-- End Navbar -->
@@ -137,6 +143,27 @@
         </div>
     </footer>
 
+    <script>
+        window.addEventListener('load', function () {
+            setTimeout(function () {
+                document.body.classList.remove('loading');
+                document.body.classList.add('loaded');
+            }, 2000);
+        });
+    </script>
+
+    <script>
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            
+            if (window.scrollY > 10) {
+                navbar.classList.add('shadow-sm');
+            } else {
+                navbar.classList.remove('shadow-sm');
+            }
+        });
+    </script>
+    
 </body>
 
 
