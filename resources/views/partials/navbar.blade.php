@@ -19,8 +19,7 @@
                         {{ $unreadCount }}
                     </span>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end notification-dropdown"
-                    aria-labelledby="dropdownMenuButton">
+                <ul class="dropdown-menu dropdown-menu-end notification-dropdown" id="notificationList" aria-labelledby="dropdownMenuButton">
                     <li class="dropdown-header">
                         <h6>Notifications</h6>
                     </li>

@@ -60,6 +60,18 @@
                               notificationItem.remove();
                            }
 
+                            // Check if no notifications are left
+                           const notificationList = document.getElementById('notificationList');
+                           if (!notificationList.querySelector('.notification-item')) {
+                              const noNotificationMessage = document.createElement('li');
+                              noNotificationMessage.classList.add('dropdown-item', 'notification-item');
+                              noNotificationMessage.innerHTML = `
+                                 <p class="text-center py-1 mb-0 notification-subtitle font-thin text-sm text-gray-500">
+                                       You are all set! No new notifications.
+                                 </p>`;
+                              notificationList.insertBefore(noNotificationMessage, notificationList.querySelector('.dropdown-header').nextSibling);
+                           }
+
                            // Debug: Check the URL before redirecting
                            console.log('Redirecting to URL:', notificationUrl);
 
