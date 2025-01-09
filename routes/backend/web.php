@@ -15,6 +15,7 @@ use App\Http\Controllers\Backend\Resume\EducationController;
 use App\Http\Controllers\Backend\Resume\ExperienceController;
 use App\Http\Controllers\Backend\Resume\LanguageSkillController;
 use App\Http\Controllers\Backend\Resume\TechnicalSkillController;
+use App\Http\Controllers\Backend\SocialMediaController;
 use App\Http\Controllers\Backend\UserController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -143,6 +144,15 @@ Route::group(['middleware' => ['auth', 'share.notifications']], function () {
             Route::post('/cache/routes', [DeveloperController::class, 'cacheRoutes'])->middleware(['can:view_developer'])->name('cache.routes');
             Route::post('/migrate/fresh/seed', [DeveloperController::class, 'databaseMigrateFreshAndSeed'])->middleware(['can:view_developer'])->name('database.migrate.fresh.seed');
             Route::post('/factory/code/run', [DeveloperController::class, 'factoryCodeRunner'])->middleware(['can:view_developer'])->name('factory.code.runner');
+        });
+
+        Route::prefix('social-media')->group(function () {
+            Route::get('/', [SocialMediaController::class, 'index'])->middleware(['can:view_social_media'])->name('social.media.index');
+            Route::get('create', [SocialMediaController::class, 'create'])->middleware(['can:create_social_media'])->name('social.media.create');
+            Route::post('store', [SocialMediaController::class, 'store'])->middleware(['can:create_social_media'])->name('social.media.store');
+            Route::get('edit/{socialMedia}', [SocialMediaController::class, 'edit'])->middleware(['can:edit_social_media'])->name('social.media.edit');
+            Route::put('update/{socialMedia}', [SocialMediaController::class, 'update'])->middleware(['can:edit_social_media'])->name('social.media.update');
+            Route::delete('destroy/{socialMedia}', [SocialMediaController::class, 'destroy'])->middleware(['can:destroy_social_media'])->name('social.media.destroy');
         });
 
         Route::prefix('log-activity')->group(function () {

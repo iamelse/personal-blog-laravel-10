@@ -8,17 +8,15 @@
         <div class="col-md-6 text-center text-lg-end text-md-end">
           <!-- Social Media Icons with Boxicons -->
           <ul class="list-inline">
+          <?php $__empty_1 = true; $__currentLoopData = $socialMedias; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $socialMedia): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
             <li class="list-inline-item">
-              <a href="#" target="_blank" title="Facebook">
-                <i class='bx bxl-facebook l-text-p bx-sm text l-text-primary'></i>
+              <a href="<?php echo e($socialMedia->url); ?>" target="_blank" title="<?php echo e($socialMedia->name); ?>">
+                <i class='<?php echo strtolower($socialMedia->icon); ?> l-text-p bx-sm text l-text-primary'></i>
               </a>
             </li>
-            <li class="list-inline-item">
-              <a href="#" target="_blank" title="Instagram">
-                <i class='bx bxl-instagram l-text-p bx-sm text l-text-primary'></i>
-              </a>
-            </li>
-            <!-- Add more social media icons as needed -->
+          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+              
+          <?php endif; ?>
           </ul>
         </div>
       </div>
