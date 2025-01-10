@@ -144,6 +144,18 @@ Route::group(['middleware' => ['auth', 'share.notifications']], function () {
             Route::post('/cache/routes', [DeveloperController::class, 'cacheRoutes'])->middleware(['can:view_developer'])->name('cache.routes');
             Route::post('/migrate/fresh/seed', [DeveloperController::class, 'databaseMigrateFreshAndSeed'])->middleware(['can:view_developer'])->name('database.migrate.fresh.seed');
             Route::post('/factory/code/run', [DeveloperController::class, 'factoryCodeRunner'])->middleware(['can:view_developer'])->name('factory.code.runner');
+
+            Route::get('/test-generate-sitemap', function () {
+                Artisan::call('generate-sitemap');
+                return response()->json(['message' => 'Sitemap generated successfully']);
+            });
+            
+            Route::get('/optimize-clear', function(){
+                Artisan::call('optimize:clear');
+                Artisan::call('cache:clear');
+                Artisan::call('view:clear');
+                echo 'Cache cleared successfully!';
+            });
         });
 
         Route::prefix('social-media')->group(function () {

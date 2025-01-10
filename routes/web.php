@@ -48,17 +48,5 @@ Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth',
     \UniSharp\LaravelFilemanager\Lfm::routes();
 });
 
-Route::get('/test-generate-sitemap', function () {
-    Artisan::call('generate-sitemap');
-    return response()->json(['message' => 'Sitemap generated successfully']);
-});
-
-Route::get('/optimize-clear', function(){
-    Artisan::call('optimize:clear');
-    Artisan::call('cache:clear');
-    Artisan::call('view:clear');
-    echo 'Cache cleared successfully!';
-});
-
 include __DIR__.'/backend/web.php';
 include __DIR__.'/frontend/web.php';
