@@ -119,8 +119,7 @@
                             </div>
                             <div class="card-body">
                                 <p class="text-muted mt-3" style="font-size: 0.95rem;">
-                                    Complete the fields below to ensure your post is properly formatted, categorized, and scheduled. 
-                                    This helps enhance user engagement and ensures better discoverability in search results.
+                                    Fill in the fields below to optimize your post for search engines and improve its visibility.
                                 </p>
 
                                 <!-- Meta Title Field -->
