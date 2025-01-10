@@ -52,7 +52,7 @@
                                         </span>
                                     @enderror
                                 </div>
-                            
+
                                 <div class="form-group mb-3 mandatory">
                                     <label class="form-label">Categories</label>
                                     <select class="form-select @error('post_category_id') is-invalid @enderror" name="post_category_id" id="selectPostCategory">
@@ -70,10 +70,60 @@
                                     @enderror
                                 </div>
                             
+                                <div class="form-group mb-3 mandatory">
+                                    <label class="form-label">Post Status</label>
+                                    <select class="form-select @error('status') is-invalid @enderror" name="status">
+                                        <option value="">--Select post status--</option>
+                                        @foreach (['published', 'archive', 'draft'] as $status)
+                                            <option value="{{ $status }}" {{ old('status', $post->status) == $status ? 'selected' : '' }}>
+                                                {{ ucfirst($status) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('status')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>                                
+                            
                                 <div class="form-group mandatory mb-3">
                                     <label class="form-label">Content</label>
                                     <textarea id="editor" class="form-control @error('content') is-invalid @enderror" name="content" rows="10" cols="50">{{ old('content', $post->body) }}</textarea>
                                     @error('content')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Meta Title</label>
+                                    <input type="text" class="form-control @error('seo_title') is-invalid @enderror" placeholder="Meta Title" name="seo_title" value="{{ old('seo_title', $post->seo->seo_title ?? '') }}"/>
+                                    <small class="form-text text-muted">* The meta title is what appears in the browser tab and search engine results. If left empty, the post title will be used instead. Keep it under 60 characters for optimal display in search results.</small>
+                                    @error('seo_title')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Meta Description</label>
+                                    <textarea class="form-control @error('seo_description') is-invalid @enderror" placeholder="Meta Description" name="seo_description" rows="3">{{ old('seo_description', $post->seo->seo_description ?? '') }}</textarea>
+                                    <small class="form-text text-muted">* The meta description appears under the title in search results. Write a compelling description, summarizing the content in under 160 characters. If left empty, the first part of the post content will be used.</small>
+                                    @error('seo_description')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Meta Keywords</label>
+                                    <input type="text" class="form-control @error('seo_keywords') is-invalid @enderror" placeholder="Meta Keywords" name="seo_keywords" value="{{ old('seo_keywords', $post->seo->seo_keywords ?? '') }}"/>
+                                    <small class="form-text text-muted">* Keywords help search engines understand the content of your post. Separate each keyword with a comma. For example: "SEO, Laravel, web development". Avoid overstuffing, and focus on relevant terms.</small>
+                                    @error('seo_keywords')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>

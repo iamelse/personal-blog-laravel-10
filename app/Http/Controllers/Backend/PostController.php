@@ -9,12 +9,14 @@ use App\Http\Requests\PostStoreRequest;
 use App\Http\Requests\PostUpdateRequest;
 use App\Models\Post;
 use App\Models\PostCategory;
+use App\Models\Seo;
 use App\Services\ImageManagementService;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
@@ -70,28 +72,40 @@ class PostController extends Controller
     {
         try {
             // Prepare the data for the post
-            $data = [
+            $post = [
                 'post_category_id' => $request->post_category_id,
                 'title' => $request->title,
                 'slug' => $request->slug,
                 'body' => $request->content,
                 'user_id' => Auth::user()->id,
                 'published_at' => $request->published_at,
-                'status' => $this->determineStatus($request),
+                'status' => $this->determineStatus($request)
             ];
 
-            // If a cover image is uploaded, handle it
+            $post_seo = [
+                'seo_title' => $request->seo_title,
+                'seo_description' => $request->seo_description,
+                'seo_keywords' => $request->seo_keywords,
+            ];
+
+            // If a new cover image is uploaded, handle it
             if ($request->hasFile('cover')) {
+                // Upload the new cover image
                 $file = $request->file('cover');
                 $imagePath = $this->imageManagementService->uploadImage($file, [
                     'disk' => env('FILESYSTEM_DISK'),
                     'folder' => 'uploads/posts/covers',
                 ]);
-                $data['cover'] = $imagePath; // Assign the uploaded image path
+
+                // Assign the new image path to the post data
+                $post['cover'] = $imagePath;
             }
 
-            // Assuming you are saving the post now:
-            Post::create($data);  // Save the post to the database
+            DB::transaction(function () use ($post, $post_seo) {
+                $createdPost = Post::create($post);
+                $post_seo['post_id'] = $createdPost->id;
+                Seo::create($post_seo);
+            });          
 
             // Log the post creation activity
             activity('post_management')
@@ -123,7 +137,7 @@ class PostController extends Controller
 
         return view('backend.article.edit', [
             'title' => 'Edit Post',
-            'post' => $post,
+            'post' => Post::with('seo')->findOrFail($post->id),
             'categories' => PostCategory::all()
         ]);
     }
@@ -134,7 +148,6 @@ class PostController extends Controller
             // Authorize the user to update the post
             $this->_authorizePost($post);
 
-            // Prepare the data for the post update
             $data = [
                 'post_category_id' => $request->post_category_id,
                 'title' => $request->title,
@@ -142,6 +155,12 @@ class PostController extends Controller
                 'body' => $request->content,
                 'published_at' => $request->published_at,
                 'status' => $this->determineStatus($request),
+            ];
+
+            $seoData = [
+                'seo_title' => $request->seo_title,
+                'seo_description' => $request->seo_description,
+                'seo_keywords' => $request->seo_keywords,
             ];
 
             // If a new cover image is uploaded, handle it
@@ -162,8 +181,20 @@ class PostController extends Controller
                 $data['cover'] = $imagePath;
             }
 
-            // Update the post in the database
-            $post->update($data);
+            // Update the post and its SEO data in the database
+            DB::transaction(function () use ($post, $request) {
+                $post->update($request->only([
+                    'post_category_id',
+                    'title',
+                    'slug',
+                    'body',
+                    'published_at',
+                    'status',
+                ]));
+            
+                $seoData = $request->only(['seo_title', 'seo_description', 'seo_keywords']);
+                $post->seo()->updateOrCreate(['post_id' => $post->id], $seoData);
+            });            
 
             // Log the activity
             activity('post_management')

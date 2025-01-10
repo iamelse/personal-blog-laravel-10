@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
+    <!-- Dynamic Meta Tags -->
+    <meta name="title" content="<?php echo e($post->seo->seo_title ?? $post->title); ?>">
+    <meta name="description" content="<?php echo e($post->seo->seo_description ?? Str::limit(strip_tags($post->body), 150)); ?>">
+    <meta name="keywords" content="<?php echo e(isset($post->seo->seo_keywords) ? Str::of($post->seo->seo_keywords)->lower()->replaceMatches('/\s*,\s*/', ',')->trim(',')->title() : ''); ?>">
+    <meta name="author" content="<?php echo e($post->author->name); ?>">
+    <meta name="category" content="<?php echo e($post->category->name); ?>">
+
     <link rel="icon" href="<?php echo e(asset('assets/favicon.png')); ?>" type="image/png">
 
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet' media="print" onload="this.media='all'">
@@ -20,7 +27,8 @@
     <!-- Defer non-critical JS (app2.js) to avoid blocking rendering -->
     <script src="<?php echo e(asset('assets/export-vite/js/app2.js')); ?>" defer></script>
 
-    <title><?php echo e($title ?? env('APP_NAME')); ?></title>
+    <!-- Dynamic Title -->
+    <title><?php echo e($post->title ?? $title ?? env('APP_NAME')); ?></title>
 </head>
 
 <body class="loading">
@@ -118,32 +126,9 @@
     </main>
     <!-- End main content -->
 
-    <footer>
-        <div class="container mt-4">
-          <hr class="card-hr">
-          <div class="row py-4">
-            <div class="col-md-6">
-              <p class="text l-text-p l-card-text">Copyright © Iamelse. All rights reserved.</p>
-            </div>
-            <div class="col-md-6 text-md-end">
-              <!-- Social Media Icons with Boxicons -->
-              <ul class="list-inline">
-                <li class="list-inline-item">
-                  <a href="#" target="_blank" title="Facebook">
-                    <i class='bx bxl-facebook l-text-p bx-sm text l-text-primary'></i>
-                  </a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="#" target="_blank" title="Instagram">
-                    <i class='bx bxl-instagram l-text-p bx-sm text l-text-primary'></i>
-                  </a>
-                </li>
-                <!-- Add more social media icons as needed -->
-              </ul>
-            </div>
-          </div>
-        </div>
-    </footer>
+    <!-- Footer -->
+    <?php echo $__env->make('frontend.partials.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <!-- End Footer -->
 
     <script>
         window.addEventListener('load', function () {

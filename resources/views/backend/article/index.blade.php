@@ -134,6 +134,10 @@
                                                         <span class="badge rounded-pill bg-success">Published</span>
                                                         @break
 
+                                                    @case(\App\Enums\PostStatus::ARCHIVE->value)
+                                                        <span class="badge rounded-pill bg-info">Archived</span>
+                                                        @break
+
                                                     @default
                                                         <span class="badge rounded-pill bg-light text-dark">Unknown</span>
                                                 @endswitch

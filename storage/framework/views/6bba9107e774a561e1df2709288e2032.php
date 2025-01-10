@@ -146,6 +146,10 @@ unset($__errorArgs, $__bag); ?>
                                                         <span class="badge rounded-pill bg-success">Published</span>
                                                         <?php break; ?>
 
+                                                    <?php case (\App\Enums\PostStatus::ARCHIVE->value): ?>
+                                                        <span class="badge rounded-pill bg-info">Archived</span>
+                                                        <?php break; ?>
+
                                                     <?php default: ?>
                                                         <span class="badge rounded-pill bg-light text-dark">Unknown</span>
                                                 <?php endswitch; ?>

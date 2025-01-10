@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
+    <!-- Dynamic Meta Tags -->
+    <meta name="title" content="{{ $post->seo->seo_title ?? $post->title }}">
+    <meta name="description" content="{{ $post->seo->seo_description ?? Str::limit(strip_tags($post->body), 150) }}">
+    <meta name="keywords" content="{{ isset($post->seo->seo_keywords) ? Str::of($post->seo->seo_keywords)->lower()->replaceMatches('/\s*,\s*/', ',')->trim(',')->title() : '' }}">
+    <meta name="author" content="{{ $post->author->name }}">
+    <meta name="category" content="{{ $post->category->name }}">
+
     <link rel="icon" href="{{ asset('assets/favicon.png') }}" type="image/png">
 
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet' media="print" onload="this.media='all'">
@@ -20,7 +27,8 @@
     <!-- Defer non-critical JS (app2.js) to avoid blocking rendering -->
     <script src="{{ asset('assets/export-vite/js/app2.js') }}" defer></script>
 
-    <title>{{ $title ?? env('APP_NAME') }}</title>
+    <!-- Dynamic Title -->
+    <title>{{ $post->title ?? $title ?? env('APP_NAME') }}</title>
 </head>
 
 <body class="loading">
