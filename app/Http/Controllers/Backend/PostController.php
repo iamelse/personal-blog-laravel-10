@@ -154,13 +154,7 @@ class PostController extends Controller
                 'slug' => $request->slug,
                 'body' => $request->content,
                 'published_at' => $request->published_at,
-                'status' => $this->determineStatus($request),
-            ];
-
-            $seoData = [
-                'seo_title' => $request->seo_title,
-                'seo_description' => $request->seo_description,
-                'seo_keywords' => $request->seo_keywords,
+                'status' => $request->status,
             ];
 
             // If a new cover image is uploaded, handle it
