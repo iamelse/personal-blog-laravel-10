@@ -13,6 +13,9 @@
     <meta name="author" content="{{ $post->author ? $post->author->name : '' }}">
     <meta name="category" content="{{ $post->category ? $post->category->name : '' }}">
 
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ url()->current() }}">
+
     <!-- Open Graph -->
     <meta property="og:title" content="{{ $post->seo && $post->seo->seo_title ? $post->seo->seo_title : $post->title }}">
     <meta property="og:description" content="{{ $post->seo && $post->seo->seo_description ? $post->seo->seo_description : Str::limit(strip_tags($post->body), 150) }}">
