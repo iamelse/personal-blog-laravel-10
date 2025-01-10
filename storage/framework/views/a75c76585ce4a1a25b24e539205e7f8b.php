@@ -7,11 +7,24 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <!-- Dynamic Meta Tags -->
-    <meta name="title" content="<?php echo e($post->seo->seo_title ?? $post->title); ?>">
-    <meta name="description" content="<?php echo e($post->seo->seo_description ?? Str::limit(strip_tags($post->body), 150)); ?>">
-    <meta name="keywords" content="<?php echo e(isset($post->seo->seo_keywords) ? Str::of($post->seo->seo_keywords)->lower()->replaceMatches('/\s*,\s*/', ',')->trim(',')->title() : ''); ?>">
-    <meta name="author" content="<?php echo e($post->author->name); ?>">
-    <meta name="category" content="<?php echo e($post->category->name); ?>">
+    <meta name="title" content="<?php echo e($post->seo && $post->seo->seo_title ? $post->seo->seo_title : $post->title); ?>">
+    <meta name="description" content="<?php echo e($post->seo && $post->seo->seo_description ? $post->seo->seo_description : Str::limit(strip_tags($post->body), 150)); ?>">
+    <meta name="keywords" content="<?php echo e($post->seo && $post->seo->seo_keywords ? Str::of($post->seo->seo_keywords)->lower()->replaceMatches('/\s*,\s*/', ',')->trim(',')->title() : ''); ?>">
+    <meta name="author" content="<?php echo e($post->author ? $post->author->name : ''); ?>">
+    <meta name="category" content="<?php echo e($post->category ? $post->category->name : ''); ?>">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="<?php echo e($post->seo && $post->seo->seo_title ? $post->seo->seo_title : $post->title); ?>">
+    <meta property="og:description" content="<?php echo e($post->seo && $post->seo->seo_description ? $post->seo->seo_description : Str::limit(strip_tags($post->body), 150)); ?>">
+    <meta property="og:image" content="<?php echo e(getPostCoverImage($post)); ?>">
+    <meta property="og:url" content="<?php echo e(url()->current()); ?>">
+    <meta property="og:type" content="article">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<?php echo e($post->seo && $post->seo->seo_title ? $post->seo->seo_title : $post->title); ?>">
+    <meta name="twitter:description" content="<?php echo e($post->seo && $post->seo->seo_description ? $post->seo->seo_description : Str::limit(strip_tags($post->body), 150)); ?>">
+    <meta name="twitter:image" content="<?php echo e(getPostCoverImage($post)); ?>">
 
     <link rel="icon" href="<?php echo e(asset('assets/favicon.png')); ?>" type="image/png">
 

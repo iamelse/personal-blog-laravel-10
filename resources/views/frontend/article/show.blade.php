@@ -7,11 +7,24 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <!-- Dynamic Meta Tags -->
-    <meta name="title" content="{{ $post->seo->seo_title ?? $post->title }}">
-    <meta name="description" content="{{ $post->seo->seo_description ?? Str::limit(strip_tags($post->body), 150) }}">
-    <meta name="keywords" content="{{ isset($post->seo->seo_keywords) ? Str::of($post->seo->seo_keywords)->lower()->replaceMatches('/\s*,\s*/', ',')->trim(',')->title() : '' }}">
-    <meta name="author" content="{{ $post->author->name }}">
-    <meta name="category" content="{{ $post->category->name }}">
+    <meta name="title" content="{{ $post->seo && $post->seo->seo_title ? $post->seo->seo_title : $post->title }}">
+    <meta name="description" content="{{ $post->seo && $post->seo->seo_description ? $post->seo->seo_description : Str::limit(strip_tags($post->body), 150) }}">
+    <meta name="keywords" content="{{ $post->seo && $post->seo->seo_keywords ? Str::of($post->seo->seo_keywords)->lower()->replaceMatches('/\s*,\s*/', ',')->trim(',')->title() : '' }}">
+    <meta name="author" content="{{ $post->author ? $post->author->name : '' }}">
+    <meta name="category" content="{{ $post->category ? $post->category->name : '' }}">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="{{ $post->seo && $post->seo->seo_title ? $post->seo->seo_title : $post->title }}">
+    <meta property="og:description" content="{{ $post->seo && $post->seo->seo_description ? $post->seo->seo_description : Str::limit(strip_tags($post->body), 150) }}">
+    <meta property="og:image" content="{{ getPostCoverImage($post) }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:type" content="article">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $post->seo && $post->seo->seo_title ? $post->seo->seo_title : $post->title }}">
+    <meta name="twitter:description" content="{{ $post->seo && $post->seo->seo_description ? $post->seo->seo_description : Str::limit(strip_tags($post->body), 150) }}">
+    <meta name="twitter:image" content="{{ getPostCoverImage($post) }}">
 
     <link rel="icon" href="{{ asset('assets/favicon.png') }}" type="image/png">
 
