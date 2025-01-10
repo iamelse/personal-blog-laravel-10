@@ -11,7 +11,7 @@
         var(--_c) bottom;
     background-size: 12px 12px;
     animation: spin-breathe 1.5s infinite ease-in-out; /* Unified animation for spinning and breathing */
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%); /* Center the loader */
