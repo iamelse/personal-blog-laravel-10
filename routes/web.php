@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Backend\InitialSetupController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -45,6 +46,11 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth', 'can:go_to_laravel_filemanager'], 'as' => 'laravel-filemanager.'], function () {
     \UniSharp\LaravelFilemanager\Lfm::routes();
+});
+
+Route::get('/test-generate-sitemap', function () {
+    Artisan::call('generate-sitemap');
+    return response()->json(['message' => 'Sitemap generated successfully']);
 });
 
 include __DIR__.'/backend/web.php';
