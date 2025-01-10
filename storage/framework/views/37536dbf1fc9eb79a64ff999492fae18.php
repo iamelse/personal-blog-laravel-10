@@ -1,12 +1,6 @@
 <?php
-    if (!function_exists('isActive')) {
-        function isActive($url, $exact = false) {
-            if ($exact) {
-                return request()->is(trim($url, '/'));
-            } else {
-                return request()->is(trim($url, '/') . '*');
-            }
-        }
+    function isActive($url) {
+        return request()->is(trim($url, '/')) || request()->is(trim($url, '/') . '/*');
     }
     
     $sidebarMenuLists = [
@@ -29,8 +23,8 @@
             ],
         ],
         'Article Tab' => [
-            ['url' => 'backend/post-category', 'icon' => 'bx-sm bx bx-category', 'label' => 'Category', 'permission' => 'view_post_categories', 'new_tab' => false, 'exact' => true], // Use 'exact' for Category
-            ['url' => 'backend/post', 'icon' => 'bx-sm bx bx-news', 'label' => 'Post', 'permission' => 'view_posts', 'new_tab' => false, 'exact' => true], // Use 'exact' for Post
+            ['url' => 'backend/post-category', 'icon' => 'bx-sm bx bx-category', 'label' => 'Category', 'permission' => 'view_post_categories', 'new_tab' => true, 'exact' => false],
+            ['url' => 'backend/post', 'icon' => 'bx-sm bx bx-news', 'label' => 'Post', 'permission' => 'view_posts', 'new_tab' => false, 'exact' => false],
         ],
         'Files' => [
             ['url' => '/laravel-filemanager', 'icon' => 'bx-sm bx bx-file', 'label' => 'Laravel File Manager', 'permission' => 'go_to_laravel_filemanager', 'new_tab' => true],
