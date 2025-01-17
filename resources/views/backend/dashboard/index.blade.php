@@ -187,6 +187,7 @@
                         </div>
                         <div class="card-body">
                             <div id="chart-post-view"></div>
+                            <p id="no-data-post-view" class="d-none text-center text-muted">No Data</p>
                         </div>
                     </div>
                 </section>
@@ -236,50 +237,57 @@
                     <section class="section">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Countries</h4>
-                            </div>
-                            <div class="card-body">
-                                <div id="chart-visitor-countries"></div>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-                <div class="col-lg-6">
-                    <section class="section">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>Browsers</h4>
-                            </div>
-                            <div class="card-body">
-                                <div id="chart-visitor-browsers"></div>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-                <div class="col-lg-6">
-                    <section class="section">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>Devices</h4>
-                            </div>
-                            <div class="card-body">
-                                <div id="chart-visitor-devices"></div>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-                <div class="col-lg-6">
-                    <section class="section">
-                        <div class="card">
-                            <div class="card-header">
                                 <h4>Operating Systems</h4>
                             </div>
                             <div class="card-body">
                                 <div id="chart-visitor-os"></div>
+                                <p id="no-data-visitor-os" class="d-none text-center text-muted">No Data</p>
                             </div>
                         </div>
                     </section>
                 </div>
+                
+                <div class="col-lg-6">
+                    <section class="section">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Visitor Countries</h4>
+                            </div>
+                            <div class="card-body">
+                                <div id="chart-visitor-countries"></div>
+                                <p id="no-data-visitor-countries" class="d-none text-center text-muted">No Data</p>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                
+                <div class="col-lg-6">
+                    <section class="section">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Visitor Browsers</h4>
+                            </div>
+                            <div class="card-body">
+                                <div id="chart-visitor-browsers"></div>
+                                <p id="no-data-visitor-browsers" class="d-none text-center text-muted">No Data</p>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                
+                <div class="col-lg-6">
+                    <section class="section">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Visitor Devices</h4>
+                            </div>
+                            <div class="card-body">
+                                <div id="chart-visitor-devices"></div>
+                                <p id="no-data-visitor-devices" class="d-none text-center text-muted">No Data</p>
+                            </div>
+                        </div>
+                    </section>
+                </div>          
             </div>
         @endif
     </div>
@@ -290,71 +298,90 @@
 <script src="{{ asset('assets/extensions/apexcharts/apexcharts.min.js') }}"></script>
 
 <script>
-    const labels = @json($labels) || [];
-    const data = @json($data) || [];
-    const colors = @json($colors) || [];
+    function toggleChartVisibility(dataSeries, chartSelector, messageSelector) {
+        const chartContainer = document.querySelector(chartSelector);
+        const messageContainer = document.querySelector(messageSelector);
 
-    const optionsPostView = {
-        chart: { type: 'bar', height: 300 },
-        series: [{ name: 'Views', data: data }],
-        xaxis: { categories: labels },
-        colors: colors
-    };
-
-    const historycalVisitorCountries = @json($historycalVisitorCountries) || {};
-    const optionsVisitorCountries = {
-        chart: { type: 'donut', width: '100%', height: '350px' },
-        series: historycalVisitorCountries.series || [],
-        labels: historycalVisitorCountries.labels || [],
-        colors: historycalVisitorCountries.colors || [],
-        legend: { position: 'bottom' },
-        plotOptions: { pie: { donut: { size: '30%' } } }
-    };
-
-    const historycalVisitorBrowsers = @json($historycalVisitorBrowsers) || {};
-    const optionsVisitorBrowsers = {
-        chart: { type: 'donut', width: '100%', height: '350px' },
-        series: historycalVisitorBrowsers.series || [],
-        labels: historycalVisitorBrowsers.labels || [],
-        colors: historycalVisitorBrowsers.colors || [],
-        legend: { position: 'bottom' },
-        plotOptions: { pie: { donut: { size: '30%' } } }
-    };
-
-    // New data for devices
-    const historycalVisitorDevices = @json($historycalVisitorDevices) || {};
-    const optionsVisitorDevices = {
-        chart: { type: 'donut', width: '100%', height: '350px' },
-        series: historycalVisitorDevices.series || [],
-        labels: historycalVisitorDevices.labels || [],
-        colors: historycalVisitorDevices.colors || [],
-        legend: { position: 'bottom' },
-        plotOptions: { pie: { donut: { size: '30%' } } }
-    };
-
-    // New data for operating systems
-    const historycalVisitorOS = @json($historycalVisitorOS) || {};
-    const optionsVisitorOS = {
-        chart: { type: 'donut', width: '100%', height: '350px' },
-        series: historycalVisitorOS.series || [],
-        labels: historycalVisitorOS.labels || [],
-        colors: historycalVisitorOS.colors || [],
-        legend: { position: 'bottom' },
-        plotOptions: { pie: { donut: { size: '30%' } } }
-    };
+        if (!dataSeries || !dataSeries.some(value => value > 0)) {
+            chartContainer.classList.add('d-none');
+            messageContainer.classList.remove('d-none');
+        } else {
+            chartContainer.classList.remove('d-none');
+            messageContainer.classList.add('d-none');
+        }
+    }
 
     document.addEventListener('DOMContentLoaded', function () {
-        const chartPostView = new ApexCharts(document.querySelector('#chart-post-view'), optionsPostView);
-        const chartVisitorCountries = new ApexCharts(document.querySelector('#chart-visitor-countries'), optionsVisitorCountries);
-        const chartVisitorBrowsers = new ApexCharts(document.querySelector('#chart-visitor-browsers'), optionsVisitorBrowsers);
-        const chartVisitorDevices = new ApexCharts(document.querySelector('#chart-visitor-devices'), optionsVisitorDevices);
-        const chartVisitorOS = new ApexCharts(document.querySelector('#chart-visitor-os'), optionsVisitorOS);
-        
-        chartPostView.render();
-        chartVisitorCountries.render();
-        chartVisitorBrowsers.render();
-        chartVisitorDevices.render();
-        chartVisitorOS.render();
+        const charts = [
+            {
+                dataSeries: @json($data) || [],
+                chartSelector: '#chart-post-view',
+                messageSelector: '#no-data-post-view',
+                options: {
+                    chart: { type: 'bar', height: 300 },
+                    series: [{ name: 'Views', data: @json($data) || [] }],
+                    xaxis: { categories: @json($labels) || [] },
+                    colors: @json($colors) || []
+                }
+            },
+            {
+                dataSeries: @json($historycalVisitorCountries['series']) || [],
+                chartSelector: '#chart-visitor-countries',
+                messageSelector: '#no-data-visitor-countries',
+                options: {
+                    chart: { type: 'donut', width: '100%', height: '350px' },
+                    series: @json($historycalVisitorCountries['series']) || [],
+                    labels: @json($historycalVisitorCountries['labels']) || [],
+                    colors: @json($historycalVisitorCountries['colors']) || [],
+                    legend: { position: 'bottom' },
+                    plotOptions: { pie: { donut: { size: '30%' } } }
+                }
+            },
+            {
+                dataSeries: @json($historycalVisitorBrowsers['series']) || [],
+                chartSelector: '#chart-visitor-browsers',
+                messageSelector: '#no-data-visitor-browsers',
+                options: {
+                    chart: { type: 'donut', width: '100%', height: '350px' },
+                    series: @json($historycalVisitorBrowsers['series']) || [],
+                    labels: @json($historycalVisitorBrowsers['labels']) || [],
+                    colors: @json($historycalVisitorBrowsers['colors']) || [],
+                    legend: { position: 'bottom' },
+                    plotOptions: { pie: { donut: { size: '30%' } } }
+                }
+            },
+            {
+                dataSeries: @json($historycalVisitorDevices['series']) || [],
+                chartSelector: '#chart-visitor-devices',
+                messageSelector: '#no-data-visitor-devices',
+                options: {
+                    chart: { type: 'donut', width: '100%', height: '350px' },
+                    series: @json($historycalVisitorDevices['series']) || [],
+                    labels: @json($historycalVisitorDevices['labels']) || [],
+                    colors: @json($historycalVisitorDevices['colors']) || [],
+                    legend: { position: 'bottom' },
+                    plotOptions: { pie: { donut: { size: '30%' } } }
+                }
+            },
+            {
+                dataSeries: @json($historycalVisitorOS['series']) || [],
+                chartSelector: '#chart-visitor-os',
+                messageSelector: '#no-data-visitor-os',
+                options: {
+                    chart: { type: 'donut', width: '100%', height: '350px' },
+                    series: @json($historycalVisitorOS['series']) || [],
+                    labels: @json($historycalVisitorOS['labels']) || [],
+                    colors: @json($historycalVisitorOS['colors']) || [],
+                    legend: { position: 'bottom' },
+                    plotOptions: { pie: { donut: { size: '30%' } } }
+                }
+            }
+        ];
+
+        charts.forEach(({ dataSeries, chartSelector, messageSelector, options }) => {
+            const chart = new ApexCharts(document.querySelector(chartSelector), options);
+            chart.render().then(() => toggleChartVisibility(dataSeries, chartSelector, messageSelector));
+        });
     });
 </script>
 

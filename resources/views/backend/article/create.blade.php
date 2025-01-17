@@ -6,8 +6,8 @@
             <div class="page-title">
                 <div class="row">
                     <div class="col-12 col-md-6 order-md-1 order-last">
-                        <h3>New Post</h3>
-                        <p class="text-subtitle text-muted">Create a new post with your content.</p>
+                        <h3>Create a New Post</h3>
+                        <p class="text-subtitle text-muted">Craft your content, categorize it, and schedule it for publication.</p>
                     </div>
                 </div>
             </div>            
@@ -15,47 +15,61 @@
 
         <div class="row match-height">
             <div class="col-12">
-                <div class="card">
+                <div class="card shadow-sm">
                     <div class="card-content">
-                        <div class="card-body">
-                            <form method="POST" action="{{ route('post.store') }}" enctype="multipart/form-data">
-                                @csrf
-
+                        
+                        <!-- Form Start -->
+                        <form method="POST" action="{{ route('post.store') }}" enctype="multipart/form-data">
+                            @csrf
+        
+                            <!-- Post Section -->
+                            <div class="card-header bg-light text-dark fw-bold rounded-top">
+                                Post Details
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted mt-3" style="font-size: 0.95rem;">
+                                    Complete the fields below to ensure your post is properly formatted, categorized, and scheduled. This helps enhance user engagement and ensures better discoverability in search results.
+                                </p>
+                                
+                                <!-- Cover Image -->
                                 <div class="form-group mb-3 mandatory">
-                                    <label class="form-label">Cover</label>
-                                    <input type="file" class="form-control @error('cover') is-invalid @enderror" name="cover">
+                                    <label class="form-label" for="cover">Cover Image</label>
+                                    <input type="file" class="form-control @error('cover') is-invalid @enderror" name="cover" id="cover">
                                     @error('cover')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
                                 </div>
-
+        
+                                <!-- Title -->
                                 <div class="form-group mandatory mb-3">
-                                    <label class="form-label">Title</label>
-                                    <input type="text" class="form-control @error('title') is-invalid @enderror" placeholder="Post Title" name="title" id="title" value="{{ old('title') }}"/>
+                                    <label class="form-label" for="title">Title</label>
+                                    <input type="text" class="form-control @error('title') is-invalid @enderror" placeholder="Enter post title" name="title" id="title" value="{{ old('title') }}"/>
                                     @error('title')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
                                 </div>
-
+        
+                                <!-- Slug -->
                                 <div class="form-group mandatory mb-3">
-                                    <label class="form-label">Slug</label>
-                                    <input type="text" class="form-control @error('slug') is-invalid @enderror" placeholder="Slug" name="slug" id="slug" value="{{ old('slug') }}" readonly/>
-                                    <small class="form-text text-muted">* The slug is generated automatically. Simply press the tab key or click outside the form to generate it.</small>
+                                    <label class="form-label" for="slug">Slug</label>
+                                    <input type="text" class="form-control @error('slug') is-invalid @enderror" placeholder="Post URL Slug" name="slug" id="slug" value="{{ old('slug') }}" readonly/>
+                                    <small class="form-text text-muted">* The slug is automatically generated. Press tab or click outside the field to generate it.</small>
                                     @error('slug')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
-                                </div>                                     
-                                
+                                </div>
+        
+                                <!-- Categories -->
                                 <div class="form-group mb-3 mandatory">
-                                    <label class="form-label">Categories</label>
+                                    <label class="form-label" for="selectPostCategory">Categories</label>
                                     <select class="form-select @error('post_category_id') is-invalid @enderror" name="post_category_id" id="selectPostCategory">
-                                        <option value="" selected>--Select categories--</option>
+                                        <option value="" selected>-- Select Categories --</option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}">{{ $category->name }}</option>
                                         @endforeach
@@ -66,39 +80,101 @@
                                         </span>
                                     @enderror
                                 </div>
-
+        
+                                <!-- Content -->
                                 <div class="form-group mandatory mb-3">
-                                    <label class="form-label">Content</label>
-                                    <textarea id="editor" class="form-control @error('content') is-invalid @enderror" name="content" rows="10" cols="50"></textarea>
+                                    <label class="form-label" for="content">Content</label>
+                                    <textarea id="editor" class="form-control @error('content') is-invalid @enderror" name="content" rows="10" placeholder="Write your post content here...">{{ old('content') }}</textarea>
                                     @error('content')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
-                                </div>     
-                                
+                                </div>
+        
+                                <!-- Post Schedule -->
                                 <div class="form-group mb-3">
-                                    <label class="form-label">Post Schedule</label>
-                                    <input type="text" class="form-control @error('published_at') is-invalid @enderror" placeholder="Select Date and Time" name="published_at" id="published_at" value="{{ old('published_at') }}"/>
+                                    <label class="form-label" for="published_at">Post Schedule</label>
+                                    <input type="text" class="form-control @error('published_at') is-invalid @enderror" placeholder="Select date and time" name="published_at" id="published_at" value="{{ old('published_at') }}"/>
+                                    <small class="form-text text-muted">If you want the post to be published immediately, leave this field empty.</small>
                                     @error('published_at')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
                                 </div>
-
-                                <div class="row">
-                                    <div class="col-12 d-flex justify-content-end">
-                                        <button type="submit" class="btn btn-sm btn-primary me-1 mb-1">Submit</button>
-                                        <a href="{{ route('post.index') }}" class="btn btn-sm btn-light-secondary me-1 mb-1">Cancel</a>
-                                    </div>
+                            </div>
+        
+                            <!-- SEO Section -->
+                            <div class="card-header bg-light text-dark fw-bold rounded-top">
+                                Search Engine Optimization
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted mt-3" style="font-size: 0.95rem;">
+                                    Fill in the fields below to optimize your post for search engines and improve its visibility.
+                                </p>
+        
+                                <!-- Meta Title -->
+                                <div class="form-group mb-3">
+                                    <label class="form-label" for="seo_title">Meta Title</label>
+                                    <input type="text" class="form-control @error('seo_title') is-invalid @enderror" placeholder="Meta Title" name="seo_title" id="seo_title" value="{{ old('seo_title') }}"/>
+                                    <small class="form-text text-muted">The Meta Title is shown in the browser tab and search engine results. Keep it under 60 characters for optimal display.</small>
+                                    @error('seo_title')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
-                            </form>
-                        </div>
+
+                                <!-- Meta Description -->
+                                <div class="form-group mb-3">
+                                    <label class="form-label" for="seo_description">Meta Description</label>
+                                    <textarea class="form-control @error('seo_description') is-invalid @enderror" placeholder="Meta Description" name="seo_description" id="seo_description" rows="4">{{ old('seo_description') }}</textarea>
+                                    <small class="form-text text-muted">Write a concise and compelling description under 160 characters. It appears under the title in search results.</small>
+                                    @error('seo_description')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+
+                                <!-- Meta Keywords -->
+                                <div class="form-group mb-3">
+                                    <label class="form-label" for="seo_keywords">Meta Keywords</label>
+                                    <input type="text" class="form-control @error('seo_keywords') is-invalid @enderror" placeholder="Meta Keywords" name="seo_keywords" id="seo_keywords" value="{{ old('seo_keywords') }}"/>
+                                    <small class="form-text text-muted">Use keywords that are relevant to the post content, separated by commas (e.g., Laravel, web development).</small>
+                                    @error('seo_keywords')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+
+                                <!-- SEO Tips -->
+                                <div class="alert alert-info mt-4">
+                                    <strong>SEO Tips:</strong> 
+                                    <ul>
+                                        <li>Write unique Meta Titles and Descriptions for better visibility.</li>
+                                        <li>Use keywords naturally in the post content.</li>
+                                        <li>Keep Meta Titles and Descriptions within optimal length limits.</li>
+                                    </ul>
+                                </div>
+                            </div>
+        
+                            <!-- Submit Buttons -->
+                            <div class="row mx-2 mb-3">
+                                <div class="col-12 d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-sm btn-primary me-1 mb-1">Save Post</button>
+                                    <a href="{{ route('post.index') }}" class="btn btn-sm btn-secondary me-1 mb-1">Cancel</a>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- Form End -->
                     </div>
                 </div>
             </div>
-        </div>
+        </div>        
+        
     </div>
 @endsection
 

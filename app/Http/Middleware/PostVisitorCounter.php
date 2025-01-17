@@ -19,10 +19,19 @@ class PostVisitorCounter
             $post = Post::where('slug', $slug)->first();
 
             if ($post) {
-                PostView::updateOrCreate(
-                    ['post_id' => $post->id, 'view_date' => $today],
-                    ['view_count' => \DB::raw('view_count + 1')]
-                );
+                $postView = PostView::where('post_id', $post->id)
+                    ->where('view_date', $today)
+                    ->first();
+
+                if ($postView) {
+                    $postView->increment('view_count');
+                } else {
+                    PostView::create([
+                        'post_id' => $post->id,
+                        'view_date' => $today,
+                        'view_count' => 1,
+                    ]);
+                }
             }
         }
 

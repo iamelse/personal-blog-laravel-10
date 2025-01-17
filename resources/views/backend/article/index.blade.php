@@ -21,16 +21,15 @@
                 <div class="card">
                     <div class="card-content">
                         <div class="card-header">
-                            @can('create_posts', $posts)
-                            <div class="row mb-4">
-                                <div class="col-6"></div>
-                                <div class="col-6 text-end">
-                                    <a href="{{ route('post.create') }}" class="btn btn-primary btn-sm">
-                                        New Post
-                                    </a>
+                            <div class="row">
+                                <div class="d-flex justify-content-end mb-4">
+                                    @can('create_posts', $posts)
+                                        <a href="{{ route('post.create') }}" class="btn btn-primary btn-sm me-2">
+                                            New Post
+                                        </a>
+                                    @endcan
                                 </div>
-                            </div>
-                            @endcan
+                            </div>                            
                             <div class="row">
                                 <div class="col-10 text-start">
                                     <div class="row">
@@ -135,6 +134,10 @@
                                                         <span class="badge rounded-pill bg-success">Published</span>
                                                         @break
 
+                                                    @case(\App\Enums\PostStatus::ARCHIVE->value)
+                                                        <span class="badge rounded-pill bg-info">Archived</span>
+                                                        @break
+
                                                     @default
                                                         <span class="badge rounded-pill bg-light text-dark">Unknown</span>
                                                 @endswitch
@@ -145,10 +148,10 @@
                                                     <a href="{{ route('post.edit', $post->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
                                                     @endcan
                                                     @can('destroy_posts', $post)
-                                                    <form method="POST" action="{{ route('post.destroy', $post->id) }}">
+                                                    <form class="delete-single-form" method="POST" action="{{ route('post.destroy', $post->id) }}">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-outline-danger" id="delete-btn">Delete</button>
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger delete-btn">Delete</button>
                                                     </form>
                                                     @endcan
                                                 </div>
@@ -156,7 +159,7 @@
                                         </tr>
                                         @empty
                                         <tr>
-                                            <td class="text-center" colspan="6">No Data</td>
+                                            <td class="text-center" colspan="10">No Data</td>
                                         </tr>
                                         @endforelse
                                     </tbody>
@@ -180,19 +183,31 @@
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-        const deleteButtons = document.querySelectorAll('#delete-btn');
 
-        deleteButtons.forEach(button => {
+<script>
+        document.querySelectorAll('.delete-btn').forEach(button => {
             button.addEventListener('click', function (e) {
                 e.preventDefault();
-                const form = this.closest('form');
+
+                // Locate the form element closest to this button
+                const form = this.closest('form.delete-single-form');
+                
+                console.log(form);
+
+                // Debugging: Log if form is found or not
+                if (!form) {
+                    console.error("No form found for this delete button!");
+                    return; // Exit early if no form is found
+                }
+
+                // Confirm deletion using SweetAlert
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
+                    text: "This action cannot be undone!",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'Cancel',
                     customClass: {
                         confirmButton: 'btn btn-primary mx-1',
                         cancelButton: 'btn btn-danger mx-1'
@@ -205,7 +220,9 @@
                 });
             });
         });
+</script>
 
+<script>
         @if($errors->any())
             Swal.fire({
                 toast: true,

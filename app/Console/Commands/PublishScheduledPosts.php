@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Enums\PostStatus;
 use App\Models\Post;
+use App\Notifications\PostPublishedNotification;
 use Illuminate\Console\Command;
 
 class PublishScheduledPosts extends Command
@@ -13,7 +14,6 @@ class PublishScheduledPosts extends Command
      *
      * @var string
      */
-    //protected $signature = 'app:publish-scheduled-posts';
     protected $signature = 'posts:publish';
 
     /**
@@ -35,6 +35,11 @@ class PublishScheduledPosts extends Command
         foreach ($posts as $post) {
             $post->status = PostStatus::PUBLISHED;
             $post->save();
+
+            // Send notification to the user after the post is published
+            $post->author->notify(new PostPublishedNotification($post));
+
+            $this->info("Post '{$post->title}' published and notification sent to user.");
         }
 
         $this->info('Scheduled posts published successfully.');

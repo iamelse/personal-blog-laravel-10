@@ -150,11 +150,17 @@ class PostViewAnalyticsServices
         $query = Post::with(['views' => function($query) use ($params) {
                                     $query->whereBetween('view_date', [$params['start_date'], $params['end_date']]);
                                 }])
-                                ->select('posts.*', DB::raw('SUM(post_views.view_count) as total_views'))
+                                ->select(
+                                    'posts.id',
+                                    'posts.cover',
+                                    'posts.title',
+                                    'posts.created_at',
+                                    DB::raw('SUM(post_views.view_count) as total_views')
+                                )
                                 ->join('post_views', 'posts.id', '=', 'post_views.post_id')
                                 ->whereBetween('post_views.view_date', [$params['start_date'], $params['end_date']])
                                 ->where('status', PostStatus::PUBLISHED)
-                                ->groupBy('posts.id')
+                                ->groupBy('posts.id', 'posts.cover', 'posts.title', 'posts.created_at')
                                 ->orderBy('total_views', 'desc');
 
         if ($user->roles->first()->name == EnumUserRole::MASTER->value) {

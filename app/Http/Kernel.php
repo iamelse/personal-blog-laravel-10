@@ -67,6 +67,7 @@ class Kernel extends HttpKernel
 
         'check.initial.setup' => \App\Http\Middleware\CheckInitialSetup::class,
         'post.visitor.counter' => \App\Http\Middleware\PostVisitorCounter::class,
-        'track.visitor' => \App\Http\Middleware\TrackVisitor::class
+        'track.visitor' => \App\Http\Middleware\TrackVisitor::class,
+        'share.notifications' => \App\Http\Middleware\ShareNotifications::class
     ];
 }

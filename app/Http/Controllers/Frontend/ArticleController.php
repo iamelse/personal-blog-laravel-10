@@ -55,7 +55,7 @@ class ArticleController extends Controller
 
     public function show($slug): View
     {
-        $post = Post::with('author', 'category')->where('status', PostStatus::PUBLISHED)->where('slug', $slug)->firstOrFail();
+        $post = Post::with('author', 'category', 'seo')->whereIn('status', [PostStatus::PUBLISHED, PostStatus::ARCHIVE])->where('slug', $slug)->firstOrFail();
         $relatedPosts = Post::where('post_category_id', $post->post_category_id)
                             ->where('slug', '!=', $post->slug)
                             ->where('status', PostStatus::PUBLISHED)
@@ -66,7 +66,11 @@ class ArticleController extends Controller
         return view('frontend.article.show', [
             'title' => $post->title,
             'post' => $post,
-            'relatedPosts' => $relatedPosts
+            'relatedPosts' => $relatedPosts,
+
+            'seo_title' => $post->seo_title,
+            'seo_description' => $post->seo_description,
+            'seo_keywords' => $post->seo_keywords,
         ]);
     }
 }

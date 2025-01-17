@@ -63,6 +63,18 @@ class DatabaseSeeder extends Seeder
             'slug' => 'coding',
         ]);
 
+        \App\Models\SocialMedia::factory()->create([
+            'name' => 'Instagram',
+            'url' => 'https://www.instagram.com/iamelse_',
+            'icon' => 'bx bxl-instagram',
+        ]);
+
+        \App\Models\SocialMedia::factory()->create([
+            'name' => 'LinkedIn',
+            'url' => 'https://www.linkedin.com/in/iamelse',
+            'icon' => 'bx bxl-linkedin-square',
+        ]);
+
         \App\Models\PostCategory::factory(20)->create();
         \App\Models\Post::factory(30)->state(function (array $attributes) {
             return [

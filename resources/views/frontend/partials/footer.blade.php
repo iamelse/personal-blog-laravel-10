@@ -8,17 +8,15 @@
         <div class="col-md-6 text-center text-lg-end text-md-end">
           <!-- Social Media Icons with Boxicons -->
           <ul class="list-inline">
+          @forelse ($socialMedias as $socialMedia)
             <li class="list-inline-item">
-              <a href="#" target="_blank" title="Facebook">
-                <i class='bx bxl-facebook l-text-p bx-sm text l-text-primary'></i>
+              <a href="{{ $socialMedia->url }}" target="_blank" title="{{ $socialMedia->name }}">
+                <i class='{!! strtolower($socialMedia->icon) !!} l-text-p bx-sm text l-text-primary'></i>
               </a>
             </li>
-            <li class="list-inline-item">
-              <a href="#" target="_blank" title="Instagram">
-                <i class='bx bxl-instagram l-text-p bx-sm text l-text-primary'></i>
-              </a>
-            </li>
-            <!-- Add more social media icons as needed -->
+          @empty
+              
+          @endforelse
           </ul>
         </div>
       </div>

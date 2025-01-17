@@ -6,17 +6,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- Dynamic Meta Tags -->
+    <meta name="title" content="{{ $post->seo && $post->seo->seo_title ? $post->seo->seo_title : $post->title }}">
+    <meta name="description" content="{{ $post->seo && $post->seo->seo_description ? $post->seo->seo_description : Str::limit(strip_tags($post->body), 150) }}">
+    <meta name="keywords" content="{{ $post->seo && $post->seo->seo_keywords ? Str::of($post->seo->seo_keywords)->lower()->replaceMatches('/\s*,\s*/', ',')->trim(',')->title() : '' }}">
+    <meta name="author" content="{{ $post->author ? $post->author->name : '' }}">
+    <meta name="category" content="{{ $post->category ? $post->category->name : '' }}">
 
-    <!-- Font Awesome CSS -->
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ url()->current() }}">
 
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <!-- Open Graph -->
+    <meta property="og:title" content="{{ $post->seo && $post->seo->seo_title ? $post->seo->seo_title : $post->title }}">
+    <meta property="og:description" content="{{ $post->seo && $post->seo->seo_description ? $post->seo->seo_description : Str::limit(strip_tags($post->body), 150) }}">
+    <meta property="og:image" content="{{ getPostCoverImage($post) }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:type" content="article">
 
-    <title>{{ $title ?? env('APP_NAME') }}</title>
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $post->seo && $post->seo->seo_title ? $post->seo->seo_title : $post->title }}">
+    <meta name="twitter:description" content="{{ $post->seo && $post->seo->seo_description ? $post->seo->seo_description : Str::limit(strip_tags($post->body), 150) }}">
+    <meta name="twitter:image" content="{{ getPostCoverImage($post) }}">
+
+    <link rel="icon" href="{{ asset('assets/favicon.png') }}" type="image/png">
+
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet' media="print" onload="this.media='all'">
+
+    <!-- Font Awesome CSS loaded asynchronously -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" as="style">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" media="print" onload="this.media='all'">
+
+    <!-- Your custom app.css loaded asynchronously -->
+    <link rel="stylesheet" href="{{ asset('assets/export-vite/css/app.css') }}" media="print" onload="this.media='all'">
+
+    <!-- Defer non-critical JS (app2.js) to avoid blocking rendering -->
+    <script src="{{ asset('assets/export-vite/js/app2.js') }}" defer></script>
+
+    <!-- Dynamic Title -->
+    <title>{{ $post->title ?? $title ?? env('APP_NAME') }}</title>
 </head>
 
-<body>
+<body class="loading">
+
+    <!-- Loader -->
+    <div class="loader" id="loader"></div>
+
     <!-- Navbar -->
     @include('frontend.partials.navbar')
     <!-- End Navbar -->
@@ -105,33 +140,31 @@
     </main>
     <!-- End main content -->
 
-    <footer>
-        <div class="container mt-4">
-          <hr class="card-hr">
-          <div class="row py-4">
-            <div class="col-md-6">
-              <p class="text l-text-p l-card-text">Copyright © Iamelse. All rights reserved.</p>
-            </div>
-            <div class="col-md-6 text-md-end">
-              <!-- Social Media Icons with Boxicons -->
-              <ul class="list-inline">
-                <li class="list-inline-item">
-                  <a href="#" target="_blank" title="Facebook">
-                    <i class='bx bxl-facebook l-text-p bx-sm text l-text-primary'></i>
-                  </a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="#" target="_blank" title="Instagram">
-                    <i class='bx bxl-instagram l-text-p bx-sm text l-text-primary'></i>
-                  </a>
-                </li>
-                <!-- Add more social media icons as needed -->
-              </ul>
-            </div>
-          </div>
-        </div>
-    </footer>
+    <!-- Footer -->
+    @include('frontend.partials.footer')
+    <!-- End Footer -->
 
+    <script>
+        window.addEventListener('load', function () {
+            setTimeout(function () {
+                document.body.classList.remove('loading');
+                document.body.classList.add('loaded');
+            }, 2000);
+        });
+    </script>
+
+    <script>
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            
+            if (window.scrollY > 10) {
+                navbar.classList.add('shadow-sm');
+            } else {
+                navbar.classList.remove('shadow-sm');
+            }
+        });
+    </script>
+    
 </body>
 
 

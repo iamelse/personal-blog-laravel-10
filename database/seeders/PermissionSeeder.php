@@ -35,6 +35,7 @@ class PermissionSeeder extends Seeder
             'create_posts',
             'edit_posts',
             'destroy_posts',
+            //'mass_destroy_posts',
             'view_education',
             'create_education',
             'edit_education',
@@ -62,7 +63,11 @@ class PermissionSeeder extends Seeder
             'view_developer',
             'view_information',
             'go_to_laravel_filemanager',
-            'view_log_activity'
+            'view_log_activity',
+            'view_social_media',
+            'create_social_media',
+            'edit_social_media',
+            'destroy_social_media',
         ];
 
         // Author permissions
