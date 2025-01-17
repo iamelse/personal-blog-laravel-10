@@ -22,20 +22,22 @@ This project is a personal **Portfolio and Blog** application built using the **
   - Manage Post Categories
   - Manage Portfolio sections (About, Projects, Experience, Education, Skills)
   - Manage Users
+  - Manage Social Media on footer
 - **Developer Menu**:
   - Run Artisan commands from the dashboard.
   - View application logs directly from the admin panel.
 - **Laravel File Manager**: Manage media files through an integrated file manager.
+- **Log Activity**
 
 ## Tech Stack
 
 - **Backend:** Laravel 10 (PHP 8.2)
 - **Frontend:** Blade, Bootstrap
-- **Database:** MySQL
+- **Database:** PgSQL
 - **Other**:
   - Spatie Laravel Permissions (for user roles and permissions)
   - Laravel Task Scheduling (for post scheduling)
-  - **Laravel File Manager** for managing uploaded files.
+  - Laravel File Manager for managing uploaded files.
 
 ## Installation
 
