@@ -6,12 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
+    <!-- Hide archive posts from search engines -->
+    <?php if($post->status === \App\Enums\PostStatus::ARCHIVE->value): ?>
+        <meta name="robots" content="noindex, nofollow">
+    <?php endif; ?>
+
     <!-- Dynamic Meta Tags -->
     <meta name="title" content="<?php echo e($post->seo && $post->seo->seo_title ? $post->seo->seo_title : $post->title); ?>">
     <meta name="description" content="<?php echo e($post->seo && $post->seo->seo_description ? $post->seo->seo_description : Str::limit(strip_tags($post->body), 150)); ?>">
     <meta name="keywords" content="<?php echo e($post->seo && $post->seo->seo_keywords ? Str::of($post->seo->seo_keywords)->lower()->replaceMatches('/\s*,\s*/', ',')->trim(',')->title() : ''); ?>">
     <meta name="author" content="<?php echo e($post->author ? $post->author->name : ''); ?>">
     <meta name="category" content="<?php echo e($post->category ? $post->category->name : ''); ?>">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="<?php echo e(url()->current()); ?>">
 
     <!-- Open Graph -->
     <meta property="og:title" content="<?php echo e($post->seo && $post->seo->seo_title ? $post->seo->seo_title : $post->title); ?>">
@@ -162,6 +170,26 @@
                 navbar.classList.remove('shadow-sm');
             }
         });
+    </script>
+
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            "headline": "<?php echo e($post->title); ?>",
+            "image": "<?php echo e(getPostCoverImage($post)); ?>",
+            "author": {
+                "@type": "Person",
+                "name": "<?php echo e($post->author->name); ?>"
+            },
+            "datePublished": "<?php echo e($post->created_at->toIso8601String()); ?>",
+            "dateModified": "<?php echo e($post->updated_at->toIso8601String()); ?>",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "<?php echo e(url()->current()); ?>"
+            },
+            "description": "<?php echo e(Str::limit(strip_tags($post->body), 150)); ?>"
+        }
     </script>
     
 </body>

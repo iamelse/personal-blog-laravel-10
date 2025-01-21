@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
+    <!-- Hide archive posts from search engines -->
+    @if ($post->status === \App\Enums\PostStatus::ARCHIVE->value)
+        <meta name="robots" content="noindex, nofollow">
+    @endif
+
     <!-- Dynamic Meta Tags -->
     <meta name="title" content="{{ $post->seo && $post->seo->seo_title ? $post->seo->seo_title : $post->title }}">
     <meta name="description" content="{{ $post->seo && $post->seo->seo_description ? $post->seo->seo_description : Str::limit(strip_tags($post->body), 150) }}">
@@ -163,6 +168,26 @@
                 navbar.classList.remove('shadow-sm');
             }
         });
+    </script>
+
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            "headline": "{{ $post->title }}",
+            "image": "{{ getPostCoverImage($post) }}",
+            "author": {
+                "@type": "Person",
+                "name": "{{ $post->author->name }}"
+            },
+            "datePublished": "{{ $post->created_at->toIso8601String() }}",
+            "dateModified": "{{ $post->updated_at->toIso8601String() }}",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "{{ url()->current() }}"
+            },
+            "description": "{{ Str::limit(strip_tags($post->body), 150) }}"
+        }
     </script>
     
 </body>
