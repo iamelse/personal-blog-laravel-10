@@ -7,9 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <!-- Hide archive posts from search engines -->
-    @if ($post->status === \App\Enums\PostStatus::ARCHIVE->value)
-        <meta name="robots" content="noindex, nofollow">
-    @endif
+    <meta name="robots" content="{{ $post->status === \App\Enums\PostStatus::PUBLISHED->value ? 'index, follow' : 'noindex, nofollow' }}">
 
     <!-- Dynamic Meta Tags -->
     <meta name="title" content="{{ $post->seo && $post->seo->seo_title ? $post->seo->seo_title : $post->title }}">
