@@ -74,7 +74,7 @@
 
                             </h1>
                             <div class="d-flex align-items-center my-4">
-                                <img src="<?php echo e(empty($post->author->image_profile) ? 'https://via.placeholder.com/150' : (Storage::disk('public_uploads')->exists($post->author->image_profile) ? asset('uploads/' . $post->author->image_profile) : 'https://via.placeholder.com/150')); ?>" alt="Profile Image" class="me-2 rounded-circle" style="width: 45px; height: 45px; object-fit: cover;">
+                                <img src="<?php echo e(getUserImageProfilePath($post->author)); ?>" alt="Profile Image" class="me-2 rounded-circle" style="width: 45px; height: 45px; object-fit: cover;">
                                 <div class="post-metadata">
                                     <span class="author l-text-dark"><?php echo e($post->author->name); ?></span>
                                     <span class="category l-text-dark">in <?php echo e($post->category->name); ?></span>
