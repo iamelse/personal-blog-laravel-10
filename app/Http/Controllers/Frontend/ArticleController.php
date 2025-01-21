@@ -73,4 +73,16 @@ class ArticleController extends Controller
             'seo_keywords' => $post->seo_keywords,
         ]);
     }
+
+    public function archived(): View
+    {
+        $posts = Post::orderBy('created_at', 'DESC')
+                    ->where('status', PostStatus::ARCHIVE)
+                    ->paginate(10);
+
+        return view('frontend.article.archived', [
+            'title' => 'Archived Articles',
+            'posts' => $posts
+        ]);
+    }
 }
