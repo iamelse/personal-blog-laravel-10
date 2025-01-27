@@ -6,20 +6,118 @@
 
 @section('content')
     <div id="main-content">
-        <div class="page-heading">
-            <div class="page-title">
-                <div class="row">
-                    <div class="col-12 col-md-6 order-md-1 order-last">
+             
+        <div class="row d-flex justify-content-between align-items-center">
+            <!-- Left Content (Start) -->
+            <div class="col">
+                <div class="page-heading">
+                    <div class="page-title">
                         <h3>
                             Hello & {{ \App\Helpers\GreetingHelper::getGreeting() }}, {{ explode(' ', Auth::user()->name)[0] }}!
                         </h3>
                         <p class="text-subtitle text-muted">
-                            Here overview of your activities.
+                            Here's an overview of your activities.
                         </p>
-                    </div>                
+                    </div>
+                </div> 
+            </div>
+        
+            <!-- Right Content (End) -->
+            <div class="col text-end">
+                <div class="page-heading">
+                    <div class="page-title">
+                        <button 
+                            class="btn btn-icon border-spacing-0 border-0" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#filterModal"
+                            aria-label="Open Filter Modal"
+                        >
+                            <i class="bx bx-sm bx-filter-alt"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>             
+        </div>        
+
+        <!-- Filter Modal -->
+        <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="filterModalLabel">Filter Options</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Start of Vertical Filter Form -->
+                        <form action="{{ url()->current() }}" method="GET">
+                            <div class="row g-3">
+                                <!-- Start Date -->
+                                <div class="col-12">
+                                    <label for="start_date" class="form-label">Start Date</label>
+                                    <input 
+                                        type="date" 
+                                        id="start_date" 
+                                        name="start_date" 
+                                        class="form-control" 
+                                        value="{{ request('start_date', \Carbon\Carbon::today()->subDays(6)->toDateString()) }}" 
+                                    >
+                                </div>
+                                
+                                <!-- End Date -->
+                                <div class="col-12">
+                                    <label for="end_date" class="form-label">End Date</label>
+                                    <input 
+                                        type="date" 
+                                        id="end_date" 
+                                        name="end_date" 
+                                        class="form-control" 
+                                        value="{{ request('end_date', \Carbon\Carbon::today()->toDateString()) }}" 
+                                    >
+                                </div>
+                                
+                                <!-- Subdays -->
+                                <div class="col-12">
+                                    <label for="subdays" class="form-label">Subdays</label>
+                                    <select name="subdays" id="subdays" class="form-select">
+                                        @for ($i = 1; $i <= 30; $i++)
+                                            <option value="{{ $i }}" {{ request('subdays', 6) == $i ? 'selected' : '' }}>
+                                                {{ $i }} day{{ $i > 1 ? 's' : '' }}
+                                            </option>
+                                        @endfor
+                                    </select>
+                                </div>
+                                
+                                <!-- User Assignment (Conditional for MASTER role) -->
+                                @if (Auth::user()->roles->first()->name == EnumUserRole::MASTER->value)
+                                    <div class="col-12">
+                                        <label for="post_user_id" class="form-label">Assign to User</label>
+                                        <select name="post_user_id" id="post_user_id" class="form-select">
+                                            <option value="" {{ request('post_user_id', '') == '' ? 'selected' : '' }}>All Users</option>
+                                            @foreach ($users as $user)
+                                                <option value="{{ $user->id }}" {{ request('post_user_id') == $user->id ? 'selected' : '' }}>
+                                                    {{ $user->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                @endif
+                            
+                                <!-- Submit Button -->
+                                <div class="col-12 text-center">
+                                    <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+                                </div>
+                                
+                                <!-- Clear Filters -->
+                                <div class="col-12 text-center">
+                                    <a href="{{ url()->current() }}" class="btn btn-secondary w-100">Clear Filters</a>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- End of Vertical Filter Form -->
+                    </div>
+                </div>
+            </div>
+        </div>
         
         @php
             $labels = [];
@@ -36,66 +134,6 @@
         <div class="row">
             <div class="col-12">
                 <section class="section">
-
-                    <div class="container mb-3">
-                        <div class="row align-items-center">
-                            <form action="{{ url()->current() }}" method="GET" class="row gx-2">
-                                <div class="col">
-                                    <!-- Start Date label and input -->
-                                    <label for="start_date" class="form-label text-sm">Start Date</label>
-                                    <input type="date" id="start_date" name="start_date" class="form-control form-control-sm" value="{{ request('start_date', \Carbon\Carbon::today()->subDays(6)->toDateString()) }}">
-                                </div>
-                        
-                                <div class="col">
-                                    <!-- End Date label and input -->
-                                    <label for="end_date" class="form-label text-sm">End Date</label>
-                                    <input type="date" id="end_date" name="end_date" class="form-control form-control-sm" value="{{ request('end_date', \Carbon\Carbon::today()->toDateString()) }}">
-                                </div>
-                        
-                                <div class="col">
-                                    <!-- Subdays label and select input -->
-                                    <label for="subdays" class="form-label text-sm">Subdays</label>
-                                    <select name="subdays" id="subdays" class="form-select form-select-sm">
-                                        @for ($i = 1; $i <= 30; $i++)
-                                            <option value="{{ $i }}" {{ request('subdays', 6) == $i ? 'selected' : '' }}>
-                                                {{ $i }} day{{ $i > 1 ? 's' : '' }}
-                                            </option>
-                                        @endfor
-                                    </select>
-                                </div>
-
-                                @if (Auth::user()->roles->first()->name == EnumUserRole::MASTER->value)
-                                    <div class="col">
-                                        <!-- User label and select input -->
-                                        <label for="post_user_id" class="form-label text-sm">Assign to User</label>
-                                        <select name="post_user_id" id="post_user_id" class="form-select form-select-sm">
-                                            <!-- Option for 'All Users' (default) -->
-                                            <option value="" {{ request('post_user_id', '') == '' ? 'selected' : '' }}>All Users</option>
-                                            
-                                            <!-- Loop through users -->
-                                            @foreach ($users as $user)
-                                                <option value="{{ $user->id }}" {{ request('post_user_id') == $user->id ? 'selected' : '' }}>
-                                                    {{ $user->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                @endif                   
-                        
-                                <div class="col-auto">
-                                    <!-- Submit button -->
-                                    <label class="form-label d-block">&nbsp;</label> <!-- Spacer for alignment -->
-                                    <button type="submit" class="btn btn-sm btn-primary mb-3">Submit</button>
-                                </div>
-                        
-                                <div class="col-auto">
-                                    <!-- Clear Filter button -->
-                                    <label class="form-label d-block">&nbsp;</label> <!-- Spacer for alignment -->
-                                    <a href="{{ url()->current() }}" class="btn btn-sm btn-secondary mb-3">Clear Filter</a>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
 
                     <div class="row">
                         <!-- All Posts -->
