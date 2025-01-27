@@ -143,7 +143,7 @@
 
                                             </p>
                                             <div class="row text-end">
-                                                <a class="arrow-card-link" href="">
+                                                <a class="arrow-card-link" href="<?php echo e(route('project.show', $project->slug)); ?>">
                                                     <i class='bx bx-right-arrow-alt bx-sm'></i>
                                                 </a>
                                             </div>
