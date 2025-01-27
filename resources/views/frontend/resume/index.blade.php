@@ -39,7 +39,7 @@
                                     <h6 class="l-text-dark fw-bold mt-2">{{ $experience->position_name }}</h6>
                                     <h6 class="l-text-dark">{{ $experience->company_name }}</h6>
                                     <p class="l-card-text">
-                                        {{ $experience->desc }}
+                                        {!! $experience->desc !!}
                                     </p>
                                 </div>
                             </div>
