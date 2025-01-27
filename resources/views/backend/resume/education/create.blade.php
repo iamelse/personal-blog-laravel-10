@@ -82,7 +82,7 @@
                                         </div>
                                 
                                         <div class="form-group mandatory mb-3">
-                                            <label for="desc" class="form-label">Description</label>
+                                            <label for="desc" class="form-label">Description</label><span class="badge bg-primary">HTML</span>
                                             <textarea class="form-control @error('desc') is-invalid @enderror" id="desc" placeholder="Description" name="desc" rows="4">{{ old('desc') }}</textarea>
                                             @error('desc')
                                                 <div class="invalid-feedback">{{ $message }}</div>
