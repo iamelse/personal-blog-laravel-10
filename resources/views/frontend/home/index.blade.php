@@ -139,7 +139,7 @@
                                             </div>
                                             <h5 class="l-card-title l-text-dark">{{ $project->title }}</h5>
                                             <p class="l-card-text">
-                                                {{ \Illuminate\Support\Str::limit(strip_tags($project->desc), 80) }}
+                                                {!! \Illuminate\Support\Str::limit(strip_tags($project->desc), 80) !!}
                                             </p>
                                             <div class="row text-end">
                                                 <a class="arrow-card-link" href="{{ route('project.show', $project->slug) }}">
