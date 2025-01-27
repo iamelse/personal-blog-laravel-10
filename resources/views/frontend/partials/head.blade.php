@@ -6,7 +6,7 @@
     <link rel="icon" href="{{ asset('assets/favicon.png') }}" type="image/png">
 
     <!-- Load Boxicons CSS asynchronously -->
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" media="print" onload="this.media='all'">
+    <link rel="preload" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" as="style" />
 
     <!-- Load Font Awesome CSS asynchronously -->
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" as="style">

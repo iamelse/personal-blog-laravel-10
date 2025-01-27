@@ -3,25 +3,13 @@
 
 @include('frontend.partials.head')
 
-<body class="loading">
-
-    <!-- Loader -->
-    <div class="loader" id="loader"></div>
+<body>
 
     @include('frontend.partials.navbar')
 
     @yield('content')
 
     @include('frontend.partials.footer')
-
-    <script>
-        window.addEventListener('load', function () {
-            setTimeout(function () {
-                document.body.classList.remove('loading');
-                document.body.classList.add('loaded');
-            }, 0);
-        });
-    </script>
 
     <script>
         window.addEventListener('scroll', function() {
