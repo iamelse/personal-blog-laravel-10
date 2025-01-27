@@ -13,7 +13,7 @@
                         @if ($home)
                             @if ($home->image)
                                 <div class="container mb-3">
-                                    <img src="{{ getHomeImageProfile($home) }}" class="rounded-circle img-fluid" style="width: 75px; height: 75px; object-fit: cover;" alt="{{ $home->image }}">
+                                    <img src="{{ getHomeImageProfile($home) }}" class="rounded-circle img-fluid" style="width: 75px; height: 75px; object-fit: cover;" alt="{{ $home->image }}" loading="lazy">
                                 </div>
                             @elseif ($home->url)
                                 <div class="container mb-3">
