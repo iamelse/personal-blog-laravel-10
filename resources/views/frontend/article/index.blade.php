@@ -18,9 +18,7 @@
                     <section class="col-lg-12 pb-2">
     
                         <p class="l-text-p pb-3">
-                            This newsletter is written by Mark Ivings, 
-                            who previously worked at Google, Medium, Vimeo, 
-                            and Qonto. Here is what to expect by subscribing:
+                            Discover a curated collection of insightful articles spanning diverse topics, thoughtfully crafted to inform, inspire, and engage readers. Explore now!
                         </p>
 
                         @forelse ($postCategories as $postCategory)
