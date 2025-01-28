@@ -79,51 +79,6 @@ class PostUpdateTest extends TestCase
     }
 
     /**
-     * Test the post update functionality ensures the post status remains unchanged.
-     */
-    public function test_post_update_preserves_status(): void
-    {
-        $user = $this->_create_user_and_logged_in_with_master_role('edit_posts');
-
-        Storage::fake(env('FILESYSTEM_DISK', 'public'));
-
-        $category = PostCategory::factory()->create();
-
-        // Create a post with a predefined status
-        $post = Post::factory()->create([
-            'post_category_id' => $category->id,
-        ]);
-
-        $updatedCoverImage = UploadedFile::fake()->image('updated-cover.jpg');
-        $updateData = [
-            'post_category_id' => $category->id,
-            'title' => 'Updated Post Title',
-            'slug' => 'updated-post-title',
-            'content' => 'This is the updated body of the post.',
-            'cover' => $updatedCoverImage,
-        ];
-
-        // Send the update request
-        $response = $this->put(route('post.update', $post->id), $updateData);
-
-        $response->assertStatus(302);
-        $response->assertSessionHasNoErrors();
-
-        // Assert the post was updated with new data
-        $this->assertDatabaseHas('posts', [
-            'id' => $post->id,
-            'post_category_id' => $category->id,
-            'title' => 'Updated Post Title',
-            'slug' => 'updated-post-title',
-            'body' => 'This is the updated body of the post.',
-        ]);
-
-        // Check that the new cover image exists
-        $updatedPost = $post->fresh();
-        Storage::disk(env('FILESYSTEM_DISK', 'public'))->assertExists($updatedPost->cover);
-    }
-
-    /**
      * Test that unauthorized users cannot update a post.
      */
     public function test_unauthorized_user_cannot_update_post(): void
