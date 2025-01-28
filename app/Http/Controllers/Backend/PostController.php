@@ -76,7 +76,7 @@ class PostController extends Controller
                 'post_category_id' => $request->post_category_id,
                 'title' => $request->title,
                 'slug' => $request->slug,
-                'body' => $request->content,
+                'body' => $request->body,
                 'user_id' => Auth::user()->id,
                 'published_at' => $request->published_at,
                 'status' => $this->determineStatus($request)
@@ -148,47 +148,42 @@ class PostController extends Controller
             // Authorize the user to update the post
             $this->_authorizePost($post);
 
-            $data = [
-                'post_category_id' => $request->post_category_id,
-                'title' => $request->title,
-                'slug' => $request->slug,
-                'body' => $request->content,
-                'published_at' => $request->published_at,
-                'status' => $request->status,
-            ];
+            DB::transaction(function () use ($post, $request) {
+                // Prepare data for updating the post
+                $data = [
+                    'post_category_id' => $request->post_category_id,
+                    'title' => $request->title,
+                    'slug' => $request->slug,
+                    'body' => $request->body,
+                    'published_at' => $request->published_at,
+                    'status' => $request->status,
+                ];
 
-            // If a new cover image is uploaded, handle it
-            if ($request->hasFile('cover')) {
-                // Delete the old cover image if it exists
-                if ($post->cover) {
-                    $this->imageManagementService->destroyImage($post->cover);
+                // If a new cover image is uploaded, handle it
+                if ($request->hasFile('cover')) {
+                    // Delete the old cover image if it exists
+                    if ($post->cover) {
+                        $this->imageManagementService->destroyImage($post->cover);
+                    }
+
+                    // Upload the new cover image
+                    $file = $request->file('cover');
+                    $imagePath = $this->imageManagementService->uploadImage($file, [
+                        'disk' => env('FILESYSTEM_DISK'),
+                        'folder' => 'uploads/posts/covers',
+                    ]);
+
+                    // Assign the new image path to the post data
+                    $data['cover'] = $imagePath;
                 }
 
-                // Upload the new cover image
-                $file = $request->file('cover');
-                $imagePath = $this->imageManagementService->uploadImage($file, [
-                    'disk' => env('FILESYSTEM_DISK'),
-                    'folder' => 'uploads/posts/covers',
-                ]);
+                // Update the post in the database
+                $post->update($data);
 
-                // Assign the new image path to the post data
-                $data['cover'] = $imagePath;
-            }
-
-            // Update the post and its SEO data in the database
-            DB::transaction(function () use ($post, $request) {
-                $post->update($request->only([
-                    'post_category_id',
-                    'title',
-                    'slug',
-                    'body',
-                    'published_at',
-                    'status',
-                ]));
-            
+                // Update or create SEO data
                 $seoData = $request->only(['seo_title', 'seo_description', 'seo_keywords']);
                 $post->seo()->updateOrCreate(['post_id' => $post->id], $seoData);
-            });            
+            });
 
             // Log the activity
             activity('post_management')
@@ -197,7 +192,6 @@ class PostController extends Controller
 
             // Redirect with success message
             return redirect()->route('post.index')->with('success', 'Post updated successfully');
-            
         } catch (\Exception $e) {
             // Log the exception for debugging purposes
             Log::error('Error updating post: ' . $e->getMessage(), [

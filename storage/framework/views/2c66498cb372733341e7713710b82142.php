@@ -138,15 +138,15 @@ unset($__errorArgs, $__bag); ?>
                                 <!-- Content -->
                                 <div class="form-group mandatory mb-3">
                                     <label class="form-label" for="content">Content</label>
-                                    <textarea id="editor" class="form-control <?php $__errorArgs = ['content'];
+                                    <textarea id="editor" class="form-control <?php $__errorArgs = ['body'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
-unset($__errorArgs, $__bag); ?>" name="content" rows="10" placeholder="Write your post content here..."><?php echo e(old('content')); ?></textarea>
-                                    <?php $__errorArgs = ['content'];
+unset($__errorArgs, $__bag); ?>" name="body" rows="10" placeholder="Write your post content here..."><?php echo e(old('body')); ?></textarea>
+                                    <?php $__errorArgs = ['body'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }

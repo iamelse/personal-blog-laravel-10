@@ -28,7 +28,7 @@ class PostUpdateRequest extends FormRequest
             'post_category_id' => 'required|exists:post_categories,id',
             'slug' => 'required|string|max:255|unique:posts,slug,' . $post->id,
             'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,avif|max:2048',
-            'content' => 'required',
+            'body' => 'required',
             'status' => 'required|in:published,archive,draft',
         ];
     }

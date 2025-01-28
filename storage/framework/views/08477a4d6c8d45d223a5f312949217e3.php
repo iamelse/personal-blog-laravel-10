@@ -11,7 +11,7 @@
                         <?php if($home): ?>
                             <?php if($home->image): ?>
                                 <div class="container mb-3">
-                                    <img src="<?php echo e(getHomeImageProfile($home)); ?>" class="rounded-circle img-fluid" style="width: 75px; height: 75px; object-fit: cover;">
+                                    <img src="<?php echo e(getHomeImageProfile($home)); ?>" class="rounded-circle img-fluid" style="width: 75px; height: 75px; object-fit: cover;" alt="<?php echo e($home->image); ?>" loading="lazy">
                                 </div>
                             <?php elseif($home->url): ?>
                                 <div class="container mb-3">
@@ -139,7 +139,7 @@
                                             </div>
                                             <h5 class="l-card-title l-text-dark"><?php echo e($project->title); ?></h5>
                                             <p class="l-card-text">
-                                                <?php echo e(\Illuminate\Support\Str::limit(strip_tags($project->desc), 80)); ?>
+                                                <?php echo \Illuminate\Support\Str::limit(strip_tags($project->desc), 80); ?>
 
                                             </p>
                                             <div class="row text-end">

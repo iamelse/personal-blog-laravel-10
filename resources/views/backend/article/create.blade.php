@@ -84,8 +84,8 @@
                                 <!-- Content -->
                                 <div class="form-group mandatory mb-3">
                                     <label class="form-label" for="content">Content</label>
-                                    <textarea id="editor" class="form-control @error('content') is-invalid @enderror" name="content" rows="10" placeholder="Write your post content here...">{{ old('content') }}</textarea>
-                                    @error('content')
+                                    <textarea id="editor" class="form-control @error('body') is-invalid @enderror" name="body" rows="10" placeholder="Write your post content here...">{{ old('body') }}</textarea>
+                                    @error('body')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
