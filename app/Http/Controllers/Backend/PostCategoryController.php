@@ -60,7 +60,7 @@ class PostCategoryController extends Controller
     {
         try {
             PostCategory::create([
-                'name' => $request->name,
+                'name' => $request->category_name,
                 'slug' => $request->slug,
             ]);
 
@@ -90,7 +90,7 @@ class PostCategoryController extends Controller
     {
         try {
             $postCategory->update([
-                'name' => $request->name,
+                'name' => $request->category_name,
                 'slug' => $request->slug,
             ]);
 
