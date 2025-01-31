@@ -11,41 +11,20 @@
 
                     <section class="col-lg-12 pb-2">
                         <h1 class="text l-text-dark display-5 fw-bold">
-                            My latest update
+                            Archived Posts
                         </h1>
                     </section>
 
                     <section class="col-lg-12 pb-2">
     
                         <p class="l-text-p pb-3">
-                            Discover a curated collection of insightful articles spanning diverse topics, thoughtfully crafted to inform, inspire, and engage readers. Explore now!
+                            Welcome to my archive. These posts reflect past thoughts, ideas, and experiences that are still valuable.
                         </p>
-
-                        @forelse ($postCategories as $postCategory)
-                            @php
-                                $isActive = request()->query('category') == $postCategory->slug;
-                            @endphp
-                            <form action="{{ route('article.search') }}" method="GET" class="d-inline">
-                                <input type="hidden" name="category" value="{{ $postCategory->slug }}">
-                                <input type="hidden" name="query" value="{{ request()->query('query') }}">
-                                <button type="submit" class="btn btn-sm my-1 {{ $isActive ? 'btn-primary' : 'btn-outline-primary' }} fw-bold">
-                                    {{ $postCategory->name }}
-                                </button>
-                            </form>
-                        @empty
-                            <div class="row">
-                                <div class="col-12 text-center">
-                                    <p class="l-card-text">
-                                        No Post Categories Available
-                                    </p>
-                                </div>
-                            </div>
-                        @endforelse
 
                         <div class="card-list mt-3">
                             @forelse ($posts as $post)
                             <div class="card flex-row border-0">
-                                <img class="card-img-left l-card-img align-self-center" src="{{ getPostCoverImage($post) }}" loading="lazy"/>
+                                <img class="card-img-left l-card-img align-self-center" src="{{ getPostCoverImage($post) }}"/>
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-start">
                                         <div>
@@ -67,7 +46,7 @@
                             <div class="row">
                                 <div class="col-12 text-center">
                                     <p class="l-card-text">
-                                        No Post Available
+                                        No archived posts available at the moment.
                                     </p>
                                 </div>
                             </div>
@@ -85,21 +64,6 @@
                 </div>
                 <!-- End first col -->
 
-                <!-- Second col -->
-                <!--
-                <div class="col-lg-4">
-                    <section class="my-3">
-                        <div class="card l-card-border-color px-3">
-                            <div class="card-body">
-                                <h5 class="l-card-title l-text-dark text-center">Filter</h5>
-                                <h6 class="l-text-dark fw-bold fs-6">Category</h6>
-                                <h6 class="l-text-dark fw-bold fs-6">Author</h6>
-                            </div>
-                        </div>                  
-                    </section>
-                </div>
-                -->
-                <!-- End second col -->
             </div>
 
         </div>

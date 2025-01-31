@@ -7,7 +7,7 @@ if (!function_exists('getUserImageProfilePath')) {
     function getUserImageProfilePath($user)
     {
         $disk = env('FILESYSTEM_DISK');
-        $placeholderUrl = 'https://via.placeholder.com/150';
+        $placeholderUrl = 'https://dummyimage.com/300';
         $appUrl = rtrim(env('APP_URL'), '/'); // Ensure there's no trailing slash in APP_URL
         $publicHtmlPath = base_path('../public_html'); // Define the relative path to public_html
 
@@ -35,7 +35,7 @@ if (!function_exists('getHomeImageProfile')) {
     function getHomeImageProfile($home)
     {
         $disk = env('FILESYSTEM_DISK');
-        $placeholderUrl = 'https://via.placeholder.com/150';
+        $placeholderUrl = 'https://dummyimage.com/300';
         $appUrl = rtrim(env('APP_URL'), '/'); // Ensure there's no trailing slash in APP_URL
         $publicHtmlPath = base_path('../public_html'); // Define the relative path to public_html
 
@@ -63,7 +63,7 @@ if (!function_exists('getImageCompanyLogo')) {
     function getImageCompanyLogo($experience)
     {
         $disk = env('FILESYSTEM_DISK');
-        $placeholderUrl = 'https://via.placeholder.com/150';
+        $placeholderUrl = 'https://dummyimage.com/300';
         $appUrl = rtrim(env('APP_URL'), '/'); // Ensure there's no trailing slash in APP_URL
         $publicHtmlPath = base_path('../public_html'); // Define the relative path to public_html
 
@@ -91,7 +91,7 @@ if (!function_exists('getImageSchoolLogo')) {
     function getImageSchoolLogo($education)
     {
         $disk = env('FILESYSTEM_DISK');
-        $placeholderUrl = 'https://via.placeholder.com/150';
+        $placeholderUrl = 'https://dummyimage.com/300';
         $appUrl = rtrim(env('APP_URL'), '/'); // Ensure there's no trailing slash in APP_URL
         $publicHtmlPath = base_path('../public_html'); // Define the relative path to public_html
 
@@ -119,7 +119,7 @@ if (!function_exists('getPostCoverImage')) {
     function getPostCoverImage($post)
     {
         $disk = env('FILESYSTEM_DISK');
-        $placeholderUrl = 'https://via.placeholder.com/150';
+        $placeholderUrl = 'https://dummyimage.com/300';
         $appUrl = rtrim(env('APP_URL'), '/'); // Ensure there's no trailing slash in APP_URL
         $publicHtmlPath = base_path('../public_html'); // Define the relative path to public_html
 

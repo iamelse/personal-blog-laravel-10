@@ -84,18 +84,36 @@
                                 <!-- Content -->
                                 <div class="form-group mandatory mb-3">
                                     <label class="form-label" for="content">Content</label>
-                                    <textarea id="editor" class="form-control @error('content') is-invalid @enderror" name="content" rows="10" placeholder="Write your post content here...">{{ old('content') }}</textarea>
-                                    @error('content')
+                                    <textarea id="editor" class="form-control @error('body') is-invalid @enderror" name="body" rows="10" placeholder="Write your post content here...">{{ old('body') }}</textarea>
+                                    @error('body')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+
+                                <!-- Post Status -->
+                                <div class="form-group mb-3 mandatory">
+                                    <label class="form-label" for="selectPostStatus">Post Status</label>
+                                    <select class="form-select @error('post_status') is-invalid @enderror" name="post_status" id="selectPostStatus">
+                                        <option value="" selected>-- Select Status --</option>
+                                        @foreach ($postStatuses as $key => $label)
+                                            <option value="{{ $key }}">{{ $label }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('post_status')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
                                 </div>
         
-                                <!-- Post Schedule -->
-                                <div class="form-group mb-3">
+                                <!-- Post Schedule (Hidden by Default) -->
+                                <div class="form-group mb-3" id="postScheduleForm" style="display: none;">
                                     <label class="form-label" for="published_at">Post Schedule</label>
-                                    <input type="text" class="form-control @error('published_at') is-invalid @enderror" placeholder="Select date and time" name="published_at" id="published_at" value="{{ old('published_at') }}"/>
+                                    <input type="text" class="form-control @error('published_at') is-invalid @enderror" 
+                                        placeholder="Select date and time" name="published_at" id="published_at" 
+                                        value="{{ old('published_at') }}"/>
                                     <small class="form-text text-muted">If you want the post to be published immediately, leave this field empty.</small>
                                     @error('published_at')
                                         <span class="invalid-feedback" role="alert">
@@ -245,6 +263,26 @@
             .then(response => response.json())
             .then(data => slug.value = data.slug)
             .catch(error => console.error('Error:', error));
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const statusSelect = document.getElementById("selectPostStatus");
+        const scheduleForm = document.getElementById("postScheduleForm");
+
+        function toggleScheduleForm() {
+            if (statusSelect.value === "scheduled") {
+                scheduleForm.style.display = "block";
+            } else {
+                scheduleForm.style.display = "none";
+            }
+        }
+
+        // Trigger on change
+        statusSelect.addEventListener("change", toggleScheduleForm);
+
+        // Ensure correct state on page load (for edit scenarios)
+        toggleScheduleForm();
     });
 </script>
 @endpush

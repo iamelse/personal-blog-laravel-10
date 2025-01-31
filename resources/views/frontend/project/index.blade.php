@@ -26,12 +26,12 @@
                                         <div class="card-body mt-2">
                                             <div class="circle-container l-card-border-color shadow-sm mb-2">
                                                 <div class="circle-content">
-                                                <i class='bx bxs-folder-open'></i>
+                                                <i class='bx bx-folder-open'></i>
                                                 </div>
                                             </div>
                                             <h5 class="l-card-title l-text-dark">{{ $project->title }}</h5>
                                             <p class="l-card-text">
-                                                {{ \Illuminate\Support\Str::limit(strip_tags($project->desc), 100) }}
+                                                {!! \Illuminate\Support\Str::limit(strip_tags($project->desc), 100) !!}
                                             </p>
                                             <div class="row text-end">
                                                 <a class="arrow-card-link" href="{{ route('project.show', $project->slug) }}">

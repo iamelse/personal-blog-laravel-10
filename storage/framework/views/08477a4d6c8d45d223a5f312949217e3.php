@@ -11,7 +11,7 @@
                         <?php if($home): ?>
                             <?php if($home->image): ?>
                                 <div class="container mb-3">
-                                    <img src="<?php echo e(getHomeImageProfile($home)); ?>" class="rounded-circle img-fluid" style="width: 75px; height: 75px; object-fit: cover;">
+                                    <img src="<?php echo e(getHomeImageProfile($home)); ?>" class="rounded-circle img-fluid" style="width: 75px; height: 75px; object-fit: cover;" alt="<?php echo e($home->image); ?>" loading="lazy">
                                 </div>
                             <?php elseif($home->url): ?>
                                 <div class="container mb-3">
@@ -134,16 +134,16 @@
                                         <div class="card-body mt-2">
                                             <div class="circle-container l-card-border-color shadow-sm mb-2">
                                                 <div class="circle-content">
-                                                <i class='bx bxs-folder-open'></i>
+                                                <i class='bx bx-folder-open'></i>
                                                 </div>
                                             </div>
                                             <h5 class="l-card-title l-text-dark"><?php echo e($project->title); ?></h5>
                                             <p class="l-card-text">
-                                                <?php echo e(\Illuminate\Support\Str::limit(strip_tags($project->desc), 80)); ?>
+                                                <?php echo \Illuminate\Support\Str::limit(strip_tags($project->desc), 80); ?>
 
                                             </p>
                                             <div class="row text-end">
-                                                <a class="arrow-card-link" href="">
+                                                <a class="arrow-card-link" href="<?php echo e(route('project.show', $project->slug)); ?>">
                                                     <i class='bx bx-right-arrow-alt bx-sm'></i>
                                                 </a>
                                             </div>

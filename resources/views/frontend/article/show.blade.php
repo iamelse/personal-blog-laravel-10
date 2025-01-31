@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
+    <!-- Hide archive posts from search engines -->
+    <meta name="robots" content="{{ $post->status === \App\Enums\PostStatus::PUBLISHED->value ? 'index, follow' : 'noindex, nofollow' }}">
+
     <!-- Dynamic Meta Tags -->
     <meta name="title" content="{{ $post->seo && $post->seo->seo_title ? $post->seo->seo_title : $post->title }}">
     <meta name="description" content="{{ $post->seo && $post->seo->seo_description ? $post->seo->seo_description : Str::limit(strip_tags($post->body), 150) }}">
@@ -70,7 +73,7 @@
                                 {{ $post->title }}
                             </h1>
                             <div class="d-flex align-items-center my-4">
-                                <img src="{{ empty($post->author->image_profile) ? 'https://via.placeholder.com/150' : (Storage::disk('public_uploads')->exists($post->author->image_profile) ? asset('uploads/' . $post->author->image_profile) : 'https://via.placeholder.com/150') }}" alt="Profile Image" class="me-2 rounded-circle" style="width: 45px; height: 45px; object-fit: cover;">
+                                <img src="{{ getUserImageProfilePath($post->author) }}" alt="Profile Image" class="me-2 rounded-circle" style="width: 45px; height: 45px; object-fit: cover;">
                                 <div class="post-metadata">
                                     <span class="author l-text-dark">{{ $post->author->name }}</span>
                                     <span class="category l-text-dark">in {{ $post->category->name }}</span>
@@ -163,6 +166,26 @@
                 navbar.classList.remove('shadow-sm');
             }
         });
+    </script>
+
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            "headline": "{{ $post->title }}",
+            "image": "{{ getPostCoverImage($post) }}",
+            "author": {
+                "@type": "Person",
+                "name": "{{ $post->author->name }}"
+            },
+            "datePublished": "{{ $post->created_at->toIso8601String() }}",
+            "dateModified": "{{ $post->updated_at->toIso8601String() }}",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "{{ url()->current() }}"
+            },
+            "description": "{{ Str::limit(strip_tags($post->body), 150) }}"
+        }
     </script>
     
 </body>

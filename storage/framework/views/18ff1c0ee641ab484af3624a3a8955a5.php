@@ -265,7 +265,7 @@ unset($__errorArgs, $__bag); ?>
     };
 
     CKEDITOR.config.toolbar = [
-        ['Styles', 'Format', 'FontSize', 'TextColor'],
+        ['Source','Styles', 'Format', 'FontSize', 'TextColor'],
         ['Bold', 'Italic', 'Underline', 'StrikeThrough'],
         ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
     ];

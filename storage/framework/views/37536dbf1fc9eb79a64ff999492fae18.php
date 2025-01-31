@@ -1,6 +1,8 @@
 <?php
-    function isActive($url) {
-        return request()->is(trim($url, '/')) || request()->is(trim($url, '/') . '/*');
+    if (!function_exists('isActive')) {
+        function isActive($url) {
+            return request()->is(trim($url, '/')) || request()->is(trim($url, '/') . '/*');
+        }
     }
     
     $sidebarMenuLists = [

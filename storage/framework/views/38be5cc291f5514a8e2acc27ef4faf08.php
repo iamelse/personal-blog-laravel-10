@@ -6,20 +6,120 @@
 
 <?php $__env->startSection('content'); ?>
     <div id="main-content">
-        <div class="page-heading">
-            <div class="page-title">
-                <div class="row">
-                    <div class="col-12 col-md-6 order-md-1 order-last">
+             
+        <div class="row d-flex justify-content-between align-items-center">
+            <!-- Left Content (Start) -->
+            <div class="col">
+                <div class="page-heading">
+                    <div class="page-title">
                         <h3>
                             Hello & <?php echo e(\App\Helpers\GreetingHelper::getGreeting()); ?>, <?php echo e(explode(' ', Auth::user()->name)[0]); ?>!
                         </h3>
                         <p class="text-subtitle text-muted">
-                            Here overview of your activities.
+                            Here's an overview of your activities.
                         </p>
-                    </div>                
+                    </div>
+                </div> 
+            </div>
+        
+            <!-- Right Content (End) -->
+            <div class="col text-end">
+                <div class="page-heading">
+                    <div class="page-title">
+                        <button 
+                            class="btn btn-icon border-spacing-0 border-0" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#filterModal"
+                            aria-label="Open Filter Modal"
+                        >
+                            <i class="bx bx-sm bx-filter-alt"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>             
+        </div>        
+
+        <!-- Filter Modal -->
+        <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="filterModalLabel">Filter Options</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Start of Vertical Filter Form -->
+                        <form action="<?php echo e(url()->current()); ?>" method="GET">
+                            <div class="row g-3">
+                                <!-- Start Date -->
+                                <div class="col-12">
+                                    <label for="start_date" class="form-label">Start Date</label>
+                                    <input 
+                                        type="date" 
+                                        id="start_date" 
+                                        name="start_date" 
+                                        class="form-control" 
+                                        value="<?php echo e(request('start_date', \Carbon\Carbon::today()->subDays(6)->toDateString())); ?>" 
+                                    >
+                                </div>
+                                
+                                <!-- End Date -->
+                                <div class="col-12">
+                                    <label for="end_date" class="form-label">End Date</label>
+                                    <input 
+                                        type="date" 
+                                        id="end_date" 
+                                        name="end_date" 
+                                        class="form-control" 
+                                        value="<?php echo e(request('end_date', \Carbon\Carbon::today()->toDateString())); ?>" 
+                                    >
+                                </div>
+                                
+                                <!-- Subdays -->
+                                <div class="col-12">
+                                    <label for="subdays" class="form-label">Subdays</label>
+                                    <select name="subdays" id="subdays" class="form-select">
+                                        <?php for($i = 1; $i <= 30; $i++): ?>
+                                            <option value="<?php echo e($i); ?>" <?php echo e(request('subdays', 6) == $i ? 'selected' : ''); ?>>
+                                                <?php echo e($i); ?> day<?php echo e($i > 1 ? 's' : ''); ?>
+
+                                            </option>
+                                        <?php endfor; ?>
+                                    </select>
+                                </div>
+                                
+                                <!-- User Assignment (Conditional for MASTER role) -->
+                                <?php if(Auth::user()->roles->first()->name == EnumUserRole::MASTER->value): ?>
+                                    <div class="col-12">
+                                        <label for="post_user_id" class="form-label">Assign to User</label>
+                                        <select name="post_user_id" id="post_user_id" class="form-select">
+                                            <option value="" <?php echo e(request('post_user_id', '') == '' ? 'selected' : ''); ?>>All Users</option>
+                                            <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($user->id); ?>" <?php echo e(request('post_user_id') == $user->id ? 'selected' : ''); ?>>
+                                                    <?php echo e($user->name); ?>
+
+                                                </option>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        </select>
+                                    </div>
+                                <?php endif; ?>
+                            
+                                <!-- Submit Button -->
+                                <div class="col-12 text-center">
+                                    <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+                                </div>
+                                
+                                <!-- Clear Filters -->
+                                <div class="col-12 text-center">
+                                    <a href="<?php echo e(url()->current()); ?>" class="btn btn-secondary w-100">Clear Filters</a>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- End of Vertical Filter Form -->
+                    </div>
+                </div>
+            </div>
+        </div>
         
         <?php
             $labels = [];
@@ -36,68 +136,6 @@
         <div class="row">
             <div class="col-12">
                 <section class="section">
-
-                    <div class="container mb-3">
-                        <div class="row align-items-center">
-                            <form action="<?php echo e(url()->current()); ?>" method="GET" class="row gx-2">
-                                <div class="col">
-                                    <!-- Start Date label and input -->
-                                    <label for="start_date" class="form-label text-sm">Start Date</label>
-                                    <input type="date" id="start_date" name="start_date" class="form-control form-control-sm" value="<?php echo e(request('start_date', \Carbon\Carbon::today()->subDays(6)->toDateString())); ?>">
-                                </div>
-                        
-                                <div class="col">
-                                    <!-- End Date label and input -->
-                                    <label for="end_date" class="form-label text-sm">End Date</label>
-                                    <input type="date" id="end_date" name="end_date" class="form-control form-control-sm" value="<?php echo e(request('end_date', \Carbon\Carbon::today()->toDateString())); ?>">
-                                </div>
-                        
-                                <div class="col">
-                                    <!-- Subdays label and select input -->
-                                    <label for="subdays" class="form-label text-sm">Subdays</label>
-                                    <select name="subdays" id="subdays" class="form-select form-select-sm">
-                                        <?php for($i = 1; $i <= 30; $i++): ?>
-                                            <option value="<?php echo e($i); ?>" <?php echo e(request('subdays', 6) == $i ? 'selected' : ''); ?>>
-                                                <?php echo e($i); ?> day<?php echo e($i > 1 ? 's' : ''); ?>
-
-                                            </option>
-                                        <?php endfor; ?>
-                                    </select>
-                                </div>
-
-                                <?php if(Auth::user()->roles->first()->name == EnumUserRole::MASTER->value): ?>
-                                    <div class="col">
-                                        <!-- User label and select input -->
-                                        <label for="post_user_id" class="form-label text-sm">Assign to User</label>
-                                        <select name="post_user_id" id="post_user_id" class="form-select form-select-sm">
-                                            <!-- Option for 'All Users' (default) -->
-                                            <option value="" <?php echo e(request('post_user_id', '') == '' ? 'selected' : ''); ?>>All Users</option>
-                                            
-                                            <!-- Loop through users -->
-                                            <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <option value="<?php echo e($user->id); ?>" <?php echo e(request('post_user_id') == $user->id ? 'selected' : ''); ?>>
-                                                    <?php echo e($user->name); ?>
-
-                                                </option>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                        </select>
-                                    </div>
-                                <?php endif; ?>                   
-                        
-                                <div class="col-auto">
-                                    <!-- Submit button -->
-                                    <label class="form-label d-block">&nbsp;</label> <!-- Spacer for alignment -->
-                                    <button type="submit" class="btn btn-sm btn-primary mb-3">Submit</button>
-                                </div>
-                        
-                                <div class="col-auto">
-                                    <!-- Clear Filter button -->
-                                    <label class="form-label d-block">&nbsp;</label> <!-- Spacer for alignment -->
-                                    <a href="<?php echo e(url()->current()); ?>" class="btn btn-sm btn-secondary mb-3">Clear Filter</a>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
 
                     <div class="row">
                         <!-- All Posts -->

@@ -13,7 +13,7 @@
                         @if ($home)
                             @if ($home->image)
                                 <div class="container mb-3">
-                                    <img src="{{ getHomeImageProfile($home) }}" class="rounded-circle img-fluid" style="width: 75px; height: 75px; object-fit: cover;">
+                                    <img src="{{ getHomeImageProfile($home) }}" class="rounded-circle img-fluid" style="width: 75px; height: 75px; object-fit: cover;" alt="{{ $home->image }}" loading="lazy">
                                 </div>
                             @elseif ($home->url)
                                 <div class="container mb-3">
@@ -134,15 +134,15 @@
                                         <div class="card-body mt-2">
                                             <div class="circle-container l-card-border-color shadow-sm mb-2">
                                                 <div class="circle-content">
-                                                <i class='bx bxs-folder-open'></i>
+                                                <i class='bx bx-folder-open'></i>
                                                 </div>
                                             </div>
                                             <h5 class="l-card-title l-text-dark">{{ $project->title }}</h5>
                                             <p class="l-card-text">
-                                                {{ \Illuminate\Support\Str::limit(strip_tags($project->desc), 80) }}
+                                                {!! \Illuminate\Support\Str::limit(strip_tags($project->desc), 80) !!}
                                             </p>
                                             <div class="row text-end">
-                                                <a class="arrow-card-link" href="">
+                                                <a class="arrow-card-link" href="{{ route('project.show', $project->slug) }}">
                                                     <i class='bx bx-right-arrow-alt bx-sm'></i>
                                                 </a>
                                             </div>

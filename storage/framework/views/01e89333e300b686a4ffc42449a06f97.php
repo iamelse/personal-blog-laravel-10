@@ -39,7 +39,7 @@
                                     <h6 class="l-text-dark fw-bold mt-2"><?php echo e($experience->position_name); ?></h6>
                                     <h6 class="l-text-dark"><?php echo e($experience->company_name); ?></h6>
                                     <p class="l-card-text">
-                                        <?php echo e($experience->desc); ?>
+                                        <?php echo $experience->desc; ?>
 
                                     </p>
                                 </div>
@@ -78,7 +78,7 @@
                                     <h6 class="l-text-dark fw-bold mt-2"><?php echo e($education->degree); ?>, <?php echo e($education->major); ?></h6>
                                     <h6 class="l-text-dark"><?php echo e($education->school_name); ?></h6>
                                     <p class="l-card-text">
-                                        <?php echo e($education->desc); ?>
+                                        <?php echo $education->desc; ?>
 
                                     </p>
                                 </div>

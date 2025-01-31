@@ -104,8 +104,8 @@
                                 <!-- Content Field -->
                                 <div class="form-group mb-3 mandatory">
                                     <label class="form-label mandatory">Content</label>
-                                    <textarea id="editor" class="form-control @error('content') is-invalid @enderror" name="content" rows="10">{{ old('content', $post->body) }}</textarea>
-                                    @error('content')
+                                    <textarea id="editor" class="form-control @error('body') is-invalid @enderror" name="body" rows="10">{{ old('body', $post->body) }}</textarea>
+                                    @error('body')
                                         <div class="invalid-feedback d-block">
                                             <strong>{{ $message }}</strong>
                                         </div>
@@ -156,6 +156,16 @@
                                             <strong>{{ $message }}</strong>
                                         </div>
                                     @enderror
+                                </div>
+
+                                <!-- SEO Tips -->
+                                <div class="alert alert-info mt-4">
+                                    <strong>SEO Tips:</strong> 
+                                    <ul>
+                                        <li>Write unique Meta Titles and Descriptions for better visibility.</li>
+                                        <li>Use keywords naturally in the post content.</li>
+                                        <li>Keep Meta Titles and Descriptions within optimal length limits.</li>
+                                    </ul>
                                 </div>
 
                                 <!-- Submit and Cancel Buttons -->
