@@ -64,7 +64,8 @@ class PostController extends Controller
 
         return view('backend.article.create', [
             'title' => 'New Post',
-            'categories' => PostCategory::all()
+            'categories' => PostCategory::all(),
+            'postStatuses' => PostStatus::values()
         ]);
     }
 
@@ -79,7 +80,7 @@ class PostController extends Controller
                 'body' => $request->body,
                 'user_id' => Auth::user()->id,
                 'published_at' => $request->published_at,
-                'status' => $this->determineStatus($request)
+                'status' => $request->post_status
             ];
 
             $post_seo = [
@@ -274,12 +275,5 @@ class PostController extends Controller
         } else {
             return Post::where('user_id', $user->id)->filter($filters);
         }
-    }
-
-    private function determineStatus($request): string
-    {
-        return $request->published_at && $request->published_at > now()
-            ? PostStatus::SCHEDULED->value
-            : PostStatus::PUBLISHED->value;
     }
 }

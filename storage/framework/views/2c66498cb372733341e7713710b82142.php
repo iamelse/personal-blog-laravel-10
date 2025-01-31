@@ -159,9 +159,39 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
                                 </div>
+
+                                <!-- Post Status -->
+                                <div class="form-group mb-3 mandatory">
+                                    <label class="form-label" for="selectPostStatus">Post Status</label>
+                                    <select class="form-select <?php $__errorArgs = ['post_status'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" name="post_status" id="selectPostStatus">
+                                        <option value="" selected>-- Select Status --</option>
+                                        <?php $__currentLoopData = $postStatuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($key); ?>"><?php echo e($label); ?></option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </select>
+                                    <?php $__errorArgs = ['post_status'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong><?php echo e($message); ?></strong>
+                                        </span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                </div>
         
-                                <!-- Post Schedule -->
-                                <div class="form-group mb-3">
+                                <!-- Post Schedule (Hidden by Default) -->
+                                <div class="form-group mb-3" id="postScheduleForm" style="display: none;">
                                     <label class="form-label" for="published_at">Post Schedule</label>
                                     <input type="text" class="form-control <?php $__errorArgs = ['published_at'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -170,7 +200,9 @@ if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
-unset($__errorArgs, $__bag); ?>" placeholder="Select date and time" name="published_at" id="published_at" value="<?php echo e(old('published_at')); ?>"/>
+unset($__errorArgs, $__bag); ?>" 
+                                        placeholder="Select date and time" name="published_at" id="published_at" 
+                                        value="<?php echo e(old('published_at')); ?>"/>
                                     <small class="form-text text-muted">If you want the post to be published immediately, leave this field empty.</small>
                                     <?php $__errorArgs = ['published_at'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -369,6 +401,26 @@ unset($__errorArgs, $__bag); ?>
             .then(response => response.json())
             .then(data => slug.value = data.slug)
             .catch(error => console.error('Error:', error));
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const statusSelect = document.getElementById("selectPostStatus");
+        const scheduleForm = document.getElementById("postScheduleForm");
+
+        function toggleScheduleForm() {
+            if (statusSelect.value === "scheduled") {
+                scheduleForm.style.display = "block";
+            } else {
+                scheduleForm.style.display = "none";
+            }
+        }
+
+        // Trigger on change
+        statusSelect.addEventListener("change", toggleScheduleForm);
+
+        // Ensure correct state on page load (for edit scenarios)
+        toggleScheduleForm();
     });
 </script>
 <?php $__env->stopPush(); ?>

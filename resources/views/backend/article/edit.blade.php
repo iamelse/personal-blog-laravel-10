@@ -158,6 +158,16 @@
                                     @enderror
                                 </div>
 
+                                <!-- SEO Tips -->
+                                <div class="alert alert-info mt-4">
+                                    <strong>SEO Tips:</strong> 
+                                    <ul>
+                                        <li>Write unique Meta Titles and Descriptions for better visibility.</li>
+                                        <li>Use keywords naturally in the post content.</li>
+                                        <li>Keep Meta Titles and Descriptions within optimal length limits.</li>
+                                    </ul>
+                                </div>
+
                                 <!-- Submit and Cancel Buttons -->
                                 <div class="row">
                                     <div class="col-12 d-flex justify-content-end">

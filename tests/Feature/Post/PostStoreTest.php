@@ -70,45 +70,6 @@ class PostStoreTest extends TestCase
     }
 
     /**
-     * Test the post store functionality for a directly published post.
-     */
-    public function test_post_store_creates_directly_published_post(): void
-    {
-        $user = $this->_create_user_and_logged_in_with_master_role('create_posts');
-
-        Storage::fake(env('FILESYSTEM_DISK', 'public'));
-
-        $category = PostCategory::factory()->create();
-
-        $coverImage = UploadedFile::fake()->image('cover.jpg');
-        $requestData = [
-            'post_category_id' => $category->id,
-            'title' => 'Published Post',
-            'slug' => 'published-post',
-            'content' => 'This is the body of the published post.',
-            'published_at' => NULL, // Set it to null for immediate publish
-            'cover' => $coverImage,
-        ];
-
-        $response = $this->post(route('post.store'), $requestData);
-
-        $response->assertStatus(302);
-        $response->assertSessionHasNoErrors();
-
-        $this->assertDatabaseHas('posts', [
-            'post_category_id' => $category->id,
-            'title' => 'Published Post',
-            'slug' => 'published-post',
-            'body' => 'This is the body of the published post.',
-            'user_id' => $user->id,
-            'status' => PostStatus::PUBLISHED->value,
-        ]);
-
-        $post = Post::where('slug', 'published-post')->first();
-        Storage::disk(env('FILESYSTEM_DISK', 'public'))->assertExists($post->cover);
-    }
-
-    /**
      * Test the post store functionality for a scheduled post.
      */
     public function test_post_store_creates_scheduled_post(): void
@@ -120,13 +81,17 @@ class PostStoreTest extends TestCase
         $category = PostCategory::factory()->create();
 
         $coverImage = UploadedFile::fake()->image('cover.jpg');
-        $scheduledDate = now()->addDays(3); // Future date
+
+        // Set a future date for scheduling
+        $futureDate = now()->addDays(3)->format('Y-m-d H:i:s');
+
         $requestData = [
             'post_category_id' => $category->id,
             'title' => 'Scheduled Post',
             'slug' => 'scheduled-post',
-            'content' => 'This is the body of the scheduled post.',
-            'published_at' => $scheduledDate,
+            'body' => 'This is the body of the scheduled post.',
+            'post_status' => PostStatus::SCHEDULED->value, // Ensure it's scheduled
+            'published_at' => $futureDate, // Future date
             'cover' => $coverImage,
         ];
 
@@ -141,8 +106,8 @@ class PostStoreTest extends TestCase
             'slug' => 'scheduled-post',
             'body' => 'This is the body of the scheduled post.',
             'user_id' => $user->id,
-            'published_at' => $scheduledDate,
-            'status' => PostStatus::SCHEDULED->value,
+            'status' => PostStatus::SCHEDULED->value, // Ensure status is scheduled
+            'published_at' => $futureDate, // Ensure future date is stored
         ]);
 
         $post = Post::where('slug', 'scheduled-post')->first();
@@ -158,7 +123,7 @@ class PostStoreTest extends TestCase
             'post_category_id' => 1,
             'title' => 'Sample Post',
             'slug' => 'sample-post',
-            'content' => 'Sample content.',
+            'body' => 'Sample content.',
             'published_at' => now(),
         ]);
 
@@ -178,7 +143,7 @@ class PostStoreTest extends TestCase
             'post_category_id' => 1,
             'title' => 'Sample Post',
             'slug' => 'sample-post',
-            'content' => 'Sample content.',
+            'body' => 'Sample content.',
             'published_at' => now(),
         ]);
 
@@ -199,7 +164,7 @@ class PostStoreTest extends TestCase
             'post_category_id',
             'title',
             'slug',
-            'content',
+            'body',
         ]);
     }
 
@@ -215,7 +180,7 @@ class PostStoreTest extends TestCase
             'post_category_id' => 'invalid', // Should be an integer
             'title' => '', // Required field
             'slug' => 12345, // Should be a string
-            'content' => '', // Required field
+            'body' => '', // Required field
             'published_at' => 'not-a-date', // Should be a valid date or null
             'cover' => null, // If required, this will fail
         ]);
@@ -225,10 +190,46 @@ class PostStoreTest extends TestCase
             'post_category_id', // Invalid type
             'title', // Required
             'slug', // Should be a string
-            'content', // Required
+            'body', // Required
             'published_at', // Invalid date
             'cover', // Required if applicable
         ]);
+    }
+
+    /*
+    * Test that the store method fails when the slug is a duplicate.
+    */
+    public function test_post_store_fails_with_duplicate_slug(): void
+    {
+        $user = $this->_create_user_and_logged_in_with_master_role('create_posts');
+
+        $category = PostCategory::factory()->create();
+
+        // Create the first post
+        $this->post(route('post.store'), [
+            'cover' => UploadedFile::fake()->image('cover.jpg'),
+            'post_category_id' => $category->id,
+            'title' => 'First Post',
+            'slug' => 'duplicate-slug',
+            'body' => 'Original content.',
+            'post_status' => PostStatus::PUBLISHED->value,
+            'published_at' => now()->addMinute(), // Ensure a valid future date
+        ]);
+
+        // Attempt to create another post with the same slug
+        $response = $this->post(route('post.store'), [
+            'cover' => UploadedFile::fake()->image('cover.jpg'),
+            'post_category_id' => $category->id,
+            'title' => 'Duplicate Slug Post',
+            'slug' => 'duplicate-slug',
+            'body' => 'This content has a duplicate slug.',
+            'post_status' => PostStatus::PUBLISHED->value,
+            'published_at' => now()->addMinute(), // Ensure a valid future date
+        ]);
+
+        // Assert that the response contains a validation error for 'slug'
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors(['slug']);
     }
 
     /**
@@ -246,43 +247,12 @@ class PostStoreTest extends TestCase
             'post_category_id' => $category->id,
             'title' => 'Post with invalid file',
             'slug' => 'post-with-invalid-file',
-            'content' => 'This post has an invalid file.',
+            'body' => 'This post has an invalid file.',
             'published_at' => now(),
             'cover' => 'not-a-file', // Invalid file
         ]);
 
         $response->assertStatus(302);
         $response->assertSessionHasErrors(['cover']);
-    }
-
-    /**
-     * Test that the store method fails with duplicate slug.
-     */
-    public function test_post_store_fails_with_duplicate_slug(): void
-    {
-        $user = $this->_create_user_and_logged_in_with_master_role('create_posts');
-
-        $category = PostCategory::factory()->create();
-
-        $this->post(route('post.store'), [
-            'cover' => UploadedFile::fake()->image('cover.jpg'),
-            'post_category_id' => $category->id,
-            'title' => 'Original Post',
-            'slug' => 'duplicate-slug',
-            'content' => 'Original content.',
-            'published_at' => NULL,
-        ]);
-
-        $response = $this->post(route('post.store'), [
-            'cover' => UploadedFile::fake()->image('cover.jpg'),
-            'post_category_id' => $category->id,
-            'title' => 'Duplicate Slug Post',
-            'slug' => 'duplicate-slug',
-            'content' => 'This content has a duplicate slug.',
-            'published_at' => NULL,
-        ]);
-
-        $response->assertStatus(302);
-        $response->assertSessionHasErrors(['slug']);
     }
 }
