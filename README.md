@@ -1,6 +1,20 @@
-# Portfolio and Blog App
+# <h1 align="center">Portfolio and Blog App</h1>
 
-This project is a personal **Portfolio and Blog** application built using the **Laravel 10** framework. It serves as both a blog platform and a portfolio to showcase personal projects, experiences, and skills. It also features a CMS for content management and a dashboard with detailed post statistics and developer tools.
+![Screenshot](screenshots/home.jpg)
+
+<p align="center">
+This project is a personal **Portfolio and Blog** application built using the **Laravel** framework.  
+It serves as both a blog platform and a portfolio to showcase personal projects, experiences, and skills.  
+It also features a CMS for content management and a dashboard with detailed post statistics and developer tools.
+</p>
+
+<div align="center">
+
+![GitHub last commit](https://img.shields.io/github/last-commit/iamelse/personal-blog-laravel.svg)  
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/iamelse/personal-blog-laravel)  
+[![License](https://img.shields.io/github/license/iamelse/personal-blog-laravel.svg)](LICENSE)
+
+</div>
 
 ## Features
 
@@ -117,15 +131,6 @@ You can enable or disable the activity logger using the following environment va
 ## Contribution
 
 Feel free to fork this repository and make contributions. Pull requests are welcome!
-
-## Screenshots
-
-![Home](screenshots/home.jpg)
-![About](screenshots/about.png)
-![Projects](screenshots/projects.png)
-![Resume](screenshots/resume.png)
-![Article](screenshots/article.png)
-
 
 ## Test Documentation
 
