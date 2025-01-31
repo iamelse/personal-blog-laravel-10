@@ -1,62 +1,69 @@
 @extends('template.auth')
 
 @section('content')
-<div id="auth">
-    <div class="row h-100">
-        <div class="col-lg-5 col-12">
-            <div id="auth-left">
-                <h1 class="auth-title">Log in.</h1>
-                <p class="auth-subtitle mb-5">Log in with your data that you entered during registration.</p>
+    <div id="auth">
+        <div class="row h-100">
+            <!-- Left Column -->
+            <div class="col-lg-5 col-12">
+                <div id="auth-left">
+                    <div class="auth-logo">
+                        <a href="{{ url()->current() }}"><img src="{{ asset('assets/static/images/logo/logo.svg') }}" alt="Logo"></a>
+                    </div>
+                    <h1 class="display-6 fw-bold">Log in.</h1>
+                    <p class="fs-5 text-gray-500 mb-5">Log in with your data that you entered during registration.</p>
 
-                <form method="POST" action="{{ route('authenticate') }}">
-                    @csrf
-                    <div class="form-group position-relative has-icon-left mb-4">
-                        <input type="text" name="email" class="form-control form-control-xl @error('email') is-invalid @enderror" placeholder="Email" value="{{ old('email') }}">
-                        <div class="form-control-icon">
-                            <i class="bi bi-person"></i>
+                    <form action="{{ route('authenticate') }}" method="POST">
+                        @csrf
+                        
+                        <!-- Email Field -->
+                        <div class="form-group position-relative has-icon-left mb-4">
+                            <input 
+                                type="text" 
+                                name="email" 
+                                class="form-control form-control-lg @error('email') is-invalid @enderror" 
+                                placeholder="Email" 
+                                value="{{ old('email') }}">
+                            <div class="form-control-icon">
+                                <i class="bi bi-person"></i>
+                            </div>
+                            <!-- Error Message -->
+                            @error('email')
+                                <p class="text-danger fw-bold mt-1" style="font-size: 0.85rem;">
+                                    * {{ $message }}
+                                </p>
+                            @enderror
                         </div>
-                        @error('email')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group position-relative has-icon-left mb-4">
-                        <input type="password" name="password" class="form-control form-control-xl @error('password') is-invalid @enderror" placeholder="Password">
-                        <div class="form-control-icon">
-                            <i class="bi bi-shield-lock"></i>
+                    
+                        <!-- Password Field -->
+                        <div class="form-group position-relative has-icon-left mb-4">
+                            <input 
+                                type="password" 
+                                name="password" 
+                                class="form-control form-control-lg @error('password') is-invalid @enderror" 
+                                placeholder="Password">
+                            <div class="form-control-icon">
+                                <i class="bi bi-shield-lock"></i>
+                            </div>
+                            <!-- Error Message -->
+                            @error('password')
+                                <p class="text-danger fw-bold mt-1" style="font-size: 0.85rem;">
+                                    * {{ $message }}
+                                </p>
+                            @enderror
                         </div>
-                        @error('password')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="form-check form-check-lg d-flex align-items-end">
-                        <input class="form-check-input me-2" type="checkbox" name="remember" id="flexCheckDefault">
-                        <label class="form-check-label text-gray-600" for="flexCheckDefault">
-                            Keep me logged in
-                        </label>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block btn-lg shadow-lg mt-5">Log in</button>
-                </form>
+                    
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary btn-block btn-md shadow-md mt-3 py-2">
+                            Log in
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Right Column (Empty) -->
+            <div class="col-lg-7 d-none d-lg-block">
+                <div id="auth-right"></div>
             </div>
         </div>
     </div>
-</div>
 @endsection
-
-@push('scripts')
-    @if($errors->any())
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            Swal.fire({
-                toast: true,
-                position: 'top-end',
-                icon: 'error',
-                title: 'Login Failed!',
-                showConfirmButton: false,
-                timer: 3000
-            });
-        });
-    </script>
-    @endif
-
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-@endpush
