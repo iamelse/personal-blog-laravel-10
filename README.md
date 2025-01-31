@@ -3,17 +3,14 @@
 ![Screenshot](screenshots/home.jpg)
 
 <p align="center">
-This project is a personal **Portfolio and Blog** application built using the **Laravel** framework.  
+This project is a personal <strong>Portfolio and Blog</strong> application built using the <strong>Laravel</strong> framework.  
 It serves as both a blog platform and a portfolio to showcase personal projects, experiences, and skills.  
 It also features a CMS for content management and a dashboard with detailed post statistics and developer tools.
 </p>
 
 <div align="center">
-
-![GitHub last commit](https://img.shields.io/github/last-commit/iamelse/personal-blog-laravel.svg)  
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/iamelse/personal-blog-laravel)  
-[![License](https://img.shields.io/github/license/iamelse/personal-blog-laravel.svg)](LICENSE)
-
+    <img src="https://img.shields.io/github/last-commit/iamelse/personal-blog-laravel.svg" style="display: inline-block; margin-right: 10px;">  
+    <img src="https://img.shields.io/github/languages/code-size/iamelse/personal-blog-laravel" style="display: inline-block;">
 </div>
 
 ## Features
