@@ -80,7 +80,7 @@ class PostController extends Controller
                 'body' => $request->body,
                 'user_id' => Auth::user()->id,
                 'published_at' => $request->published_at,
-                'status' => $request->post_status
+                'status' => $request->status
             ];
 
             $post_seo = [

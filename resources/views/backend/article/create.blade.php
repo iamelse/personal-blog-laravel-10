@@ -95,13 +95,13 @@
                                 <!-- Post Status -->
                                 <div class="form-group mb-3 mandatory">
                                     <label class="form-label" for="selectPostStatus">Post Status</label>
-                                    <select class="form-select @error('post_status') is-invalid @enderror" name="post_status" id="selectPostStatus">
+                                    <select class="form-select @error('status') is-invalid @enderror" name="status" id="selectPostStatus">
                                         <option value="" selected>-- Select Status --</option>
                                         @foreach ($postStatuses as $key => $label)
                                             <option value="{{ $key }}">{{ $label }}</option>
                                         @endforeach
                                     </select>
-                                    @error('post_status')
+                                    @error('status')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
