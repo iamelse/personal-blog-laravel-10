@@ -154,9 +154,13 @@ Route::group(['middleware' => ['auth', 'share.notifications']], function () {
                 Artisan::call('optimize:clear');
                 Artisan::call('cache:clear');
                 Artisan::call('view:clear');
-                Artisan::call('composer:dump-autoload');
                 echo 'Optimized successfully!';
             });
+
+            Artisan::call('down', [
+                '--message' => 'The application is down for maintenance.',
+                '--retry' => 60
+            ]);
         });
 
         Route::prefix('social-media')->group(function () {
