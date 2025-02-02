@@ -65,7 +65,7 @@
 
                     <article class="col-lg-12 pb-2">
                         <header>
-                            <h1 class="text l-text-dark display-5 fw-bold">
+                            <h1 class="text l-text-dark display-6 fw-bold">
                                 <?php echo e($post->title); ?>
 
                             </h1>
