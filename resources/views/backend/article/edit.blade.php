@@ -225,7 +225,10 @@
             elements: {
                 p: function (el) {
                     el.addClass('l-text-p');
-                }
+                },
+                li: function (el) {
+                    el.addClass('l-text-p');
+                },
             }
         });
     });
