@@ -114,8 +114,8 @@
                                             </td>
                                             <td class="text-bold-500">{{ $post->category->name ?? '' }}</td>
                                             <td class="text-bold-500">{{ $post?->author?->name }}</td>
-                                            <td class="text-bold-500">{{ $post->title ?? '' }}</td>
-                                            <td class="text-bold-500">{{ $post->slug ?? '' }}</td>
+                                            <td class="text-bold-500">{{ truncateTableText($post->title) ?? '' }}</td>
+                                            <td class="text-bold-500">{{ truncateTableText($post->slug) ?? '' }}</td>
                                             @php
                                                 $status = $post->status;
                                             @endphp

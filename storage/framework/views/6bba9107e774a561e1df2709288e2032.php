@@ -126,8 +126,8 @@ unset($__errorArgs, $__bag); ?>
                                             </td>
                                             <td class="text-bold-500"><?php echo e($post->category->name ?? ''); ?></td>
                                             <td class="text-bold-500"><?php echo e($post?->author?->name); ?></td>
-                                            <td class="text-bold-500"><?php echo e($post->title ?? ''); ?></td>
-                                            <td class="text-bold-500"><?php echo e($post->slug ?? ''); ?></td>
+                                            <td class="text-bold-500"><?php echo e(truncateTableText($post->title) ?? ''); ?></td>
+                                            <td class="text-bold-500"><?php echo e(truncateTableText($post->slug) ?? ''); ?></td>
                                             <?php
                                                 $status = $post->status;
                                             ?>
