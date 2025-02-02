@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\PostStatus;
 use App\Models\Post;
 use App\Models\PostView;
 use Closure;
@@ -18,7 +19,8 @@ class PostVisitorCounter
         if ($slug) {
             $post = Post::where('slug', $slug)->first();
 
-            if ($post) {
+            if ($post && $post->status !== PostStatus::DRAFT->value) {
+                // Only increment views if the post is not a draft
                 $postView = PostView::where('post_id', $post->id)
                     ->where('view_date', $today)
                     ->first();
