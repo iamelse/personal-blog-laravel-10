@@ -156,11 +156,6 @@ Route::group(['middleware' => ['auth', 'share.notifications']], function () {
                 Artisan::call('view:clear');
                 echo 'Optimized successfully!';
             });
-
-            Artisan::call('down', [
-                '--message' => 'The application is down for maintenance.',
-                '--retry' => 60
-            ]);
         });
 
         Route::prefix('social-media')->group(function () {
