@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Closure;
 use DeviceDetector\ClientHints;
 use DeviceDetector\DeviceDetector;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
@@ -32,7 +33,7 @@ class TrackVisitor
         if ($slug) {
             $post = Post::where('slug', $slug)->first();
 
-            if ($post && $post->status !== PostStatus::DRAFT->value) {
+            if (!Auth::check() && $post && $post->status !== PostStatus::DRAFT->value) {
                 // Track the visitor if the post is not a draft
                 $date = now()->toDateString();
                 DB::table('visitor_statistics')

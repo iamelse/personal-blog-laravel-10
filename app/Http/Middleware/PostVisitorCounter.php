@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Models\PostView;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class PostVisitorCounter
@@ -19,7 +20,7 @@ class PostVisitorCounter
         if ($slug) {
             $post = Post::where('slug', $slug)->first();
 
-            if ($post && $post->status !== PostStatus::DRAFT->value) {
+            if (!Auth::check() && $post && $post->status !== PostStatus::DRAFT->value) {
                 // Only increment views if the post is not a draft
                 $postView = PostView::where('post_id', $post->id)
                     ->where('view_date', $today)
