@@ -136,19 +136,18 @@
         <div class="row">
             <div class="col-12">
                 <section class="section">
-
-                    <div class="row">
+                    <div class="row row-cols-1 row-cols-md-2">
                         <!-- All Posts -->
-                        <div class="col-6 col-lg-3 col-md-6">
+                        <div class="col">
                             <div class="card">
                                 <div class="card-body px-4 py-4-5">
                                     <div class="row">
-                                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
+                                        <div class="col-3 col-md-4 col-lg-2 d-flex justify-content-start">
                                             <div class="stats-icon purple mb-2">
                                                 <i class='bx bx-file'></i>
                                             </div>
                                         </div>
-                                        <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                        <div class="col-9 col-md-8 col-lg-10">
                                             <h6 class="text-muted font-semibold">All Post</h6>
                                             <h6 class="font-extrabold mb-0"><?php echo e($totalPosts->count()); ?></h6>
                                         </div>
@@ -156,18 +155,18 @@
                                 </div>
                             </div>
                         </div>
-
+                    
                         <!-- Scheduled Posts -->
-                        <div class="col-6 col-lg-3 col-md-6">
+                        <div class="col">
                             <div class="card">
                                 <div class="card-body px-4 py-4-5">
                                     <div class="row">
-                                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
+                                        <div class="col-3 col-md-4 col-lg-2 d-flex justify-content-start">
                                             <div class="stats-icon orange mb-2">
                                                 <i class='bx bx-calendar'></i>
                                             </div>
                                         </div>
-                                        <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                        <div class="col-9 col-md-8 col-lg-10">
                                             <h6 class="text-muted font-semibold">Scheduled Post</h6>
                                             <h6 class="font-extrabold mb-0"><?php echo e($scheduledPosts->count()); ?></h6>
                                         </div>
@@ -175,18 +174,18 @@
                                 </div>
                             </div>
                         </div>
-
+                    
                         <!-- Drafted Posts -->
-                        <div class="col-6 col-lg-3 col-md-6">
+                        <div class="col">
                             <div class="card">
                                 <div class="card-body px-4 py-4-5">
                                     <div class="row">
-                                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
+                                        <div class="col-3 col-md-4 col-lg-2 d-flex justify-content-start">
                                             <div class="stats-icon green mb-2">
                                                 <i class='bx bx-pencil'></i>
                                             </div>
                                         </div>
-                                        <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                        <div class="col-9 col-md-8 col-lg-10">
                                             <h6 class="text-muted font-semibold">Drafted Post</h6>
                                             <h6 class="font-extrabold mb-0"><?php echo e($draftedPosts->count()); ?></h6>
                                         </div>
@@ -194,18 +193,18 @@
                                 </div>
                             </div>
                         </div>
-
+                    
                         <!-- Published Posts -->
-                        <div class="col-6 col-lg-3 col-md-6">
+                        <div class="col">
                             <div class="card">
                                 <div class="card-body px-4 py-4-5">
                                     <div class="row">
-                                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
+                                        <div class="col-3 col-md-4 col-lg-2 d-flex justify-content-start">
                                             <div class="stats-icon red mb-2">
                                                 <i class='bx bx-check-circle'></i>
                                             </div>
                                         </div>
-                                        <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                        <div class="col-9 col-md-8 col-lg-10">
                                             <h6 class="text-muted font-semibold">Published Post</h6>
                                             <h6 class="font-extrabold mb-0"><?php echo e($publishedPosts->count()); ?></h6>
                                         </div>
@@ -214,6 +213,7 @@
                             </div>
                         </div>
                     </div>
+                                        
                 </section>
             </div>
         </div>
