@@ -23,7 +23,7 @@ class HomeUpdateRequest extends FormRequest
     {
         $rules = [
             'url' => 'nullable|url',
-            'imageInput' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,avif|max:2048',
+            'imageInput' => 'required|image|mimes:jpeg,png,jpg,gif,webp,avif|max:2048',
         ];
 
         // Only require 'content' if the action is to update content
