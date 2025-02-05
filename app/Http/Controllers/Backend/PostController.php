@@ -80,7 +80,7 @@ class PostController extends Controller
                 'body' => $request->body,
                 'user_id' => Auth::user()->id,
                 'published_at' => $request->published_at,
-                'status' => $request->post_status
+                'status' => $request->status
             ];
 
             $post_seo = [
@@ -192,7 +192,7 @@ class PostController extends Controller
                 ->log("Updated post: {$post->title}");
 
             // Redirect with success message
-            return redirect()->route('post.index')->with('success', 'Post updated successfully');
+            return redirect()->route('post.edit', $post->id)->with('success', 'Post updated successfully');
         } catch (\Exception $e) {
             // Log the exception for debugging purposes
             Log::error('Error updating post: ' . $e->getMessage(), [

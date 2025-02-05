@@ -50,11 +50,7 @@
     <title>{{ $post->title ?? $title ?? env('APP_NAME') }}</title>
 </head>
 
-<body class="loading">
-
-    <!-- Loader -->
-    <div class="loader" id="loader"></div>
-
+<body>
     <!-- Navbar -->
     @include('frontend.partials.navbar')
     <!-- End Navbar -->
@@ -69,7 +65,7 @@
 
                     <article class="col-lg-12 pb-2">
                         <header>
-                            <h1 class="text l-text-dark display-5 fw-bold">
+                            <h1 class="text l-text-dark display-6 fw-bold">
                                 {{ $post->title }}
                             </h1>
                             <div class="d-flex align-items-center my-4">
@@ -92,6 +88,9 @@
                                                                 
                             </div>                                                      
                         </header>
+                        <div class="cover-img mb-3" style="position: relative; width: 100%; padding-bottom: calc(100% / (3 / 1));">
+                            <img class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover" src="{{ getPostCoverImage($post) }}" alt="">
+                        </div>
                         <div class="content">
                             {!! $post->body !!}
                         </div>
@@ -146,15 +145,6 @@
     <!-- Footer -->
     @include('frontend.partials.footer')
     <!-- End Footer -->
-
-    <script>
-        window.addEventListener('load', function () {
-            setTimeout(function () {
-                document.body.classList.remove('loading');
-                document.body.classList.add('loaded');
-            }, 2000);
-        });
-    </script>
 
     <script>
         window.addEventListener('scroll', function() {

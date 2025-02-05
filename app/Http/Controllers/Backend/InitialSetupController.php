@@ -8,6 +8,13 @@ use Illuminate\Support\Facades\Artisan;
 
 class InitialSetupController extends Controller
 {
+    public function __construct()
+    {
+        if (config('app.setup_enabled') === false) {
+            abort(404);
+        }
+    }
+
     public function showInitialSetupPage()
     {
         return view('welcome');

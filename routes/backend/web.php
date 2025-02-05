@@ -154,7 +154,7 @@ Route::group(['middleware' => ['auth', 'share.notifications']], function () {
                 Artisan::call('optimize:clear');
                 Artisan::call('cache:clear');
                 Artisan::call('view:clear');
-                echo 'Cache cleared successfully!';
+                echo 'Optimized successfully!';
             });
         });
 

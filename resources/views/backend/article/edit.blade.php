@@ -225,7 +225,10 @@
             elements: {
                 p: function (el) {
                     el.addClass('l-text-p');
-                }
+                },
+                li: function (el) {
+                    el.addClass('l-text-p');
+                },
             }
         });
     });
@@ -240,5 +243,30 @@
             .then(data => slug.value = data.slug)
             .catch(error => console.error('Error:', error));
     });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+        @if($errors->any())
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'error',
+                title: 'Oops, something went wrong.',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        @endif
+
+        @if(session('success'))
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        @endif
 </script>
 @endpush

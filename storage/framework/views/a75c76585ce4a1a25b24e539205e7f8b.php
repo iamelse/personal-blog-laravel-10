@@ -50,11 +50,7 @@
     <title><?php echo e($post->title ?? $title ?? env('APP_NAME')); ?></title>
 </head>
 
-<body class="loading">
-
-    <!-- Loader -->
-    <div class="loader" id="loader"></div>
-
+<body>
     <!-- Navbar -->
     <?php echo $__env->make('frontend.partials.navbar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <!-- End Navbar -->
@@ -69,7 +65,7 @@
 
                     <article class="col-lg-12 pb-2">
                         <header>
-                            <h1 class="text l-text-dark display-5 fw-bold">
+                            <h1 class="text l-text-dark display-6 fw-bold">
                                 <?php echo e($post->title); ?>
 
                             </h1>
@@ -93,6 +89,9 @@
                                                                 
                             </div>                                                      
                         </header>
+                        <div class="cover-img mb-3" style="position: relative; width: 100%; padding-bottom: calc(100% / (3 / 1));">
+                            <img class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover" src="<?php echo e(getPostCoverImage($post)); ?>" alt="">
+                        </div>
                         <div class="content">
                             <?php echo $post->body; ?>
 
@@ -148,15 +147,6 @@
     <!-- Footer -->
     <?php echo $__env->make('frontend.partials.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <!-- End Footer -->
-
-    <script>
-        window.addEventListener('load', function () {
-            setTimeout(function () {
-                document.body.classList.remove('loading');
-                document.body.classList.add('loaded');
-            }, 2000);
-        });
-    </script>
 
     <script>
         window.addEventListener('scroll', function() {

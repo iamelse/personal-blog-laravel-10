@@ -55,7 +55,16 @@ class ArticleController extends Controller
 
     public function show($slug): View
     {
-        $post = Post::with('author', 'category', 'seo')->whereIn('status', [PostStatus::PUBLISHED, PostStatus::ARCHIVE])->where('slug', $slug)->firstOrFail();
+        $post = Post::with('author', 'category', 'seo')
+            ->where(function ($query) {
+                $query->whereIn('status', [PostStatus::PUBLISHED, PostStatus::ARCHIVE])
+                    ->orWhere(function ($subQuery) {
+                        $subQuery->where('status', PostStatus::DRAFT);
+                    });
+            })
+            ->where('slug', $slug)
+            ->firstOrFail();
+
         $relatedPosts = Post::where('post_category_id', $post->post_category_id)
                             ->where('slug', '!=', $post->slug)
                             ->where('status', PostStatus::PUBLISHED)

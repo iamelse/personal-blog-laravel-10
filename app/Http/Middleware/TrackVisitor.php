@@ -2,10 +2,13 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\PostStatus;
+use App\Models\Post;
 use Carbon\Carbon;
 use Closure;
 use DeviceDetector\ClientHints;
 use DeviceDetector\DeviceDetector;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
@@ -13,39 +16,45 @@ class TrackVisitor
 {
     public function handle($request, Closure $next)
     {
+        $slug = $request->route('slug');
         $userAgent = $_SERVER['HTTP_USER_AGENT'];
         $clientHints = ClientHints::factory($_SERVER);
 
         $deviceDetector = new DeviceDetector($userAgent, $clientHints);
-
         $deviceDetector->parse();
 
         $ip = $request->ip();
-        //$userAgent = $request->header('User-Agent');
-
         $browser = $this->_getBrowser($userAgent);
         $device = $this->_getDevice($userAgent);
         $os = $this->_getOS($userAgent);
         $country = $this->_getCountry($ip);
 
-        $date = now()->toDateString();
-        DB::table('visitor_statistics')
-            ->updateOrInsert(
-                [
-                    'date' => $date,
-                    'country' => $country,
-                    'browser' => $browser,
-                    'device' => $device,
-                    'os' => $os,
-                    'ip' => $ip,
-                    'full_os_info' => json_encode($deviceDetector->getOs()),
-                    'full_client_info'=> json_encode($deviceDetector->getClient()),
-                ],
-                [
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ]
-            );
+        // Check if post exists and its status is not 'draft'
+        if ($slug) {
+            $post = Post::where('slug', $slug)->first();
+
+            if (!Auth::check() && $post && $post->status !== PostStatus::DRAFT->value) {
+                // Track the visitor if the post is not a draft
+                $date = now()->toDateString();
+                DB::table('visitor_statistics')
+                    ->updateOrInsert(
+                        [
+                            'date' => $date,
+                            'country' => $country,
+                            'browser' => $browser,
+                            'device' => $device,
+                            'os' => $os,
+                            'ip' => $ip,
+                            'full_os_info' => json_encode($deviceDetector->getOs()),
+                            'full_client_info'=> json_encode($deviceDetector->getClient()),
+                        ],
+                        [
+                            'created_at' => Carbon::now(),
+                            'updated_at' => Carbon::now(),
+                        ]
+                    );
+            }
+        }
 
         return $next($request);
     }

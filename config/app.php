@@ -192,4 +192,10 @@ return [
         'Image' => \Intervention\Image\ImageServiceProvider::class,
     ])->toArray(),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Setup Enabled
+    |--------------------------------------------------------------------------
+    */
+    'setup_enabled' => env('SETUP_ENABLED', true),
 ];

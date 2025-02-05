@@ -163,20 +163,20 @@ unset($__errorArgs, $__bag); ?>
                                 <!-- Post Status -->
                                 <div class="form-group mb-3 mandatory">
                                     <label class="form-label" for="selectPostStatus">Post Status</label>
-                                    <select class="form-select <?php $__errorArgs = ['post_status'];
+                                    <select class="form-select <?php $__errorArgs = ['status'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
-unset($__errorArgs, $__bag); ?>" name="post_status" id="selectPostStatus">
+unset($__errorArgs, $__bag); ?>" name="status" id="selectPostStatus">
                                         <option value="" selected>-- Select Status --</option>
                                         <?php $__currentLoopData = $postStatuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <option value="<?php echo e($key); ?>"><?php echo e($label); ?></option>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
-                                    <?php $__errorArgs = ['post_status'];
+                                    <?php $__errorArgs = ['status'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
