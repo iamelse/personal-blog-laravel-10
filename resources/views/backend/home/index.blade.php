@@ -16,71 +16,41 @@
                         <div class="card-body">
                             <form method="POST" action="{{ route('backend.home.update.image') }}" enctype="multipart/form-data">
                                 @csrf
-                                @method('PUT')                                
-
-                                <div class="form-group">
-                                    <div class="form-group">
-                                        <div class="form-check">
-                                            <input class="form-check-input @error('radioType') is-invalid @enderror" type="radio" name="radioType" id="imageUploadRadio" value="image" {{ old('radioType', $home ? ($home->image ? 'image' : '') : 'image') == 'image' ? 'checked' : '' }}>
-                                            <label class="form-check-label mb-1" for="imageUploadRadio">
-                                                Image Upload
-                                            </label>
-                                            @error('radioType')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                
-                                        <div id="imageUpload" class="mb-3">
-                                            <input type="file" class="form-control @error('imageInput') is-invalid @enderror" name="imageInput" id="imageInput" value="{{ old('imageInput', $home ? $home->image : '') }}">
+                                @method('PUT')
+            
+                                <div class="row">
+                                    <!-- Image Preview -->
+                                    <div class="col-md-2 d-flex justify-content-center align-items-center mb-3">
+                                        <img id="imagePreview" 
+                                             src="{{ getHomeImageProfile($home) }}" 
+                                             class="img-fluid rounded-circle img-thumbnail" 
+                                             style="width: 100px; height: 100px; object-fit: cover;">
+                                    </div>
+            
+                                    <!-- Form Inputs -->
+                                    <div class="col-md-10">
+                                        <div class="form-group">
+                                            <label for="imageInput" class="form-label">Upload Image</label>
+                                            <input type="file" class="form-control @error('imageInput') is-invalid @enderror" 
+                                                   name="imageInput" id="imageInput">
                                             @error('imageInput')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
+            
+                                        @can('update_image_home', $home)
+                                            <div class="d-flex justify-content-end mt-3">
+                                                <button type="submit" class="btn btn-sm btn-primary me-1">Update</button>
+                                                <a href="{{ route('backend.home.index') }}" class="btn btn-sm btn-light-secondary">Cancel</a>
+                                            </div>
+                                        @endcan
                                     </div>
-                                
-                                    <div class="form-group">
-                                        <div class="form-check">
-                                            <input class="form-check-input @error('radioType') is-invalid @enderror" type="radio" name="radioType" id="urlRadio" value="url" {{ old('radioType', $home ? ($home->url ? 'url' : '') : '') == 'url' ? 'checked' : '' }}>
-                                            <label class="form-check-label mb-1" for="urlRadio">
-                                                URL Link
-                                            </label>
-                                            @error('radioType')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                
-                                        <div id="urlInput" class="mb-3">
-                                            <input type="text" class="form-control @error('urlLink') is-invalid @enderror" name="urlLink" id="urlLink" value="{{ old('urlLink', $home ? $home->url : '') }}" placeholder="Enter URL here">
-                                            @error('urlLink')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                
-                                    <div class="form-check">
-                                        <input class="form-check-input @error('radioType') is-invalid @enderror" type="radio" name="radioType" id="removeImageRadio" value="removeImage">
-                                        <label class="form-check-label mb-1" for="removeImageRadio">
-                                            Remove Image
-                                        </label>
-                                        @error('radioType')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>                                                            
-                            
-                                @can('update_image_home', $home)
-                                    <div class="row">
-                                        <div class="col-12 d-flex justify-content-end">
-                                            <button type="submit" class="btn btn-sm btn-primary me-1 mb-1">Update</button>
-                                            <a href="{{ route('backend.home.index') }}" class="btn btn-sm btn-light-secondary me-1 mb-1">Cancel</a>
-                                        </div>
-                                    </div>
-                                @endcan
-                            </form>                            
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>            
 
             <div class="col-12">
                 <div class="card">
@@ -121,52 +91,38 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    $(document).ready(function () {
-        updateFormVisibility($('input[type=radio][name=radioType]:checked').val());
+    document.getElementById('imageInput').addEventListener('change', function(event) {
+        let reader = new FileReader();
+        reader.onload = function() {
+            let preview = document.getElementById('imagePreview');
 
-        $('input[type=radio][name=radioType]').change(function () {
-            updateFormVisibility(this.value);
-        });
-
-        function updateFormVisibility(value) {
-            switch (value) {
-                case 'image':
-                    $('#imageUpload').show();
-                    $('#urlInput').hide();
-                    break;
-                case 'url':
-                    $('#imageUpload').hide();
-                    $('#urlInput').show();
-                    break;
-                default:
-                    $('#imageUpload').hide();
-                    $('#urlInput').hide();
-                    break;
-            }
-        }
-
-        @if($errors->any())
-            Swal.fire({
-                toast: true,
-                position: 'top-end',
-                icon: 'error',
-                title: 'There are errors in the form!',
-                showConfirmButton: false,
-                timer: 3000
-            });
-        @endif
-
-        @if(session('success'))
-            Swal.fire({
-                toast: true,
-                position: 'top-end',
-                icon: 'success',
-                title: '{{ session('success') }}',
-                showConfirmButton: false,
-                timer: 3000
-            });
-        @endif
+            preview.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
     });
+</script>
+<script>
+    @if($errors->any())
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'error',
+            title: 'There are errors in the form!',
+            showConfirmButton: false,
+            timer: 3000
+        });
+    @endif
+
+    @if(session('success'))
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: '{{ session('success') }}',
+            showConfirmButton: false,
+            timer: 3000
+        });
+    @endif
 </script>
 <script>
     var options = {
