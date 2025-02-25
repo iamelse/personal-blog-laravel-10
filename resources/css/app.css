@@ -11,6 +11,9 @@
 }
 
 @layer components {
+  .sidebar-icons {
+    @apply text-[1.25rem] font-bold;
+  }
   .menu-item {
     @apply relative flex items-center gap-3 rounded-lg px-3 py-2 text-theme-sm font-medium;
   }
