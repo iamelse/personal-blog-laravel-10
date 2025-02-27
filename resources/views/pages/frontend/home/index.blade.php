@@ -22,7 +22,7 @@
   <!-- Hero Section -->
   <section class="py-28 lg:py-56 text-center bg-gray-50 dark:bg-gray-900 transition-colors" data-aos="fade-up">
     <div class="max-w-6xl mx-auto px-6">
-      <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight text-gray-900 dark:text-gray-300">
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight text-gray-900 dark:text-gray-300">
         Laravel Web Developer Expert
       </h1>
       <p class="mt-6 text-base sm:text-lg text-gray-500 dark:text-gray-300 max-w-3xl mx-auto">
@@ -96,7 +96,7 @@
   <!-- About Section -->
   <section id="about" class="py-16 lg:py-32 text-center bg-white dark:bg-gray-800 transition-colors">
     <div class="max-w-6xl mx-auto px-6">
-      <h2 data-aos="fade-up" class="text-3xl py-2 lg:py-10 sm:text-4xl md:text-5xl font-extrabold leading-tight text-gray-900 dark:text-gray-300">
+      <h2 data-aos="fade-up" class="text-3xl py-2 lg:py-10 sm:text-4xl md:text-5xl font-bold leading-tight text-gray-900 dark:text-gray-300">
         About Me
       </h2>
 
@@ -128,7 +128,7 @@
   <!-- Project Section -->
   <section id="project" class="py-16 lg:py-32 bg-white dark:bg-gray-900 transition-colors">
     <div class="max-w-6xl mx-auto px-6 text-center">
-      <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight text-gray-900 dark:text-gray-300"
+      <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight text-gray-900 dark:text-gray-300"
           data-aos="fade-up">
         My Projects
       </h2>
@@ -172,7 +172,7 @@
   <!-- Post Section -->
   <section id="posts" class="py-16 lg:py-32 bg-gray-50 dark:bg-gray-800 transition-colors">
     <div class="max-w-6xl mx-auto px-6">
-      <h2 class="text-center text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight text-gray-900 dark:text-gray-300"
+      <h2 class="text-center text-3xl sm:text-4xl md:text-5xl font-bold leading-tight text-gray-900 dark:text-gray-300"
           data-aos="fade-up">
         Latest Posts
       </h2>
@@ -269,7 +269,7 @@
       <div class="flex flex-col md:flex-row items-center justify-between gap-6 bg-blue-700 p-8 rounded-3xl shadow-lg" data-aos="fade-up">
         <!-- Text Content -->
         <div class="flex-1 text-center md:text-left" data-aos="fade-right">
-          <h2 class="text-3xl sm:text-4xl font-extrabold leading-tight">
+          <h2 class="text-3xl sm:text-4xl font-bold leading-tight">
             Let's Collaborate and Build Something Amazing!
           </h2>
           <p class="mt-3 text-lg text-blue-200">
@@ -294,7 +294,7 @@
   <!-- Contact Section -->
   <section id="contact" class="py-16 lg:py-32 bg-white dark:bg-gray-900 transition-colors">
     <div class="max-w-6xl mx-auto px-6">
-      <h2 class="text-center text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight text-gray-900 dark:text-gray-300"
+      <h2 class="text-center text-3xl sm:text-4xl md:text-5xl font-bold leading-tight text-gray-900 dark:text-gray-300"
           data-aos="fade-up">
         Get in Touch
       </h2>
