@@ -36,7 +36,7 @@
       <div class="mt-10 flex flex-col lg:flex-row items-center gap-10">
         <!-- Bio Content -->
         <article class="w-full lg:w-3/4 text-left">
-          <div data-aos="fade-left" class="space-y-8">
+          <div data-aos="fade-left" class="space-y-3 lg:space-y-4">
             <div>
               <h2 class="text-xl lg:text-3xl font-extrabold text-gray-900 dark:text-gray-100">Short Bio</h2>
               <p class="text-base sm:text-lg text-gray-600 dark:text-gray-300">
