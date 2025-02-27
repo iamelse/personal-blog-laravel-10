@@ -45,17 +45,17 @@
   </div>
 
   <!-- Bottom Copyright -->
-  <div class="mt-8 border-t border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2">
-      <!-- Left: Copyright -->
-      <div class="mt-8 text-center md:text-left">
-          © 2025 Lana Septiana. All rights reserved.
-      </div>
-      
-      <!-- Right: Made with Love -->
-      <div class="mt-2 lg:mt-8 text-center md:text-right flex justify-center md:justify-end items-center space-x-2">
-          <span>Made with</span>
-          <i class="bx bxs-heart text-red-500 dark:text-red-400 text-xl"></i>
-          <span>by Lana</span>
-      </div>
+  <div class="mt-8 border-t border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 max-w-6xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center">
+    <!-- Left: Copyright -->
+    <div class="text-center md:text-left">
+      © 2025 Lana Septiana. All rights reserved.
+    </div>
+
+    <!-- Right: Made with Love -->
+    <div class="mt-2 md:mt-0 flex items-center space-x-2">
+      <span>Made with</span>
+      <i class="bx bxs-heart text-red-500 dark:text-red-400 text-xl"></i>
+      <span>by Lana</span>
+    </div>
   </div>
 </footer>
