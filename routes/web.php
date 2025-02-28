@@ -1,13 +1,7 @@
 <?php
 
 use App\Http\Controllers\Web\Auth\LoginController;
-use App\Http\Controllers\Web\FrontEnd\AboutController;
-use App\Http\Controllers\Web\FrontEnd\HomeController;
 use Illuminate\Support\Facades\Route;
-
-Route::get('/', [HomeController::class, 'index'])->name('fe.home.index');
-Route::get('/about', [AboutController::class, 'index'])->name('fe.about.index');
-
 
 Route::prefix('auth')->group(function () {
 
@@ -27,3 +21,4 @@ Route::prefix('auth')->group(function () {
 
 
 include __DIR__ . '/web/backend/web.php';
+include __DIR__ . '/web/frontend/web.php';
