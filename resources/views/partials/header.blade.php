@@ -153,7 +153,7 @@
                <img src="{{ asset('tailadmin/images/user/user-01.jpg') }}" alt="User" />
                </span>
                <span class="mr-1 block text-theme-sm font-medium">
-               Emirhan Boruch
+                  {{ Auth::user()->name }}
                </span>
                <svg
                   :class="dropdownOpen && 'rotate-180'"
@@ -182,12 +182,12 @@
                   <span
                      class="block text-theme-sm font-medium text-gray-700 dark:text-gray-400"
                      >
-                  Emirhan Boruch
+                  {{ Auth::user()->name }}
                   </span>
                   <span
                      class="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400"
                      >
-                  emirhanboruch51@gmail.com
+                     {{ Auth::user()->email }}
                   </span>
                </div>
                <ul
