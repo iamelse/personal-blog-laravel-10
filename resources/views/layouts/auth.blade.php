@@ -10,7 +10,31 @@
       <link rel="icon" href="{{ asset('tailadmin/images/favicon.ico') }}">
       <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
       <title>{{ $title ?? env('APP_NAME') }}</title>
-      @vite('resources/css/app.css')
+      
+      @php
+         $viteDevUrl = env('VITE_DEV_SERVER_URL', 'http://localhost:5173');
+         $isDev = !env('APP_IDCLOUDHOST_ENV') && @file_get_contents($viteDevUrl) !== false;
+      @endphp
+
+      @if ($isDev)
+         {{-- Use Vite Dev Server --}}
+         @vite(['resources/css/app.css', 'resources/js/app.js'])
+      @else
+         {{-- Load Production Build --}}
+         @php
+            $manifestPath = public_path('build/manifest.json');
+            $manifest = file_exists($manifestPath) ? json_decode(file_get_contents($manifestPath), true) : null;
+         @endphp
+
+         @if ($manifest)
+            <link rel="stylesheet" href="{{ asset('build/' . $manifest['resources/css/app.css']['file']) }}" />
+            <script type="module" src="{{ asset('build/' . $manifest['resources/js/app.js']['file']) }}"></script>
+         @else
+            {{-- Fallback if manifest.json is missing --}}
+            <p style="color: red;">Error: Build files not found. Please run <code>npm run build</code>.</p>
+         @endif
+      @endif
+
    </head>
    <body
       x-data="{ page: 'comingSoon', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
@@ -58,6 +82,5 @@
             </svg>
          </button>
       </div>
-      @vite('resources/js/app.js')
    </body>
 </html>
