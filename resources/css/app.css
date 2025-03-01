@@ -4,6 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
+[x-cloak] {
+  display: none !important;
+}
+
 @layer base {
   body {
     @apply relative z-1 bg-gray-50 font-outfit text-base font-normal;

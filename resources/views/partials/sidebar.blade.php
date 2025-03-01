@@ -1,7 +1,7 @@
 <!-- ===== Sidebar Start ===== -->
 <aside
 :class="sidebarToggle ? 'translate-x-0 lg:w-[90px]' : '-translate-x-full'"
-class="sidebar fixed left-0 top-0 z-9999 flex h-screen w-[290px] flex-col overflow-y-hidden border-r border-gray-200 bg-white px-5 dark:border-gray-800 dark:bg-black lg:static lg:translate-x-0"
+class="sidebar fixed left-0 top-0 z-40 flex h-screen w-[290px] flex-col overflow-y-hidden border-r border-gray-200 bg-white px-5 dark:border-gray-800 dark:bg-black lg:static lg:translate-x-0"
 >
 <!-- SIDEBAR HEADER -->
 <div
@@ -60,12 +60,22 @@ class="sidebar fixed left-0 top-0 z-9999 flex h-screen w-[290px] flex-col overfl
          <ul class="flex flex-col gap-4 mb-6">
             <!-- Menu Item Dashboard -->
             <li>
-               <a href="" class="menu-item group menu-item-active">
-                  <i class='bx bx-sm bx-line-chart'></i>
-                  Dashboard
+               <a href="{{ route('be.dashboard.index') }}" 
+                  class="menu-item group {{ request()->routeIs('be.dashboard.index') ? 'menu-item-active' : 'menu-item-inactive' }}">
+                   <i class='bx bx-sm bx-line-chart'></i>
+                   Dashboard
+               </a>
+           </li>           
+            <!-- Menu Item Dashboard -->
+
+            <!-- Menu Item Role And Permission -->
+            <li>
+               <a href="{{ route('be.role.and.permission.index') }}" class="menu-item group {{ request()->routeIs('be.role.and.permission.index') ? 'menu-item-active' : 'menu-item-inactive' }}">
+                  <i class='bx bx-sm bx-user-circle'></i>
+                  Role And Permission
                </a>
             </li>
-            <!-- Menu Item Dashboard -->
+            <!-- Menu Item Role And Permission -->
          </ul>
       </div>
    </nav>

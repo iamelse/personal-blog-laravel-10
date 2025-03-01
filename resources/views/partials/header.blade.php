@@ -1,7 +1,7 @@
 <!-- ===== Header Start ===== -->
 <header
    x-data="{menuToggle: false}"
-   class="sticky top-0 z-99999 flex w-full border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 lg:border-b"
+   class="sticky top-0 z-40 flex w-full border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 lg:border-b"
    >
    <div
       class="flex flex-grow flex-col items-center justify-between lg:flex-row lg:px-6"
@@ -141,6 +141,7 @@
          <!-- User Area -->
          <div
             class="relative"
+            x-cloak
             x-data="{ dropdownOpen: false }"
             @click.outside="dropdownOpen = false"
             >
