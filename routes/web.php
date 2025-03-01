@@ -22,3 +22,4 @@ Route::prefix('auth')->group(function () {
 
 include __DIR__ . '/web/backend/web.php';
 include __DIR__ . '/web/frontend/web.php';
+include __DIR__ .'/dev-idcloudhost.php';
