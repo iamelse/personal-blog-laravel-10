@@ -7,6 +7,7 @@ use App\Enums\PermissionEnum;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Str;
 
 class PermissionSeeder extends Seeder
 {
@@ -16,7 +17,12 @@ class PermissionSeeder extends Seeder
     public function run(): void
     {
         foreach (RoleEnum::cases() as $roleEnum) {
-            $role = Role::firstOrCreate(['name' => $roleEnum->value]);
+            $role = Role::firstOrNew(['name' => $roleEnum->value]);
+            
+            if (!$role->exists) {
+                $role->slug = Str::slug($roleEnum->value);
+                $role->save();
+            }
 
             foreach ($roleEnum->permissions() as $permissionEnum) {
                 $permission = Permission::firstOrCreate(['name' => $permissionEnum->value]);

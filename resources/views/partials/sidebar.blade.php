@@ -57,25 +57,29 @@ class="sidebar fixed left-0 top-0 z-40 flex h-screen w-[290px] flex-col overflow
                   />
             </svg>
          </h3>
-         <ul class="flex flex-col gap-4 mb-6">
-            <!-- Menu Item Dashboard -->
-            <li>
-               <a href="{{ route('be.dashboard.index') }}" 
-                  class="menu-item group {{ request()->routeIs('be.dashboard.index') ? 'menu-item-active' : 'menu-item-inactive' }}">
-                   <i class='bx bx-sm bx-line-chart'></i>
-                   Dashboard
-               </a>
-           </li>           
-            <!-- Menu Item Dashboard -->
+         @php
+            use App\Enums\PermissionEnum;
 
-            <!-- Menu Item Role And Permission -->
-            <li>
-               <a href="{{ route('be.role.and.permission.index') }}" class="menu-item group {{ request()->routeIs('be.role.and.permission.index') ? 'menu-item-active' : 'menu-item-inactive' }}">
-                  <i class='bx bx-sm bx-user-circle'></i>
-                  Role And Permission
-               </a>
-            </li>
-            <!-- Menu Item Role And Permission -->
+            $menus = [
+               ['parent_route' => 'be.dashboard', 'route' => 'be.dashboard.index', 'icon' => 'bx-line-chart', 'label' => 'Dashboard', 'permission' => PermissionEnum::READ_DASHBOARD],
+               ['parent_route' => 'be.role.and.permission', 'route' => 'be.role.and.permission.index', 'icon' => 'bx-user-circle', 'label' => 'Role And Permission', 'permission' => PermissionEnum::READ_ROLE],
+            ];
+
+            $userPermissions = Auth::user()->permissions;
+         @endphp
+
+         <ul class="flex flex-col gap-4 mb-6">
+            @foreach ($menus as $menu)
+               @can($menu['permission'], $userPermissions)
+                     <li>
+                        <a href="{{ route($menu['route']) }}" 
+                           class="menu-item group {{ request()->routeIs($menu['parent_route'] . '*') ? 'menu-item-active' : 'menu-item-inactive' }}">
+                           <i class="bx bx-sm {{ $menu['icon'] }}"></i>
+                           {{ $menu['label'] }}
+                        </a>
+                     </li>
+               @endcan
+            @endforeach
          </ul>
       </div>
    </nav>

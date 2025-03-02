@@ -12,10 +12,9 @@
     
     @php
         $viteDevUrl = env('VITE_DEV_SERVER_URL', 'http://localhost:5173');
-        $isDev = !env('APP_IDCLOUDHOST_ENV') && @file_get_contents($viteDevUrl) !== false;
     @endphp
 
-    @if ($isDev)
+    @if ($viteDevUrl)
         {{-- Use Vite Dev Server --}}
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @else

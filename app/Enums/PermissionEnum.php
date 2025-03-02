@@ -4,7 +4,7 @@ namespace App\Enums;
 
 enum PermissionEnum: string
 {
-    case DASHBOARD_INDEX = 'dashboard_index';
+    case READ_DASHBOARD = 'dashboard_read';
 
     case CREATE_POST = 'posts_create';
     case READ_POST = 'posts_read';
@@ -20,6 +20,7 @@ enum PermissionEnum: string
     case READ_ROLE = 'roles_read';
     case UPDATE_ROLE = 'roles_update';
     case DELETE_ROLE = 'roles_delete';
+    case UPDATE_ROLE_PERMISSION = 'roles_update_permission';
 
     public static function all(): array
     {

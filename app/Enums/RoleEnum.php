@@ -11,7 +11,7 @@ enum RoleEnum: string
     {
         return match ($this) {
             self::MASTER => [
-                PermissionEnum::DASHBOARD_INDEX,
+                PermissionEnum::READ_DASHBOARD,
 
                 PermissionEnum::CREATE_POST,
                 PermissionEnum::READ_POST,
@@ -27,9 +27,11 @@ enum RoleEnum: string
                 PermissionEnum::READ_ROLE,
                 PermissionEnum::UPDATE_ROLE,
                 PermissionEnum::DELETE_ROLE,
+
+                PermissionEnum::UPDATE_ROLE_PERMISSION
             ],
             self::AUTHOR => [
-                PermissionEnum::DASHBOARD_INDEX,
+                PermissionEnum::READ_DASHBOARD,
 
                 PermissionEnum::CREATE_POST,
                 PermissionEnum::READ_POST,

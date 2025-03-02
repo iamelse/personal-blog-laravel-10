@@ -12,7 +12,7 @@ class DashboardController extends Controller
 {
     public function index(): View
     {
-        Gate::authorize(PermissionEnum::DASHBOARD_INDEX->value);
+        Gate::authorize(PermissionEnum::READ_DASHBOARD->value);
 
         return view('pages.dashboard.index', [
             'title' => 'Dashboard'
