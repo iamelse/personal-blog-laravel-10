@@ -37,3 +37,18 @@ Route::get('/refresh-database', function () {
         'message' => 'Database refreshed successfully!',
     ]);
 });
+
+Route::get('/dump-autoload', function () {
+    try {
+        $output = shell_exec('composer dump-autoload 2>&1');
+        return response()->json([
+            'message' => 'Composer dump-autoload executed successfully!',
+            'output' => $output
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'message' => 'Failed to execute composer dump-autoload!',
+            'error' => $e->getMessage()
+        ], 500);
+    }
+});
