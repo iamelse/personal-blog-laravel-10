@@ -6,6 +6,30 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Carbon\Carbon;
 
+Route::get('/config-clear', function () {
+    Artisan::call('config:clear');
+
+    return response()->json([
+       'message' => 'Config cleared successfully!',
+    ]);
+});
+
+Route::get('/cache-clear', function () {
+    Artisan::call('cache:clear');
+
+    return response()->json([
+        'message'=> 'Cache cleared successfully!',
+    ]);
+});
+
+Route::get('/optimize-clear', function () {
+    Artisan::call('optimize:clear');
+
+    return response()->json([
+        'message'=> 'Optimized cleared successfully!',
+    ]);
+});
+
 Route::get('/refresh-database', function () {
     Artisan::call('migrate:fresh --seed');
 
