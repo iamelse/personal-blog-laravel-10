@@ -7,14 +7,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\Role\StoreRoleRequest;
 use App\Http\Requests\Web\Role\UpdateRoleRequest;
 use App\Models\Role;
-use Artisan;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
-use Log;
 use Spatie\Permission\Models\Permission;
 use Spatie\QueryBuilder\QueryBuilder;
 

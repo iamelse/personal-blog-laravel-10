@@ -79,7 +79,7 @@
                   @can(PermissionEnum::UPDATE_ROLE_PERMISSION->value, $role)
                      <div class="flex justify-end mt-8">
                         <button type="submit"
-                           class="px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-all">
+                           class="px-4 py-2.5 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-all">
                            Update Permissions
                         </button>
                      </div>

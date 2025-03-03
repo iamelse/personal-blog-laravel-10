@@ -14,10 +14,6 @@
                 <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Edit Role</h1>
                 <p class="text-gray-600 dark:text-gray-400">Modify the role details and permissions.</p>
             </div>
-            <a href="{{ route('be.role.and.permission.create') }}" 
-                class="flex items-center gap-2 px-5 py-2.5 text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700">
-                <i class="bx bx-plus text-lg"></i> New Role
-            </a>
         </div>
 
         <!-- Form Section -->
@@ -73,7 +69,7 @@
                     <!-- Submit Button -->
                     <div class="flex justify-end mt-6">
                         <button type="submit" 
-                            class="px-6 py-2.5 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 
+                            class="px-4 py-2.5 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 
                             focus:outline-none focus:ring-2 focus:ring-blue-500">
                             Update Role
                         </button>

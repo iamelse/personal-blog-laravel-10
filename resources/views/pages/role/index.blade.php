@@ -17,8 +17,8 @@
         </div>
         @can(PermissionEnum::CREATE_ROLE, $roles)
         <a href="{{ route('be.role.and.permission.create') }}" 
-            class="flex items-center gap-2 px-5 py-2.5 text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700">
-            <i class="bx bx-plus text-lg"></i> New Role
+            class="flex items-center gap-2 px-4 py-2.5 text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700">
+            <i class="bx bx-plus"></i> New Role
         </a>
         @endcan
     </div>
