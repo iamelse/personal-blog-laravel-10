@@ -63,6 +63,7 @@ class="sidebar fixed left-0 top-0 z-40 flex h-screen w-[290px] flex-col overflow
             $menus = [
                ['parent_route' => 'be.dashboard', 'route' => 'be.dashboard.index', 'icon' => 'bx-line-chart', 'label' => 'Dashboard', 'permission' => PermissionEnum::READ_DASHBOARD],
                ['parent_route' => 'be.role.and.permission', 'route' => 'be.role.and.permission.index', 'icon' => 'bx-user-circle', 'label' => 'Role And Permission', 'permission' => PermissionEnum::READ_ROLE],
+               ['parent_route' => 'be.user', 'route' => 'be.user.index', 'icon' => 'bx bx-user', 'label' => 'User', 'permission' => PermissionEnum::READ_USER]
             ];
 
             $userPermissions = Auth::user()->permissions;

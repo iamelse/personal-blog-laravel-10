@@ -163,6 +163,12 @@ class RoleController extends Controller
         }
     }
 
+    /**
+     * Summary of massDestroy
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Role $role
+     * @return RedirectResponse
+     */
     public function massDestroy(Request $request, Role $role): RedirectResponse
     {
         try {
