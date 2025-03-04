@@ -13,6 +13,11 @@ class Role extends SpatieRoleModel
     
     protected $guarded = ['id'];
 
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     /**
      * Return the sluggable configuration array for this model.
      *

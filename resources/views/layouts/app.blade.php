@@ -36,7 +36,7 @@
 
    </head>
    <body
-      x-data="{ page: 'ecommerce', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+      x-data="{ 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
       x-init="
       darkMode = JSON.parse(localStorage.getItem('darkMode'));
       $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
@@ -57,7 +57,12 @@
                ></div>
             <!-- Small Device Overlay End -->
             @include('partials.header')
+
+            <!-- Page content -->
             @yield('content')
+
+            <!-- Page-Specific Scripts -->
+            @yield('bottom-scripts')
          </div>
          <!-- ===== Content Area End ===== -->
       </div>

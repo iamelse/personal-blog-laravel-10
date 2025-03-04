@@ -23,12 +23,13 @@ class RoleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View | RedirectResponse
+    public function index(Request $request): View | RedirectResponse
     {
         Gate::authorize(PermissionEnum::READ_ROLE->value);
 
         $allowedFilterFields = ['name'];
         $allowedSortFields = ['name', 'created_at', 'updated_at'];
+        $limits = [10, 25, 50, 100];
 
         $redirect = $this->_validateFilter(request()->query('filter', []), $allowedFilterFields);
         if ($redirect) {
@@ -39,13 +40,16 @@ class RoleController extends Controller
                 ->defaultSort('name')
                 ->allowedFilters($allowedFilterFields)
                 ->allowedSorts($allowedSortFields)
-                ->paginate(10);
+                ->paginate($request->query('limit', 10))
+                ->appends(request()->query())
+                ->onEachSide(1);
 
         return view('pages.role.index', [
             'title' => 'Role and Permission',
             'roles' => $roles,
             'allowedFilterFields' => $allowedFilterFields,
-            'allowedSortFields' => $allowedSortFields
+            'allowedSortFields' => $allowedSortFields,
+            'limits' => $limits
         ]);
     }
 
@@ -159,6 +163,31 @@ class RoleController extends Controller
         }
     }
 
+    public function massDestroy(Request $request, Role $role): RedirectResponse
+    {
+        try {
+            Gate::authorize(PermissionEnum::DELETE_ROLE->value);
+
+            $roleSlugsArray = explode(',', $request->input('slugs', ''));
+
+            if (!empty($roleSlugsArray)) {
+                Role::whereIn('slug', $roleSlugsArray)->delete();
+            }
+
+            return redirect()
+                ->route('be.role.and.permission.index')
+                ->with('success', 'Roles deleted successfully.');
+        } catch (AuthorizationException $authorizationException) {
+                Log::error($authorizationException->getMessage());
+                abort(403, 'This action is unauthorized.');
+        } catch (Exception $e) {
+            Log::error('Error deleting roles: '. $e->getMessage());
+            return redirect()
+                ->route('be.role.and.permission.index')
+                ->with('error', 'An error occurred while deleting the roles.');
+        }
+    }
+
     /**
      * Show the form for editing permission of spesific user role
      */
@@ -188,7 +217,7 @@ class RoleController extends Controller
 
             return redirect()
                 ->route('be.role.and.permission.edit.permissions', $role->slug)
-                ->with('success', 'Successfully updated role permissions');
+                ->with('success', 'Role permissions updated');
         } catch (AuthorizationException $authorizationException) {
                 Log::error($authorizationException->getMessage());
 

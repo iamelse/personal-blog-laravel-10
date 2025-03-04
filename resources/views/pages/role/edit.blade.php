@@ -81,3 +81,42 @@
 </main>
 <!-- ===== Main Content End ===== -->
 @endsection
+
+@section('bottom-scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            @if(session('success'))
+                Swal.fire({
+                    toast: true,
+                    position: "top-end",
+                    icon: "success",
+                    title: "{{ session('success') }}",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    customClass: {
+                        popup: 'bg-white dark:bg-gray-800 shadow-lg',
+                        title: 'font-normal text-base text-gray-800 dark:text-gray-200'
+                    }
+                });
+            @endif
+
+            @if(session('error'))
+                Swal.fire({
+                    toast: true,
+                    position: "top-end",
+                    icon: "error",
+                    title: "{{ session('error') }}",
+                    showConfirmButton: false,
+                    timer: 4000,
+                    timerProgressBar: true,
+                    customClass: {
+                        popup: 'bg-white dark:bg-gray-800 shadow-lg',
+                        title: 'font-normal text-base text-gray-800 dark:text-gray-200'
+                    }
+                });
+            @endif
+        });
+    </script>
+@endsection

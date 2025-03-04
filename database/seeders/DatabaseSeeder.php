@@ -29,6 +29,6 @@ class DatabaseSeeder extends Seeder
         $user = User::find(1);
         $user->assignRole(RoleEnum::MASTER->value);
 
-        //Role::factory()->count(100)->create();
+        Role::factory()->count(100)->create();
     }
 }

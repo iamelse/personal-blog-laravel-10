@@ -20,7 +20,7 @@ class RoleFactory extends Factory
     {
         return [
             'name' => $this->faker->unique()->jobTitle,
-            'guard_name' => $this->faker->randomElement(['web', 'api']),
+            'guard_name' => $this->faker->randomElement(['web']),
             'created_at' => Carbon::now()->subDays(random_int(1, 365)),
             'updated_at' => Carbon::now()->subDays(random_int(1, 365))
         ];
