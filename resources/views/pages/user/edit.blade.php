@@ -1,7 +1,3 @@
-@php
-    use App\Enums\PermissionEnum;
-@endphp
-
 @extends('layouts.app')
 
 @section('content')
@@ -11,31 +7,30 @@
         <!-- Header Section -->
         <div class="flex px-6 flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-                <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Edit Role</h1>
-                <p class="text-gray-600 dark:text-gray-400">Modify the role details and permissions.</p>
+                <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Create User</h1>
+                <p class="text-gray-600 dark:text-gray-400">Add a new user to the system.</p>
             </div>
         </div>
 
         <!-- Form Section -->
         <div class="border-gray-100 p-5 dark:border-gray-800 sm:p-6">
             <div class="rounded-2xl px-6 pb-8 pt-4 border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-                <form action="{{ route('be.role.and.permission.update', $role->slug) }}" method="POST" x-data="{ name: '{{ $role->name }}', slug: '{{ $role->slug }}' }">
+                <form action="{{ route('be.user.update', $user->username) }}" method="POST">
                     @csrf
                     @method('PUT')
                     
-                    <!-- Role Name -->
+                    <!-- Name -->
                     <div class="mt-4">
                         <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                            Role Name <span class="text-error-500">*</span>
+                            Name <span class="text-error-500">*</span>
                         </label>
                         <div x-data="{ hasError: {{ session('errors') && session('errors')->has('name') ? 'true' : 'false' }} }">
                             <input 
                                 type="text" 
                                 id="name" 
                                 name="name" 
-                                x-model="name" 
-                                @input="slug = name.toLowerCase().trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')"
-                                placeholder="Enter role name"
+                                value="{{ old('name', $user->name) }}"
+                                placeholder="Enter full name"
                                 :class="hasError ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-700 focus:border-brand-300 dark:focus:border-brand-800'"
                                 class="h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:outline-none focus:ring focus:ring-brand-500/10 dark:bg-dark-900 dark:text-white/90 dark:placeholder:text-white/30"
                                 required>
@@ -44,24 +39,91 @@
                             </span>
                         </div>
                     </div>
-    
-                    <!-- Slug (Read-only) -->
+
+                    <!-- Username -->
                     <div class="mt-4">
                         <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                            Slug <span class="text-error-500">*</span>
+                            Username <span class="text-error-500">*</span>
                         </label>
-                        <div x-data="{ hasError: {{ session('errors') && session('errors')->has('slug') ? 'true' : 'false' }} }">
+                        <div x-data="{ hasError: {{ session('errors') && session('errors')->has('username') ? 'true' : 'false' }} }">
                             <input 
                                 type="text" 
-                                id="slug" 
-                                name="slug" 
-                                x-model="slug"
-                                placeholder="Slug is auto generated"
+                                id="username" 
+                                name="username" 
+                                value="{{ old('username', $user->username) }}"
+                                placeholder="Enter username"
                                 :class="hasError ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-700 focus:border-brand-300 dark:focus:border-brand-800'"
                                 class="h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:outline-none focus:ring focus:ring-brand-500/10 dark:bg-dark-900 dark:text-white/90 dark:placeholder:text-white/30"
-                                readonly>
+                                required>
                             <span class="text-xs mt-1 font-medium text-red-500 dark:text-red-500" x-show="hasError">
-                                @error('slug') * {{ $message }} @enderror
+                                @error('username') * {{ $message }} @enderror
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mt-4">
+                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                            Email <span class="text-error-500">*</span>
+                        </label>
+                        <div x-data="{ hasError: {{ session('errors') && session('errors')->has('email') ? 'true' : 'false' }} }">
+                            <input 
+                                type="email" 
+                                id="email" 
+                                name="email" 
+                                value="{{ old('email', $user->email) }}"
+                                placeholder="Enter email address"
+                                :class="hasError ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-700 focus:border-brand-300 dark:focus:border-brand-800'"
+                                class="h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:outline-none focus:ring focus:ring-brand-500/10 dark:bg-dark-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                required>
+                            <span class="text-xs mt-1 font-medium text-red-500 dark:text-red-500" x-show="hasError">
+                                @error('email') * {{ $message }} @enderror
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="mt-4">
+                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                            Password (Leave blank to keep current password)
+                        </label>
+                        <div x-data="{ hasError: {{ session('errors') && session('errors')->has('password') ? 'true' : 'false' }} }">
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password"
+                                placeholder="Enter password"
+                                :class="hasError ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-700 focus:border-brand-300 dark:focus:border-brand-800'"
+                                class="h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:outline-none focus:ring focus:ring-brand-500/10 dark:bg-dark-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                >
+                            <span class="text-xs mt-1 font-medium text-red-500 dark:text-red-500" x-show="hasError">
+                                @error('password') * {{ $message }} @enderror
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Role -->
+                    <div class="mt-4">
+                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                            Role <span class="text-error-500">*</span>
+                        </label>
+                        <div x-data="{ hasError: {{ session()->has('errors') && session('errors')->has('role') ? 'true' : 'false' }} }">
+                            <select 
+                                id="role" 
+                                name="role" 
+                                :class="hasError ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-700 focus:border-brand-300 dark:focus:border-brand-800'"
+                                class="h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs focus:outline-none focus:ring focus:ring-brand-500/10 dark:bg-dark-900 dark:text-white/90"
+                                required>
+                                <option value="">Select a role</option>
+                                @foreach($roles as $role)
+                                    <option value="{{ $role->name }}" 
+                                        {{ (old('role', $user->roles->first()->name ?? '') == $role->name) ? 'selected' : '' }}>
+                                        {{ $role->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <span class="text-xs mt-1 font-medium text-red-500 dark:text-red-500" x-show="hasError">
+                                @error('role') * {{ $message }} @enderror
                             </span>
                         </div>
                     </div>
@@ -69,9 +131,9 @@
                     <!-- Submit Button -->
                     <div class="flex justify-end mt-6">
                         <button type="submit" 
-                            class="px-4 py-2.5 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 
+                            class="px-6 py-2.5 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 
                             focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            Update Role
+                            Update User
                         </button>
                     </div>
                 </form>

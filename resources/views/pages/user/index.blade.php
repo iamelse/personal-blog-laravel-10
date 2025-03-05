@@ -32,14 +32,14 @@
                 <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
                     <div class="relative flex items-center gap-2">
                         <!-- Delete Selected Button -->
-                        <div x-data="{ openRoleMassDeleteModal: false, deleteUrl: '' }">
+                        <div x-data="{ openUserMassDeleteModal: false, deleteUrl: '' }">
                             <!-- Delete Selected Button -->
                             <a href="#" 
                                 x-on:click.prevent="
                                     if (selected.length > 0) { 
-                                        let params = new URLSearchParams({ slugs: selected.join(',') });
+                                        let params = new URLSearchParams({ usernames: selected.join(',') });
                                         deleteUrl = '{{ route('be.user.mass.destroy') }}?' + params.toString();
-                                        openRoleMassDeleteModal = true;
+                                        openUserMassDeleteModal = true;
                                     }
                                 " 
                                 :class="selected.length === 0 ? 'hidden' : ''"
@@ -49,7 +49,7 @@
                             </a>                   
 
                             <!-- Delete Confirmation Modal -->
-                            <div x-show="openRoleMassDeleteModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                            <div x-show="openUserMassDeleteModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-[400px]">
                                     <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Confirm Deletion</h2>
                                     <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
@@ -57,7 +57,7 @@
                                     </p>
 
                                     <div class="mt-4 flex justify-end gap-3">
-                                        <button @click="openRoleMassDeleteModal = false" 
+                                        <button @click="openUserMassDeleteModal = false" 
                                             class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
                                             Cancel
                                         </button>
@@ -203,7 +203,7 @@
                             <td class="w-10 px-6 py-3">
                                 <input 
                                     type="checkbox"
-                                    class="role-checkbox flex h-5 w-5 border-gray-300 cursor-pointer items-center justify-center rounded-md border-[1.25px] transition-all" value="{{ $user->slug }}" 
+                                    class="role-checkbox flex h-5 w-5 border-gray-300 cursor-pointer items-center justify-center rounded-md border-[1.25px] transition-all" value="{{ $user->username }}" 
                                     x-model="selected">
                             </td>
                             <td class="w-20 px-4 py-3">{{ $loop->iteration }}</td>
@@ -211,7 +211,7 @@
                             <td class="px-4 py-3 @if ($user->role === '[null]') ? text-gray-500 : '' @endif">{{ $user->role }}</td>
                             <td class="px-4 py-3">{{ $user->username }}</td>
                             <td class="px-4 py-3">{{ $user->email }}</td>
-                            <td class="px-4 py-3">{{ $user->formatted_email_verified_at }}</td>
+                            <td class="px-4 py-3 @if ($user->formatted_email_verified_at === '[null]') ? text-gray-500 : '' @endif">{{ $user->formatted_email_verified_at }}</td>
                             <td class="px-4 py-3">{{ $user->formatted_created_at }}</td>
                             <td class="px-4 py-3">{{ $user->formatted_updated_at }}</td>
                             <td class="px-4 py-3 text-center relative">
@@ -223,13 +223,15 @@
                                     <div x-show="openDropDown" @click.outside="openDropDown = false"
                                         class="absolute right-16 top-8 mt-1 w-40 rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-800 dark:bg-gray-900 
                                         z-50 overflow-visible">
+                                        @can(PermissionEnum::UPDATE_USER, $user)
                                         <a href="{{ route('be.user.edit', $user->username) }}" class="block w-full px-4 py-2 text-left text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">
                                             Edit
                                         </a>
+                                        @endcan
                                         <!-- Alpine.js State Wrapper -->
                                         <div x-data="{ openRoleDeleteModal: false }">
                                             <!-- Delete Button -->
-                                            @can(PermissionEnum::DELETE_USER, $users)
+                                            @can(PermissionEnum::DELETE_USER, $user)
                                             <button @click="openRoleDeleteModal = true" class="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-100 dark:text-red-400 dark:hover:bg-red-800">
                                                 Delete
                                             </button>

@@ -1,7 +1,3 @@
-@php
-    use App\Enums\PermissionEnum;
-@endphp
-
 @extends('layouts.app')
 
 @section('content')
@@ -13,7 +9,7 @@
         <div class="flex px-6 flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
                 <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Create a Role</h1>
-                <p class="text-gray-600 dark:text-gray-400">Define and manage user roles with permissions.</p>
+                <p class="text-gray-600 dark:text-gray-400">Add a new role to the system.</p>
             </div>
         </div>
 

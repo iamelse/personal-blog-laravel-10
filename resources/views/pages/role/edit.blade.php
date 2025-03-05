@@ -1,7 +1,3 @@
-@php
-    use App\Enums\PermissionEnum;
-@endphp
-
 @extends('layouts.app')
 
 @section('content')
