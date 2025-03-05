@@ -206,8 +206,8 @@
                                 <td class="w-20 px-4 py-3">{{ $loop->iteration }}</td>
                                 <td class="px-4 py-3">{{ $role->name }}</td>
                                 <td class="px-4 py-3">{{ $role->slug }}</td>
-                                <td class="px-4 py-3">{{ $role->created_at }}</td>
-                                <td class="px-4 py-3">{{ $role->updated_at }}</td>
+                                <td class="px-4 py-3">{{ $role->formatted_created_at }}</td>
+                                <td class="px-4 py-3">{{ $role->formatted_updated_at }}</td>
                                 <td class="px-4 py-3 text-center relative">
                                     <div x-cloak x-data="{ openDropDown: false }" class="inline-block">
                                         <button @click="openDropDown = !openDropDown" 
