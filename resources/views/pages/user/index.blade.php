@@ -95,9 +95,22 @@
 
                                     <!-- Form -->
                                     <form method="GET" action="{{ route('be.user.index') }}">
-                                        @foreach(request()->except(['filter', 'sort', 'limit']) as $key => $value)
-                                            <input type="hidden" name="{{ $key }}" value="{{ $value }}">
-                                        @endforeach
+                                        <!-- Role Selection -->
+                                        <div class="mt-4">
+                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                                Role
+                                            </label>
+                                            <select name="role"
+                                                class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:ring focus:ring-blue-500">
+                                                <option value="">All Roles</option>
+                                                @foreach ($roles as $role)
+                                                    <option value="{{ $role->slug }}" {{ request('role') == $role->slug ? 'selected' : '' }}>
+                                                        {{ $role->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
                                         <!-- Limit Selection -->
                                         <div class="mt-4">
                                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -113,28 +126,19 @@
                                             </select>
                                         </div>
 
-                                        <!-- Select Filter Field -->
-                                        <div class="mt-4">
-                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                                Filter Field
-                                            </label>
-                                            <select x-model="selectedField"
-                                                class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:ring focus:ring-blue-500">
-                                                <option value="" {{ request()->query('filter') ? '' : 'selected' }}> * </option>
-                                                @foreach ($allowedFilterFields as $field)
-                                                    <option value="{{ $field }}">{{ ucfirst(str_replace('_', ' ', $field)) }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-
-                                        <!-- Filter Keyword -->
+                                        <!-- Filter by Keyword -->
                                         <div class="mt-4">
                                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                                 Keyword
                                             </label>
-                                            <input type="text" x-bind:name="'filter[' + selectedField + ']'" 
-                                                value="{{ request('filter')[array_key_first(request('filter') ?? [])] ?? '' }}"
-                                                class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:ring focus:ring-blue-500">
+                                            <input type="text" name="keyword" 
+                                                value="{{ request('keyword', '') }}"
+                                                class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg 
+                                                    bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 
+                                                    focus:ring focus:ring-blue-500 focus:outline-none">
+                                            <span class="text-xs text-gray-600 dark:text-gray-400">
+                                                Anything that match in: {{ implode(', ', $allowedFilterFields) }}
+                                            </span>
                                         </div>
 
                                         <!-- Sort Field Selection -->
@@ -142,16 +146,29 @@
                                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                                 Sort By
                                             </label>
-                                            <select name="sort"
+                                            <select name="sort_by"
                                                 class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:ring focus:ring-blue-500">
                                                 @foreach ($allowedSortFields as $field)
-                                                    <option value="{{ $field }}" {{ request('sort') === $field ? 'selected' : '' }}>
-                                                        {{ ucfirst(str_replace('_', ' ', $field)) }} (Ascending)
-                                                    </option>
-                                                    <option value="-{{ $field }}" {{ request('sort') === "-$field" ? 'selected' : '' }}>
-                                                        {{ ucfirst(str_replace('_', ' ', $field)) }} (Descending)
+                                                    <option value="{{ $field }}" {{ request('sort_by') === $field ? 'selected' : '' }}>
+                                                        {{ ucfirst($field) }}
                                                     </option>
                                                 @endforeach
+                                            </select>
+                                        </div>
+
+                                        <!-- Sort Field Selection -->
+                                        <div class="mt-4">
+                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                                Sort Order
+                                            </label>
+                                            <select name="sort_order"
+                                                class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:ring focus:ring-blue-500">
+                                                <option value="ASC" {{ request('sort_order', 'ASC') === 'ASC' ? 'selected' : '' }}>
+                                                    Ascending
+                                                </option>
+                                                <option value="DESC" {{ request('sort_order', 'ASC') === 'DESC' ? 'selected' : '' }}>
+                                                    Descending
+                                                </option>
                                             </select>
                                         </div>
 
@@ -282,7 +299,7 @@
                 <div class="flex items-center justify-between">
                     <!-- Previous Button -->
                     @if ($users->previousPageUrl())
-                        <a href="{{ $users->previousPageUrl() }}" class="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-700 shadow-sm hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition">
+                        <a href="{{ $users->appends(request()->query())->previousPageUrl() }}" class="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-700 shadow-sm hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition">
                             <span class="hidden sm:inline">Previous</span>
                         </a>
                     @else
@@ -296,7 +313,7 @@
             
                     <!-- Next Button -->
                     @if ($users->nextPageUrl())
-                        <a href="{{ $users->nextPageUrl() }}" class="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-700 shadow-sm hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition">
+                        <a href="{{ $users->appends(request()->query())->nextPageUrl() }}" class="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-700 shadow-sm hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition">
                             <span class="hidden sm:inline">Next</span>
                         </a>
                     @else

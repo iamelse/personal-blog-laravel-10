@@ -5,13 +5,14 @@ namespace App\Models;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Spatie\Permission\Models\Role as SpatieRoleModel;
+use Yogameleniawan\SearchSortEloquent\Traits\Searchable;
+use Yogameleniawan\SearchSortEloquent\Traits\Sortable;
 
 class Role extends SpatieRoleModel
 {
-    use HasFactory, Sluggable;
+    use HasFactory, Sluggable, Searchable, Sortable;
     
     protected $guarded = ['id'];
 

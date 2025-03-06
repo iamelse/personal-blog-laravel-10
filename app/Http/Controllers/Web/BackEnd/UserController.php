@@ -9,12 +9,12 @@ use App\Http\Requests\Web\User\UpdateUserRequest;
 use App\Models\Role;
 use App\Models\User;
 use Exception;
-use Hash;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -30,26 +30,25 @@ class UserController extends Controller
     {
         Gate::authorize(PermissionEnum::READ_USER->value);
 
+        $roles = Role::all();
         $allowedFilterFields = ['name', 'username', 'email'];
         $allowedSortFields = ['name', 'username', 'email', 'email_verified_at', 'created_at', 'updated_at'];
         $limits = [10, 25, 50, 100];
 
-        $redirect = $this->_validateFilter(request()->query('filter', []), $allowedFilterFields);
-        if ($redirect) {
-            return $redirect;
-        }
-
-        $users = QueryBuilder::for(User::class)
-                ->with('permissions')
-                ->defaultSort('name')
-                ->allowedFilters($allowedFilterFields)
-                ->allowedSorts($allowedSortFields)
-                ->paginate($request->query('limit', 10))
-                ->appends(request()->query())
-                ->onEachSide(1);
+        $users = User::with('roles', 'permissions')->search(
+                keyword: $request->keyword,
+                columns: $allowedFilterFields,
+            )->sort(
+                sort_by: $request->sort_by ?? 'name',
+                sort_order: $request->sort_order ?? 'ASC'
+            )->when($request->role, fn($query, $role) => 
+                $query->whereHas('roles', fn($q) => $q->where('slug', $role))
+            )
+            ->paginate($request->query('limit') ?? 10);
 
         return view('pages.user.index', [
             'title' => 'User',
+            'roles' => $roles,
             'users' => $users,
             'allowedFilterFields' => $allowedFilterFields,
             'allowedSortFields' => $allowedSortFields,
@@ -213,19 +212,5 @@ class UserController extends Controller
                 ->route('be.user.index')
                 ->with('error', 'An error occurred while deleting the users.');
         }
-    }
-
-    /**
-     * Validate allowed filters fields.
-     */
-    private function _validateFilter(array $filters, array $allowedFilterFields): RedirectResponse | NULL
-    {
-        $validFilters = array_intersect_key($filters, array_flip($allowedFilterFields));
-
-        if (count($validFilters) !== count($filters)) {
-            return redirect()->route('be.user.index', array_merge(request()->except('filter'), ['filter' => $validFilters]));
-        }
-
-        return null;
     }
 }

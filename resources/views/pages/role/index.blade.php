@@ -113,28 +113,19 @@
                                             </select>
                                         </div>
 
-                                        <!-- Select Filter Field -->
-                                        <div class="mt-4">
-                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                                Filter Field
-                                            </label>
-                                            <select x-model="selectedField"
-                                                class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:ring focus:ring-blue-500">
-                                                <option value="" {{ request()->query('filter') ? '' : 'selected' }}> * </option>
-                                                @foreach ($allowedFilterFields as $field)
-                                                    <option value="{{ $field }}">{{ ucfirst(str_replace('_', ' ', $field)) }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-
-                                        <!-- Filter Keyword -->
+                                        <!-- Filter by Keyword -->
                                         <div class="mt-4">
                                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                                 Keyword
                                             </label>
-                                            <input type="text" x-bind:name="'filter[' + selectedField + ']'" 
-                                                value="{{ request('filter')[array_key_first(request('filter') ?? [])] ?? '' }}"
-                                                class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:ring focus:ring-blue-500">
+                                            <input type="text" name="keyword" 
+                                                value="{{ request('keyword', '') }}"
+                                                class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg 
+                                                    bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 
+                                                    focus:ring focus:ring-blue-500 focus:outline-none">
+                                            <span class="text-xs text-gray-600 dark:text-gray-400">
+                                                Anything that match in: {{ implode(', ', $allowedFilterFields) }}
+                                            </span>
                                         </div>
 
                                         <!-- Sort Field Selection -->
@@ -142,16 +133,29 @@
                                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                                 Sort By
                                             </label>
-                                            <select name="sort"
+                                            <select name="sort_by"
                                                 class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:ring focus:ring-blue-500">
                                                 @foreach ($allowedSortFields as $field)
-                                                    <option value="{{ $field }}" {{ request('sort') === $field ? 'selected' : '' }}>
-                                                        {{ ucfirst(str_replace('_', ' ', $field)) }} (Ascending)
-                                                    </option>
-                                                    <option value="-{{ $field }}" {{ request('sort') === "-$field" ? 'selected' : '' }}>
-                                                        {{ ucfirst(str_replace('_', ' ', $field)) }} (Descending)
+                                                    <option value="{{ $field }}" {{ request('sort_by') === $field ? 'selected' : '' }}>
+                                                        {{ ucfirst($field) }}
                                                     </option>
                                                 @endforeach
+                                            </select>
+                                        </div>
+
+                                        <!-- Sort Field Selection -->
+                                        <div class="mt-4">
+                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                                Sort Order
+                                            </label>
+                                            <select name="sort_order"
+                                                class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:ring focus:ring-blue-500">
+                                                <option value="ASC" {{ request('sort_order', 'ASC') === 'ASC' ? 'selected' : '' }}>
+                                                    Ascending
+                                                </option>
+                                                <option value="DESC" {{ request('sort_order', 'ASC') === 'DESC' ? 'selected' : '' }}>
+                                                    Descending
+                                                </option>
                                             </select>
                                         </div>
 
@@ -195,76 +199,80 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200 dark:divide-gray-800 dark:text-gray-400">
-                        @foreach ($roles as $role)
-                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition">
-                                <td class="w-10 px-6 py-3">
-                                    <input 
-                                        type="checkbox"
-                                        class="role-checkbox flex h-5 w-5 border-gray-300 cursor-pointer items-center justify-center rounded-md border-[1.25px] transition-all" value="{{ $role->slug }}" 
-                                        x-model="selected">
-                                </td>
-                                <td class="w-20 px-4 py-3">{{ $loop->iteration }}</td>
-                                <td class="px-4 py-3">{{ $role->name }}</td>
-                                <td class="px-4 py-3">{{ $role->slug }}</td>
-                                <td class="px-4 py-3">{{ $role->formatted_created_at }}</td>
-                                <td class="px-4 py-3">{{ $role->formatted_updated_at }}</td>
-                                <td class="px-4 py-3 text-center relative">
-                                    <div x-cloak x-data="{ openDropDown: false }" class="inline-block">
-                                        <button @click="openDropDown = !openDropDown" 
-                                            class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
-                                            <i class="bx bx-dots-horizontal-rounded text-xl"></i>
-                                        </button>
-                                        <div x-show="openDropDown" @click.outside="openDropDown = false"
-                                            class="absolute right-16 top-8 mt-1 w-40 rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-800 dark:bg-gray-900 
-                                            z-50 overflow-visible">
-                                            <a href="{{ route('be.role.and.permission.edit', $role->slug) }}" class="block w-full px-4 py-2 text-left text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">
-                                                Edit
-                                            </a>
-                                            <a href="{{ route('be.role.and.permission.edit.permissions', $role->slug) }}" class="block w-full px-4 py-2 text-left text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">
-                                                Permission
-                                            </a>
-                                            <!-- Alpine.js State Wrapper -->
-                                            <div x-data="{ openRoleDeleteModal: false }">
-                                                <!-- Delete Button -->
-                                                @can(PermissionEnum::DELETE_ROLE, $roles)
-                                                <button @click="openRoleDeleteModal = true" class="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-100 dark:text-red-400 dark:hover:bg-red-800">
-                                                    Delete
-                                                </button>
-                                                @endcan
+                        @forelse ($roles as $role)
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                            <td class="w-10 px-6 py-3">
+                                <input 
+                                    type="checkbox"
+                                    class="role-checkbox flex h-5 w-5 border-gray-300 cursor-pointer items-center justify-center rounded-md border-[1.25px] transition-all" value="{{ $role->slug }}" 
+                                    x-model="selected">
+                            </td>
+                            <td class="w-20 px-4 py-3">{{ $loop->iteration }}</td>
+                            <td class="px-4 py-3">{{ $role->name }}</td>
+                            <td class="px-4 py-3">{{ $role->slug }}</td>
+                            <td class="px-4 py-3">{{ $role->formatted_created_at }}</td>
+                            <td class="px-4 py-3">{{ $role->formatted_updated_at }}</td>
+                            <td class="px-4 py-3 text-center relative">
+                                <div x-cloak x-data="{ openDropDown: false }" class="inline-block">
+                                    <button @click="openDropDown = !openDropDown" 
+                                        class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
+                                        <i class="bx bx-dots-horizontal-rounded text-xl"></i>
+                                    </button>
+                                    <div x-show="openDropDown" @click.outside="openDropDown = false"
+                                        class="absolute right-16 top-8 mt-1 w-40 rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-800 dark:bg-gray-900 
+                                        z-50 overflow-visible">
+                                        <a href="{{ route('be.role.and.permission.edit', $role->slug) }}" class="block w-full px-4 py-2 text-left text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">
+                                            Edit
+                                        </a>
+                                        <a href="{{ route('be.role.and.permission.edit.permissions', $role->slug) }}" class="block w-full px-4 py-2 text-left text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">
+                                            Permission
+                                        </a>
+                                        <!-- Alpine.js State Wrapper -->
+                                        <div x-data="{ openRoleDeleteModal: false }">
+                                            <!-- Delete Button -->
+                                            @can(PermissionEnum::DELETE_ROLE, $roles)
+                                            <button @click="openRoleDeleteModal = true" class="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-100 dark:text-red-400 dark:hover:bg-red-800">
+                                                Delete
+                                            </button>
+                                            @endcan
 
-                                                <!-- Confirmation Modal -->
-                                                <div x-show="openRoleDeleteModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                                                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-[400px]">
-                                                        <h2 class="text-lg text-start font-semibold text-gray-800 dark:text-gray-200">Confirm Deletion</h2>
-                                                        <p class="text-sm text-start text-gray-600 dark:text-gray-400 mt-2">
-                                                            Are you sure you want to delete the selected items?
-                                                        </p>
+                                            <!-- Confirmation Modal -->
+                                            <div x-show="openRoleDeleteModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                                                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-[400px]">
+                                                    <h2 class="text-lg text-start font-semibold text-gray-800 dark:text-gray-200">Confirm Deletion</h2>
+                                                    <p class="text-sm text-start text-gray-600 dark:text-gray-400 mt-2">
+                                                        Are you sure you want to delete the selected items?
+                                                    </p>
 
-                                                        <!-- Centered Buttons -->
-                                                        <div class="flex justify-end space-x-3 mt-3">
-                                                            <!-- Cancel Button -->
-                                                            <button @click="openRoleDeleteModal = false" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
-                                                                Cancel
+                                                    <!-- Centered Buttons -->
+                                                    <div class="flex justify-end space-x-3 mt-3">
+                                                        <!-- Cancel Button -->
+                                                        <button @click="openRoleDeleteModal = false" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
+                                                            Cancel
+                                                        </button>
+
+                                                        <!-- Delete Form -->
+                                                        <form action="{{ route('be.role.and.permission.destroy', $role->slug) }}" method="POST">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                                                                Yes, Delete
                                                             </button>
-
-                                                            <!-- Delete Form -->
-                                                            <form action="{{ route('be.role.and.permission.destroy', $role->slug) }}" method="POST">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
-                                                                    Yes, Delete
-                                                                </button>
-                                                            </form>
-                                                        </div>
+                                                        </form>
                                                     </div>
                                                 </div>
-                                                
                                             </div>
+                                            
                                         </div>
                                     </div>
-                                </td>                                                                
-                            </tr>
-                        @endforeach
+                                </div>
+                            </td>                                                                
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="10" class="text-center py-4 text-gray-400">No data available.</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>            

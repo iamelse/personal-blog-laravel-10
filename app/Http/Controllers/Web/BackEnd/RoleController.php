@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Spatie\Permission\Models\Permission;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class RoleController extends Controller
 {
@@ -31,18 +30,14 @@ class RoleController extends Controller
         $allowedSortFields = ['name', 'created_at', 'updated_at'];
         $limits = [10, 25, 50, 100];
 
-        $redirect = $this->_validateFilter(request()->query('filter', []), $allowedFilterFields);
-        if ($redirect) {
-            return $redirect;
-        }
-
-        $roles = QueryBuilder::for(Role::class)
-                ->defaultSort('name')
-                ->allowedFilters($allowedFilterFields)
-                ->allowedSorts($allowedSortFields)
-                ->paginate($request->query('limit', 10))
-                ->appends(request()->query())
-                ->onEachSide(1);
+        $roles = Role::with('permissions')->search(
+            keyword: $request->keyword,
+            columns: $allowedFilterFields,
+        )->sort(
+            sort_by: $request->sort_by ?? 'name',
+            sort_order: $request->sort_order ?? 'ASC'
+        )
+        ->paginate($request->limit ?? 10);
 
         return view('pages.role.index', [
             'title' => 'Role and Permission',
@@ -235,19 +230,5 @@ class RoleController extends Controller
                 ->back()
                 ->with('error', 'An error occurred while updating permissions.');
         }
-    }
-
-    /**
-     * Validate allowed filters fields.
-     */
-    private function _validateFilter(array $filters, array $allowedFilterFields): RedirectResponse | NULL
-    {
-        $validFilters = array_intersect_key($filters, array_flip($allowedFilterFields));
-
-        if (count($validFilters) !== count($filters)) {
-            return redirect()->route('be.role.and.permission.index', array_merge(request()->except('filter'), ['filter' => $validFilters]));
-        }
-
-        return null;
     }
 }
