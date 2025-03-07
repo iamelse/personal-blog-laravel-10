@@ -151,7 +151,7 @@
                @click.prevent="dropdownOpen = ! dropdownOpen"
                >
                <span class="mr-3 h-11 w-11 overflow-hidden rounded-full">
-               <img src="{{ asset('tailadmin/images/user/user-01.jpg') }}" alt="User" />
+               <img src="{{ Avatar::create(Auth::user()->name) }}" alt="User" />
                </span>
                <span class="mr-1 block text-theme-sm font-medium">
                   {{ Auth::user()->name }}

@@ -207,7 +207,6 @@
                             <th class="px-4 py-3 font-medium">Name</th>
                             <th class="px-4 py-3 font-medium">Role</th>
                             <th class="px-4 py-3 font-medium">Username</th>
-                            <th class="px-4 py-3 font-medium">Email</th>
                             <th class="px-4 py-3 font-medium">Email Verified At</th>
                             <th class="px-4 py-3 font-medium">Created At</th>
                             <th class="px-4 py-3 font-medium">Updated At</th>
@@ -224,10 +223,15 @@
                                     x-model="selected">
                             </td>
                             <td class="w-20 px-4 py-3">{{ $loop->iteration }}</td>
-                            <td class="px-4 py-3">{{ $user->name }}</td>
+                            <td class="px-4 py-10 flex items-start space-x-3">
+                                <img class="h-12 w-12 rounded-full" src="{{ Avatar::create($user->name)->toBase64() }}" />
+                                <div class="flex flex-col justify-center">
+                                    <span class="font-medium">{{ $user->name }}</span>
+                                    <span class="text-sm text-gray-500">{{ $user->email }}</span>
+                                </div>
+                            </td>                            
                             <td class="px-4 py-3 @if ($user->role === '[null]') ? text-gray-500 : '' @endif">{{ $user->role }}</td>
                             <td class="px-4 py-3">{{ $user->username }}</td>
-                            <td class="px-4 py-3">{{ $user->email }}</td>
                             <td class="px-4 py-3 @if ($user->formatted_email_verified_at === '[null]') ? text-gray-500 : '' @endif">{{ $user->formatted_email_verified_at }}</td>
                             <td class="px-4 py-3">{{ $user->formatted_created_at }}</td>
                             <td class="px-4 py-3">{{ $user->formatted_updated_at }}</td>
