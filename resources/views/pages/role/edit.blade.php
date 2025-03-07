@@ -69,8 +69,7 @@
                     <!-- Submit Button -->
                     <div class="flex justify-end mt-6">
                         <button type="submit" 
-                            class="px-4 py-2.5 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 
-                            focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            class="flex items-center gap-2 h-[42px] px-4 py-2.5 rounded-lg border border-blue-500 bg-blue-600 text-white font-medium transition-all hover:bg-blue-700 hover:border-blue-600 focus:ring focus:ring-blue-300 dark:bg-blue-700 dark:border-blue-600 dark:hover:bg-blue-800">
                             Update Role
                         </button>
                     </div>
