@@ -61,9 +61,9 @@ class="sidebar fixed left-0 top-0 z-40 flex h-screen w-[290px] flex-col overflow
             use App\Enums\PermissionEnum;
 
             $menus = [
-               ['parent_route' => 'be.dashboard', 'route' => 'be.dashboard.index', 'icon' => 'bx-line-chart', 'label' => 'Dashboard', 'permission' => PermissionEnum::READ_DASHBOARD],
-               ['parent_route' => 'be.role.and.permission', 'route' => 'be.role.and.permission.index', 'icon' => 'bx-user-circle', 'label' => 'Role and Permission', 'permission' => PermissionEnum::READ_ROLE],
-               ['parent_route' => 'be.user', 'route' => 'be.user.index', 'icon' => 'bx bx-user', 'label' => 'User', 'permission' => PermissionEnum::READ_USER]
+               ['active' => 'be.dashboard', 'route' => 'be.dashboard.index', 'icon' => 'bx-line-chart', 'label' => 'Dashboard', 'permission' => PermissionEnum::READ_DASHBOARD],
+               ['active' => 'be.role.and.permission', 'route' => 'be.role.and.permission.index', 'icon' => 'bx-lock-open', 'label' => 'Role and Permission', 'permission' => PermissionEnum::READ_ROLE],
+               ['active' => 'be.user', 'route' => 'be.user.index', 'icon' => 'bx bx-user', 'label' => 'User', 'permission' => PermissionEnum::READ_USER]
             ];
 
             $userPermissions = Auth::user()->permissions;
@@ -74,7 +74,7 @@ class="sidebar fixed left-0 top-0 z-40 flex h-screen w-[290px] flex-col overflow
                @can($menu['permission'], $userPermissions)
                      <li>
                         <a href="{{ route($menu['route']) }}" 
-                           class="menu-item group {{ request()->routeIs($menu['parent_route'] . '*') ? 'menu-item-active' : 'menu-item-inactive' }}">
+                           class="menu-item group {{ request()->routeIs($menu['active'] . '*') ? 'menu-item-active' : 'menu-item-inactive' }}">
                            <i class="bx bx-sm {{ $menu['icon'] }}"></i>
                            {{ $menu['label'] }}
                         </a>
