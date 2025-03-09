@@ -192,7 +192,6 @@
                             </th>                            
                             <th class="w-20 px-4 py-3 font-medium">No.</th>
                             <th class="px-4 py-3 font-medium">Name</th>
-                            <th class="px-4 py-3 font-medium">Slug</th>
                             <th class="px-4 py-3 font-medium">Created At</th>
                             <th class="px-4 py-3 font-medium">Updated At</th>
                             <th class="px-4 py-3 font-medium text-center">Actions</th>
@@ -209,7 +208,6 @@
                             </td>
                             <td class="w-20 px-4 py-3">{{ $loop->iteration }}</td>
                             <td class="px-4 py-3">{{ $role->name }}</td>
-                            <td class="px-4 py-3">{{ $role->slug }}</td>
                             <td class="px-4 py-3">{{ $role->formatted_created_at }}</td>
                             <td class="px-4 py-3">{{ $role->formatted_updated_at }}</td>
                             <td class="px-4 py-3 text-center relative">
