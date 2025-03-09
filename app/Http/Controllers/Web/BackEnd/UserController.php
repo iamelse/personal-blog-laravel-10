@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class UserController extends Controller
 {
