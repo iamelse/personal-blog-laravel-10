@@ -21,7 +21,7 @@
             data-dropdown-placement="bottom"
             >
          <span class="sr-only">Open user menu</span>
-         <img class="h-10 w-10 overflow-hidden rounded-full" src="{{ asset('tailadmin/images/user/user-01.jpg') }}" alt="user photo" />
+         <img class="h-10 w-10 overflow-hidden rounded-full" src="{{ getUserImageProfilePath(Auth::user()) }}" alt="user photo" />
          </button>
          <div
             :class="userNavbarToggle ? 'block' : 'hidden'"

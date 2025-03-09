@@ -7,7 +7,7 @@
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="icon" href="{{ asset('tailadmin/images/logo/else-logo.webp') }}">
+    <link rel="icon" href="{{ asset('tailadmin/images/favicon.ico') }}">
     <title>{{ $title ?? env('APP_NAME') }}</title>
     
     @php

@@ -20,23 +20,45 @@
                     @method('PUT')
                     
                     <!-- Image Profile -->
-                    <div class="mt-4 flex flex-col items-center" x-data="{ imagePreview: '{{ $user->image ? asset('storage/' . $user->image) : Avatar::create(Auth::user()->name) }}' }">
-                        <div class="flex flex-col items-center gap-2">
-                            <!-- Image Preview -->
+                    <div class="mt-4 flex flex-col items-center" 
+                        x-data="{ 
+                            imagePreview: '{{ getUserImageProfilePath(Auth::user()) }}', 
+                            defaultImage: '{{ Avatar::create(Auth::user()->name)->toBase64() }}',
+                            removeImage: false
+                        }">
+
+                        <div class="flex flex-col items-center gap-3">
+                        <!-- Image Preview -->
+                        <div class="relative">
                             <img :src="imagePreview"
                                 @click="$refs.imageInput.click()"
                                 alt="Profile Image"
-                                class="w-17 h-17 rounded-full object-cover cursor-pointer transition duration-300 hover:opacity-80">
+                                class="w-32 h-32 rounded-full object-cover cursor-pointer transition duration-300 hover:opacity-80">
                             
-                            <!-- Hidden File Input -->
-                            <input type="file" id="image" name="image" class="hidden"
-                                x-ref="imageInput"
-                                @change="let file = $event.target.files[0];
-                                            if (file) {
-                                                let reader = new FileReader();
-                                                reader.onload = (e) => imagePreview = e.target.result;
-                                                reader.readAsDataURL(file);
-                                            }">
+                            @if ($user->image)
+                                <!-- Hidden input to track image removal -->
+                                <input type="hidden" name="remove_image" :value="removeImage ? 1 : 0">
+                                
+                                <!-- Remove Button -->
+                                <template x-if="imagePreview !== defaultImage">
+                                    <button type="button"
+                                        class="absolute top-0 right-0 bg-red-500 text-white text-xs px-2 py-1 rounded-full shadow-lg hover:bg-red-600 transition"
+                                        @click="imagePreview = defaultImage; removeImage = true; $refs.imageInput.value = ''">
+                                        X
+                                    </button>
+                                </template>
+                            @endif
+                        </div>
+
+                        <!-- Hidden File Input -->
+                        <input type="file" id="image" name="image" class="hidden"
+                            x-ref="imageInput"
+                            @change="let file = $event.target.files[0];
+                                        if (file) {
+                                            let reader = new FileReader();
+                                            reader.onload = (e) => imagePreview = e.target.result;
+                                            reader.readAsDataURL(file);
+                                        }">
                         </div>
                     </div>
                     
@@ -117,6 +139,14 @@
                         </button>
                     </div>
                 </form>
+            </div>
+        </div>
+
+        <!-- Header Section -->
+        <div class="flex px-6 flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Change Password</h1>
+                <p class="text-gray-600 dark:text-gray-400">Modify your current password.</p>
             </div>
         </div>
 

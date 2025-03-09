@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\UserProfile\UpdatePasswordRequest;
 use App\Http\Requests\Web\UserProfile\UpdateUserProfileRequest;
 use App\Models\User;
+use App\Services\ImageManagementService;
 use FFI\Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +16,10 @@ use Illuminate\View\View;
 
 class UserProfileController extends Controller
 {
+    public function __construct(
+        protected ImageManagementService $imageManagementService
+    ) {}
+    
     public function edit(): View
     {
         $user = Auth::user();
@@ -30,15 +35,11 @@ class UserProfileController extends Controller
         try {
             $user = User::findOrfail(Auth::user()->id);
 
-            if (!$user) {
-                return redirect()->route('be.user.profile.edit', $request->username)
-                    ->with('error', 'Unauthorized action.');
-            }
-
             $user->update([
                 'name' => $request->name,
                 'username' => $request->username,
                 'email' => $request->email,
+                'image' => $this->_handleImageUpload($request, $user)
             ]);
 
             return redirect()->route('be.user.profile.edit', $user->username)
@@ -78,5 +79,31 @@ class UserProfileController extends Controller
 
             return back()->with('error', 'Failed to update password. Please try again.');
         }
+    }
+
+    private function _handleImageUpload($request, $user)
+    {
+        $imagePath = null;
+
+        if ($request->has('remove_image') && $request->remove_image == 1) {
+            $this->imageManagementService->destroyImage($user->image);
+    
+            $user->image = null;
+            return null;
+        }
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+
+            $imagePath = $this->imageManagementService->uploadImage($image, [
+                'currentImagePath' => $user->image,
+                'disk' => env('FILESYSTEM_DISK'),
+                'folder' => 'uploads/user_profiles'
+            ]);
+
+            $user->image = $imagePath;
+        }
+
+        return $imagePath;
     }
 }
