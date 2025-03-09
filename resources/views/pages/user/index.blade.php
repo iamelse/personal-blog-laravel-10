@@ -223,7 +223,7 @@
                                     x-model="selected">
                             </td>
                             <td class="w-20 px-4 py-3">{{ $loop->iteration }}</td>
-                            <td class="px-4 pt-4 flex items-start space-x-3">
+                            <td class="px-4 pt-3.5 flex items-start space-x-3">
                                 <img class="h-12 w-12 rounded-full" src="{{ Avatar::create($user->name)->toBase64() }}" />
                                 <div class="flex flex-col justify-center">
                                     <span class="font-medium">{{ $user->name }}</span>
